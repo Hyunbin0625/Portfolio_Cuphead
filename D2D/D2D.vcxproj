@@ -19,18 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Bullet\BulletManager.cpp" />
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
-    <ClCompile Include="Objects\PlayerBullet.cpp" />
+    <ClCompile Include="Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Scenes\Scene_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="Objects\AnimationRect.cpp" />
-    <ClCompile Include="TileMap\TileMap.cpp" />
-    <ClCompile Include="TileMap\TileSet.cpp" />
     <ClCompile Include="Utilities\Animator.cpp" />
     <ClCompile Include="Components\ColliderComponent.cpp" />
     <ClCompile Include="Systems\Gui.cpp" />
@@ -43,11 +41,8 @@
     <ClCompile Include="Utilities\Collision.cpp" />
     <ClCompile Include="Components\ColorComponent.cpp" />
     <ClCompile Include="Components\MoveComponent.cpp" />
-    <ClCompile Include="Objects\Circle.cpp" />
     <ClCompile Include="Objects\ColorRect.cpp" />
     <ClCompile Include="Objects\Drawable.cpp" />
-    <ClCompile Include="Objects\FilledCircle.cpp" />
-    <ClCompile Include="Objects\Line.cpp" />
     <ClCompile Include="Objects\Object.cpp" />
     <ClCompile Include="Renders\Shaders\PixelShader.cpp" />
     <ClCompile Include="Renders\IA\IndexBuffer.cpp" />
@@ -70,18 +65,16 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Bullet\BulletManager.h" />
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
-    <ClInclude Include="Objects\PlayerBullet.h" />
+    <ClInclude Include="Bullet\PlayerBullet.h" />
     <ClInclude Include="Scenes\Scene_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="Objects\AnimationRect.h" />
-    <ClInclude Include="TileMap\TileMap.h" />
-    <ClInclude Include="TileMap\TileSet.h" />
     <ClInclude Include="Utilities\Animator.h" />
     <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Systems\Gui.h" />
@@ -95,11 +88,8 @@
     <ClInclude Include="Components\ColorComponent.h" />
     <ClInclude Include="Components\Component.h" />
     <ClInclude Include="Components\MoveComponent.h" />
-    <ClInclude Include="Objects\Circle.h" />
     <ClInclude Include="Objects\ColorRect.h" />
     <ClInclude Include="Objects\Drawable.h" />
-    <ClInclude Include="Objects\FilledCircle.h" />
-    <ClInclude Include="Objects\Line.h" />
     <ClInclude Include="Objects\Object.h" />
     <ClInclude Include="Renders\Resources\ConstantBuffer.h" />
     <ClInclude Include="Renders\Resources\GlobalBuffers.h" />
@@ -134,18 +124,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="_Shaders\Vertex.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="_Shaders\VertexColor.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="_Shaders\VertexTexture.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

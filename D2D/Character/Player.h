@@ -41,6 +41,9 @@ enum State
 	Aim_Shoot_Up_L,
 	Aim_Shoot_Down_R,
 	Aim_Shoot_Down_L,
+
+	Dash_R,
+	Dash_L
 };
 
 enum Direction
@@ -56,36 +59,42 @@ public:
 
 public:
 	void Move();
-	void Jump();
-	bool CheckGround(shared_ptr<ColorRect> ground);
 
 public:
-	void Init();
-	void Destroy();
-
 	void Update();
-	void PreRender();
 	void Render();
-	void PostRender();
+
+	void GUI();
 
 public:
+	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
+	bool GetPlatform() { return platform; }
 
+	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
+	void SetPlatform(bool platform) { this->platform = platform; }
 
 private:
-	unique_ptr<AnimationRect> animRect;
-	shared_ptr<PlayerBullet> bullet;
-	Vector2 position;
-	Vector2 lastPos;
+	shared_ptr<AnimationRect> animRect;
+	shared_ptr<BulletManager> bullet;
+	unique_ptr<AnimationRect> SFXbullet;
+
 	Vector2 scale;
+	
+	Vector2 position;
+	float scaleSize = 1.0f;
 
 	State state = State::Idle_R;
 	Direction direction = Direction::R;
 	float speed;
 
 	float G = 0;
-	int speedG = 0;
 	float jumpSpeed = 0;
-	float jumpMaxSpeed = 500;
+	float jumpMaxSpeed = 600;
 	bool checkCollider = 0;
 	UINT jumpCount = 2;
+
+	float runTime = 0;
+	int dash = 0;
+
+	bool platform = 0;
 };

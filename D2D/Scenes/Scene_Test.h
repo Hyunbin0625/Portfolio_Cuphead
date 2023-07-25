@@ -13,7 +13,12 @@ public:
 	void Render() override;
 	void PostRender() override;
 
+	// 임시 함수
+	void CheckGround();
+
 private:
 	unique_ptr<Player> player;
 	shared_ptr<ColorRect> ground;
+
+	shared_ptr<ColorRect> ground2;
 };

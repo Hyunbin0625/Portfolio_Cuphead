@@ -19,9 +19,6 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{8e8b152e-5388-4024-b51c-692fb6df72d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{bce623d3-5518-4741-9c66-3e11f8445f4a}</UniqueIdentifier>
     </Filter>
@@ -31,8 +28,11 @@
     <Filter Include="Utilities">
       <UniqueIdentifier>{d3862996-1254-4dc2-a161-9dbb9f9992f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="TileMap">
-      <UniqueIdentifier>{8944d585-70e8-42af-bbc6-eb14125cbcda}</UniqueIdentifier>
+    <Filter Include="Character">
+      <UniqueIdentifier>{8c259163-0078-47c3-87a2-ee0511cbe266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Components">
+      <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,25 +82,16 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Components\ColorComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Circle.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\FilledCircle.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects\Line.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Objects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\MoveComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\Collision.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Components\ColliderComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Objects\TextureRect.cpp">
       <Filter>Objects</Filter>
@@ -109,7 +100,7 @@
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Components\SelectionComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\String.cpp">
       <Filter>Utilities</Filter>
@@ -126,25 +117,25 @@
     <ClCompile Include="Systems\Camera.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap\TileSet.cpp">
-      <Filter>TileMap</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\AnimationRect.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\Animator.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap\TileMap.cpp">
-      <Filter>TileMap</Filter>
-    </ClCompile>
-    <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Scenes\Scene_Test.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Components\AnimatorComponent.cpp" />
-    <ClCompile Include="Objects\Bullet.cpp" />
-    <ClCompile Include="Objects\PlayerBullet.cpp" />
+    <ClCompile Include="Character\Player.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\AnimatorComponent.cpp">
+      <Filter>Objects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerBullet.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\BulletManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -193,7 +184,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Components\Component.h">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Drawable.h">
       <Filter>Objects</Filter>
@@ -202,10 +193,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Components\ColorComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Circle.h">
-      <Filter>Objects</Filter>
+      <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneList.h">
       <Filter>Scenes</Filter>
@@ -213,20 +201,14 @@
     <ClInclude Include="Scenes\IScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Line.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\FilledCircle.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Components\MoveComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Collision.h">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Components\ColliderComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Objects\TextureRect.h">
       <Filter>Objects</Filter>
@@ -235,7 +217,7 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Components\SelectionComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\String.h">
       <Filter>Utilities</Filter>
@@ -258,28 +240,22 @@
     <ClInclude Include="Utilities\Animator.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap\TileMap.h">
-      <Filter>TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="TileMap\TileSet.h">
-      <Filter>TileMap</Filter>
-    </ClInclude>
-    <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Scenes\Scene_Test.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Components\AnimatorComponent.h" />
-    <ClInclude Include="Objects\Bullet.h" />
-    <ClInclude Include="Objects\PlayerBullet.h" />
+    <ClInclude Include="Character\Player.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\AnimatorComponent.h">
+      <Filter>Objects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerBullet.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\BulletManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="_Shaders\VertexColor.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="_Shaders\VertexTexture.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="_Shaders\VertexTextureInverse.hlsl">

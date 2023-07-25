@@ -38,7 +38,7 @@ void AnimatorComponent::Update()
 					currentFrameIndex = 0;
 				else
 					currentFrameIndex = currentAnimClip->GetLastFrameIndex();
-			}
+			}	
 		}
 		else	// 이미지의 역방향
 		{

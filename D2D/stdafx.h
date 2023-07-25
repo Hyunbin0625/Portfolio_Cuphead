@@ -155,19 +155,15 @@ extern float gWinHeight;
 #include "Objects/Object.h"
 #include "Objects/Drawable.h"
 #include "Objects/ColorRect.h"
-#include "Objects/Line.h"
-#include "Objects/Circle.h"
-#include "Objects/FilledCircle.h"
 #include "Objects/TextureRect.h"
 #include "Objects/AnimationRect.h"
-#include "Objects/Bullet.h"
-#include "Objects/PlayerBullet.h"
+
+// Bullet
+#include "Bullet/PlayerBullet.h"
+#include "Bullet/BulletManager.h"
 
 // Character
 #include "Character/Player.h"
-
-// TileMap
-#include "TileMap/TileMap.h"
 
 // GetComponentMacro
 #define GET_COMP(COMPONENT_NAME) GetComponent<COMPONENT_NAME##Component>(#COMPONENT_NAME)	// ## : 이어 붙인다. 매크로 치환, # : 문자열로 치환이 된다.
