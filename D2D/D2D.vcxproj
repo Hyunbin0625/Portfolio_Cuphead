@@ -19,7 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet\BulletManager.cpp" />
+    <ClCompile Include="Bullet\PlayerBulletManager.cpp" />
+    <ClCompile Include="Bullet\PlayerSpecialAttack.cpp" />
+    <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp" />
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
@@ -65,7 +67,9 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet\BulletManager.h" />
+    <ClInclude Include="Bullet\PlayerBulletManager.h" />
+    <ClInclude Include="Bullet\PlayerSpecialAttack.h" />
+    <ClInclude Include="Bullet\PlayerSpecialAttackManager.h" />
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />

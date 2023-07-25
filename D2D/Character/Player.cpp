@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player(const Vector2& position, const Vector2& scale, float speed)
-	: position(position), scale(scale), speed(speed)
+Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT hp, float maxSuperMeterCard)
+	: position(position), scale(scale), speed(speed), hp(hp), maxSuperMeterCard(maxSuperMeterCard)
 {
+	lastHp = hp;
 	animRect = make_shared<AnimationRect>(position, scale, 0.0f, L"_Textures/Player/cuphead_idle_R.png");
 
 	// Move
@@ -75,15 +76,46 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed)
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"AimShootDownL", L"_Textures/Player/cuphead_shoot_down_L.png", 6, true, true, 0.1));
 
 	// Dash
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"Dash_R", L"_Textures/Player/cuphead_dash_R.png", 8, false, true, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"Dash_L", L"_Textures/Player/cuphead_dash_L.png", 8, true, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashR", L"_Textures/Player/cuphead_dash_R.png", 8, false, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashL", L"_Textures/Player/cuphead_dash_L.png", 8, true, true, 0.1));
+
+
+	// Ground_Special_Attack
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackR", L"_Textures/Player/cuphead_ex_straight_R.png", 15, false, false, 0.12));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackL", L"_Textures/Player/cuphead_ex_straight_L.png", 15, true, false, 0.12));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_R.png", 15, false, false, 0.12));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_L.png", 15, true, false, 0.12));
+
+	// Air_Special_Attack
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackR", L"_Textures/Player/cuphead_ex_straight_air_R.png", 6, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackL", L"_Textures/Player/cuphead_ex_straight_air_L.png", 6, true, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_air_R.png", 6, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_air_L.png", 6, true, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownR", L"_Textures/Player/cuphead_ex_down_air_R.png", 6, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownL", L"_Textures/Player/cuphead_ex_down_air_L.png", 6, true, false, 0.1));
+		
+	// Super_Beam
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SuperBeamR", L"_Textures/Player/cuphead_dash_R.png", 8, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SuperBeamL", L"_Textures/Player/cuphead_dash_L.png", 8, true, false, 0.1));
+
+
+	// Hit
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"HitR", L"_Textures/Player/cuphead_hit_air_R.png", 6, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"HitL", L"_Textures/Player/cuphead_hit_air_L.png", 6, true, false, 0.1));
+
+	// Death
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Death", L"_Textures/Player/cuphead_death_body.png", 16, false, false, 0.1));
+
 	// AddAnimator
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
 	// animRect SetAnimator
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 
 	// Create Player Bullet
-	bullet = make_shared<BulletManager>(10, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
+	bullet = make_shared<PlayerBulletManager>(10, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
+
+	// Create Special Attack
+	SpecialAttack = make_shared<PlayerSpecialAttackManager>(2, 500, 1);	// totalBullet, bulletSpeed, speakerSpeed
 
 	SFXbullet = make_unique<AnimationRect>(Vector2(), Vector2(75, 69), 0.0f, L"_Textures/Player/weapon_peashot_spark.png");
 	SFXbullet->AddAnimClip(make_shared<AnimationClip>(L"SFXBullet", L"_Textures/Player/weapon_peashot_spark.png", 4, false, true, 0.1));
@@ -98,103 +130,127 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed)
 
 void Player::Move()
 {
-	if (!INPUT->Press('C') && !INPUT->Press(VK_DOWN) && !(runTime > 0.0f && runTime < 0.4f))
+	if (!INPUT->Press('C') && !INPUT->Press(VK_DOWN) && !(deltaTime > 0.0f && deltaTime < 0.4f))
 	{
 		if (INPUT->Press(VK_LEFT))
-			animRect->Move(Vector2(-speed, 0));
+			animRect->Move(Vector2(-speed, 0) * totalSize);
 		if (INPUT->Press(VK_RIGHT))
-			animRect->Move(Vector2(speed, 0));
+			animRect->Move(Vector2(speed, 0) * totalSize);
 	}
 
-	if (INPUT->Down(VK_SHIFT) && runTime == 0.0f)
+	if (INPUT->Down(VK_SHIFT) && deltaTime == 0.0f)
 	{
 		if (direction == Direction::L)
-			animRect->Move(Vector2(-speed * 150, 0));
+			animRect->Move(Vector2(-speed * 150, 0) * totalSize);
 		else
-			animRect->Move(Vector2(speed * 150, 0));
+			animRect->Move(Vector2(speed * 150, 0) * totalSize);
 		dash = 1;
 	}
 
 	if (dash == 1)
-		runTime += 1 * DELTA;
+		deltaTime += 1 * DELTA;
 
-	if (runTime > 0.4f && dash == 1)
+	if (deltaTime > 0.4f && dash == 1)
 	{
 		++dash;
 		if (direction == Direction::L)
-			animRect->Move(Vector2(-speed * 150, 0));
+			animRect->Move(Vector2(-speed * 150, 0) * totalSize);
 		else
-			animRect->Move(Vector2(speed * 150, 0));
+			animRect->Move(Vector2(speed * 150, 0) * totalSize);
 	}
 
-	if (!INPUT->Press(VK_SHIFT) && runTime > 0.4f && dash == 2)
+	if (!INPUT->Press(VK_SHIFT) && deltaTime > 0.4f && dash == 2)
 	{
 		dash = 0;
-		runTime = 0.0f;
+		deltaTime = 0.0f;
 	}
 }
 
 void Player::Update()
 {
-	if (platform == 1 && INPUT->Press(VK_DOWN) && INPUT->Press('Z'))
+	SFXbullet->SetPosition(Vector2(-1000, -1000));
+	SFXbullet->SetScale(Vector2(75, 69) * totalSize);
+
+	if (state != State::Death && specialAttack != 1)
 	{
-		checkCollider = 0;
-		++jumpCount;
-	}	
-	else if (INPUT->Down('Z') && checkCollider == 1)
-	{
-		++jumpCount;
-		G = 0;
-		jumpSpeed = jumpMaxSpeed;
-		checkCollider = 0;
+		if (platform == 1 && INPUT->Press(VK_DOWN) && INPUT->Press('Z'))
+		{
+			checkCollider = 0;
+			++jumpCount;
+		}
+		else if (INPUT->Down('Z') && checkCollider == 1)
+		{
+			++jumpCount;
+			G = 0;
+			jumpSpeed = jumpMaxSpeed;
+			checkCollider = 0;
+		}
+
+		Move();
 	}
 
-	Move();
 	if (checkCollider == 0)
 	{
 		G += 15 * DELTA;
 		jumpSpeed -= G;
 
-		animRect->Move(Vector2(0, jumpSpeed));
+		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
 
-		if (jumpCount > 0)
+		if (direction == Direction::R)
+			state = State::Jump_R;
+		else
+			state = State::Jump_L;
+
+		if (INPUT->Press('X') && state != State::Death && specialAttack != 1)
 		{
-			if (direction == Direction::R)
-				state = State::Jump_R;
-			else
-				state = State::Jump_L;
-
-			if (INPUT->Press('X'))
+			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
-				if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
-				{
-					direction = Direction::R;
-					bullet->Init(Vector2(animRect->GetPosition().x + 60, animRect->GetPosition().y), 0.0f, 0.0f);
-				}
+				direction = Direction::R;
+				bullet->Init(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y), 0.0f, 0.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y));
+			}
 
-				if (INPUT->Press(VK_LEFT) || direction == Direction::L)
-				{
-					direction = Direction::L;
-					bullet->Init(Vector2(animRect->GetPosition().x - 60, animRect->GetPosition().y), 180.0f, 0.0f);
-				}
+			if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+			{
+				direction = Direction::L;
+				bullet->Init(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y), 180.0f, 0.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y));
+			}
 
-				if (INPUT->Press(VK_UP))
-					bullet->Init(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + 80), -90.0f, 0.0f);
+			if (INPUT->Press(VK_UP))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + 80 * totalSize), -90.0f, 0.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + 80 * totalSize));
+			}
 
-				if (INPUT->Press(VK_DOWN))
-					bullet->Init(Vector2(animRect->GetPosition().x, animRect->GetPosition().y - 80), 90.0f, 0.0f);
+			if (INPUT->Press(VK_DOWN))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x, animRect->GetPosition().y - 80 * totalSize), 90.0f, 0.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y - 80 * totalSize));
+			}
 
-				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
-					bullet->Init(Vector2(animRect->GetPosition().x + 60, animRect->GetPosition().y + 60), -45.0f, 21.0f);
+			if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y + 60 * totalSize), -45.0f, 21.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y + 60 * totalSize));
+			}
 
-				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
-					bullet->Init(Vector2(animRect->GetPosition().x - 60, animRect->GetPosition().y + 60), -135.0f, 21.0f);
+			if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y + 60 * totalSize), -135.0f, 21.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y + 60 * totalSize));
+			}
 
-				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_DOWN))
-					bullet->Init(Vector2(animRect->GetPosition().x + 60, animRect->GetPosition().y - 60), 45.0f, 21.0f);
+			if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_DOWN))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y - 60 * totalSize), 45.0f, 21.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 60 * totalSize, animRect->GetPosition().y - 60 * totalSize));
+			}
 
-				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_DOWN))
-					bullet->Init(Vector2(animRect->GetPosition().x - 60, animRect->GetPosition().y - 60), 135.0f, 21.0f);
+			if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_DOWN))
+			{
+				bullet->Init(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y - 60 * totalSize), 135.0f, 21.0f);
+				SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 60 * totalSize, animRect->GetPosition().y - 60 * totalSize));
 			}
 		}
 	}
@@ -430,19 +486,109 @@ void Player::Update()
 		}
 	}
 
-	if (dash >= 1 && runTime > 0.0f && runTime < 0.4f)
+	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f)
 	{
-		cout << runTime << '\n';
 		jumpSpeed = 0;
 		if (direction == Direction::R)
 			state = State::Dash_R;
 		else
 			state = State::Dash_L;
 	}
-	
+
+	cout << deltaTime << '\n';
+	if (INPUT->Press('V') && (superMeterCard / maxSuperMeterCard * 100) >= 20 && deltaTime == 0.0f)
+	{
+		cout << "true\n";
+		specialAttack = 1;
+	}
+
+	if (specialAttack == 1 && deltaTime <= 1.0f)
+	{
+		cout << "진입\n";
+		deltaTime += 1 * DELTA;
+		check = 1;
+
+		if (checkCollider == 0)
+		{
+			jumpSpeed = 0;
+			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
+			{
+				direction = Direction::R;
+				state = State::Air_Special_Attack_R;
+			}
+			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+			{
+				direction = Direction::L;
+				state = State::Air_Special_Attack_L;
+			}
+
+			if (INPUT->Press(VK_UP))
+			{
+				if (direction == Direction::R)
+					state = State::Air_Special_Attack_Up_R;
+				else
+					state = State::Air_Special_Attack_Up_L;
+			}
+
+			if (INPUT->Press(VK_DOWN))
+			{
+				if (direction == Direction::R)
+					state = State::Air_Special_Attack_Down_R;
+				else
+					state = State::Air_Special_Attack_Down_L;
+			}
+		}
+		else
+		{
+			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
+			{
+				direction = Direction::R;
+				state = State::Special_Attack_R;
+			}
+			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+			{
+				direction = Direction::L;
+				state = State::Special_Attack_L;
+			}
+
+			if (INPUT->Press(VK_UP))
+			{
+				if (direction == Direction::R)
+					state = State::Special_Attack_Up_R;
+				else
+					state = State::Special_Attack_Up_L;
+			}
+		}
+	}
+
+	if (!INPUT->Press('V') && deltaTime > 1.0f && specialAttack == 1)
+	{
+		superMeterCard = superMeterCard - 0.2 * maxSuperMeterCard;
+		deltaTime = 0.0f;
+		specialAttack = 0;
+	}
+
+	if (hp < lastHp && deltaTime < 0.3f)
+	{
+		deltaTime += 1 * DELTA;
+		if (direction == Direction::R)
+			state = State::Hit_R;
+		else
+			state = State::Hit_L;
+	}
+	else if (hp < lastHp)
+	{
+		deltaTime = 0.0f;
+		lastHp = hp;
+	}
+	else if (hp > lastHp)
+		lastHp = hp;
+
+	if (hp == 0)
+		state = State::Death;
+		
 	if (scale != animRect->GetScale())
-		animRect->SetScale(scale * scaleSize);
-	SFXbullet->SetPosition(Vector2(-1000, -1000));
+		animRect->SetScale(scale * totalSize);
 
 	switch (state)
 	{
@@ -454,175 +600,237 @@ void Player::Update()
 		break;
 	case Run_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunR");
-		animRect->SetScale(Vector2(137, 169)* scaleSize);
+		animRect->SetScale(Vector2(137, 169)* totalSize);
 		break;
 	case Run_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
-		animRect->SetScale(Vector2(137, 169)* scaleSize);
+		animRect->SetScale(Vector2(137, 169)* totalSize);
 		break;
 	case Jump_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpR");
-		animRect->SetScale(Vector2(88, 109)* scaleSize);
+		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
 	case Jump_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpL");
-		animRect->SetScale(Vector2(88, 109)* scaleSize);
+		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
 	case Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DuckR");
-		animRect->SetScale(Vector2(168, 92)* scaleSize);	// Duck_size	나중에 매크로로 저장
+		animRect->SetScale(Vector2(168, 92)* totalSize);
 		break;
 	case Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DuckL");
-		animRect->SetScale(Vector2(168, 92)* scaleSize);
+		animRect->SetScale(Vector2(168, 92)* totalSize);
 		break;
 	case Shoot_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ShootDuckR");
-		animRect->SetScale(Vector2(178, 81)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 100, animRect->GetPosition().y), 0.0f, 21.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 80, animRect->GetPosition().y));
+		animRect->SetScale(Vector2(178, 81)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 100 * totalSize, animRect->GetPosition().y), 0.0f, 21.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 80 * totalSize, animRect->GetPosition().y));
 		break;
 	case Shoot_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ShootDuckL");
-		animRect->SetScale(Vector2(178, 81)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 100, animRect->GetPosition().y), 180.0f, 21.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 80, animRect->GetPosition().y));
+		animRect->SetScale(Vector2(178, 81)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 100 * totalSize, animRect->GetPosition().y), 180.0f, 21.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 80 * totalSize, animRect->GetPosition().y));
 		break;
 	case Shoot_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ShootR");
-		animRect->SetScale(Vector2(127, 155)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 75, animRect->GetPosition().y + 5), 0.0f, 43.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55, animRect->GetPosition().y + 5));
+		animRect->SetScale(Vector2(127, 155)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 75 * totalSize, animRect->GetPosition().y + 5 * totalSize), 0.0f, 43.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55 * totalSize, animRect->GetPosition().y + 5 * totalSize));
 		break;
 	case Shoot_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ShootL");
-		animRect->SetScale(Vector2(127, 155)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 75, animRect->GetPosition().y + 5), -180.0f, 43.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55, animRect->GetPosition().y + 5));
+		animRect->SetScale(Vector2(127, 155)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 75 * totalSize, animRect->GetPosition().y + 5 * totalSize), -180.0f, 43.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55 * totalSize, animRect->GetPosition().y + 5 * totalSize));
 		break;
 	case Run_Shoot_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunShootR");
-		animRect->SetScale(Vector2(144, 162)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 75, animRect->GetPosition().y - 10), 0.0f, 43.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55, animRect->GetPosition().y - 10));
+		animRect->SetScale(Vector2(144, 162)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 75 * totalSize, animRect->GetPosition().y - 10 * totalSize), 0.0f, 43.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55 * totalSize, animRect->GetPosition().y - 10 * totalSize));
 		break;
 	case Run_Shoot_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunShootL");
-		animRect->SetScale(Vector2(144, 162)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 75, animRect->GetPosition().y - 10), -180.0f, 43.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55, animRect->GetPosition().y - 10));
+		animRect->SetScale(Vector2(144, 162)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 75 * totalSize, animRect->GetPosition().y - 10 * totalSize), -180.0f, 43.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55 * totalSize, animRect->GetPosition().y - 10 * totalSize));
 		break;
 	case Run_Shoot_Diagonal_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunShootDiagUpR");
-		animRect->SetScale(Vector2(143, 157)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 75, animRect->GetPosition().y + 65), -45.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55, animRect->GetPosition().y + 45));
+		animRect->SetScale(Vector2(143, 157)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 75 * totalSize, animRect->GetPosition().y + 65 * totalSize), -45.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55 * totalSize, animRect->GetPosition().y + 45 * totalSize));
 		break;
 	case Run_Shoot_Diagonal_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunShootDiagUpL");
-		animRect->SetScale(Vector2(143, 157)* scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 75, animRect->GetPosition().y + 65), -135.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55, animRect->GetPosition().y + 45));
+		animRect->SetScale(Vector2(143, 157)* totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 75 * totalSize, animRect->GetPosition().y + 65 * totalSize), -135.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55 * totalSize, animRect->GetPosition().y + 45 * totalSize));
 		break;
 	case Aim_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimR");
-		animRect->SetScale(Vector2(135, 161)* scaleSize);
+		animRect->SetScale(Vector2(135, 161)* totalSize);
 		break;
 	case Aim_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimL");
-		animRect->SetScale(Vector2(135, 161) * scaleSize);
+		animRect->SetScale(Vector2(135, 161) * totalSize);
 		break;
 	case Aim_Diagonal_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDiagUpR");
-		animRect->SetScale(Vector2(129, 151)* scaleSize);
+		animRect->SetScale(Vector2(129, 151)* totalSize);
 		break;
 	case Aim_Diagonal_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDiagUpL");
-		animRect->SetScale(Vector2(129, 151)* scaleSize);
+		animRect->SetScale(Vector2(129, 151)* totalSize);
 		break;
 	case Aim_Diagonal_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDiagDownR");
-		animRect->SetScale(Vector2(118, 163) * scaleSize);
+		animRect->SetScale(Vector2(118, 163) * totalSize);
 		break;
 	case Aim_Diagonal_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDiagDownL");
-		animRect->SetScale(Vector2(118, 163) * scaleSize);
+		animRect->SetScale(Vector2(118, 163) * totalSize);
 		break;
 	case Aim_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimUpR");
-		animRect->SetScale(Vector2(108, 175) * scaleSize);
+		animRect->SetScale(Vector2(108, 175) * totalSize);
 		break;
 	case Aim_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimUpL");
-		animRect->SetScale(Vector2(108, 175) * scaleSize);
+		animRect->SetScale(Vector2(108, 175) * totalSize);
 		break;
 	case Aim_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDownR");
-		animRect->SetScale(Vector2(103, 168) * scaleSize);
+		animRect->SetScale(Vector2(103, 168) * totalSize);
 		break;
 	case Aim_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimDownL");
-		animRect->SetScale(Vector2(103, 168) * scaleSize);
+		animRect->SetScale(Vector2(103, 168) * totalSize);
 		break;
 	case Aim_Shoot_Diagonal_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDiagUpR");
-		animRect->SetScale(Vector2(130, 154) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 75, animRect->GetPosition().y + 65), -45.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55, animRect->GetPosition().y + 45));
+		animRect->SetScale(Vector2(130, 154) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 75 * totalSize, animRect->GetPosition().y + 65 * totalSize), -45.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55 * totalSize, animRect->GetPosition().y + 45 * totalSize));
 		break;
 	case Aim_Shoot_Diagonal_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDiagUpL");
-		animRect->SetScale(Vector2(130, 154) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 75, animRect->GetPosition().y + 65), -135.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55, animRect->GetPosition().y + 45));
+		animRect->SetScale(Vector2(130, 154) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 75 * totalSize, animRect->GetPosition().y + 65 * totalSize), -135.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55 * totalSize, animRect->GetPosition().y + 45 * totalSize));
 		break;
 	case Aim_Shoot_Diagonal_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDiagDownR");
-		animRect->SetScale(Vector2(120, 163) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 75, animRect->GetPosition().y - 65), 45.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55, animRect->GetPosition().y - 45));
+		animRect->SetScale(Vector2(120, 163) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 75 * totalSize, animRect->GetPosition().y - 65 * totalSize), 45.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 55 * totalSize, animRect->GetPosition().y - 45 * totalSize));
 		break;
 	case Aim_Shoot_Diagonal_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDiagDownL");
-		animRect->SetScale(Vector2(120, 163) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 75, animRect->GetPosition().y - 65), 135.0f, 10.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55, animRect->GetPosition().y - 45));
+		animRect->SetScale(Vector2(120, 163) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 75 * totalSize, animRect->GetPosition().y - 65 * totalSize), 135.0f, 10.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 55 * totalSize, animRect->GetPosition().y - 45 * totalSize));
 		break;
 	case Aim_Shoot_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootUpR");
-		animRect->SetScale(Vector2(108, 179) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 30, animRect->GetPosition().y + 110), -90.0f, 0.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 30, animRect->GetPosition().y + 85));
+		animRect->SetScale(Vector2(108, 179) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 30 * totalSize, animRect->GetPosition().y + 110 * totalSize), -90.0f, 0.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 30 * totalSize, animRect->GetPosition().y + 85 * totalSize));
 		break;
 	case Aim_Shoot_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootUpL");
-		animRect->SetScale(Vector2(108, 179) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 30, animRect->GetPosition().y + 110), -90.0f, 0.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30, animRect->GetPosition().y + 85));
+		animRect->SetScale(Vector2(108, 179) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y + 110 * totalSize), -90.0f, 0.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y + 85 * totalSize));
 		break;
 	case Aim_Shoot_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDownR");
-		animRect->SetScale(Vector2(102, 171) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x + 30, animRect->GetPosition().y - 110), 90.0f, 0.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 30, animRect->GetPosition().y - 85));
+		animRect->SetScale(Vector2(102, 171) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x + 30 * totalSize, animRect->GetPosition().y - 110 * totalSize), 90.0f, 0.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x + 30 * totalSize, animRect->GetPosition().y - 85 * totalSize));
 		break;
 	case Aim_Shoot_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AimShootDownL");
-		animRect->SetScale(Vector2(102, 171) * scaleSize);
-		bullet->Init(Vector2(animRect->GetPosition().x - 30, animRect->GetPosition().y - 110), 90.0f, 0.0f);
-		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30, animRect->GetPosition().y - 85));
+		animRect->SetScale(Vector2(102, 171) * totalSize);
+		bullet->Init(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 110 * totalSize), 90.0f, 0.0f);
+		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 85 * totalSize));
 		break;
 	case Dash_R:
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Dash_R");
-		animRect->SetScale(Vector2(326, 163) * scaleSize);
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashR");
+		animRect->SetScale(Vector2(326, 163) * totalSize);
 		break;
 	case Dash_L:
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Dash_L");
-		animRect->SetScale(Vector2(326, 163) * scaleSize);
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashL");
+		animRect->SetScale(Vector2(326, 163) * totalSize);
+		break;
+
+	case Special_Attack_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackR");
+		animRect->SetScale(Vector2(425, 385) * totalSize);
+		break;
+	case Special_Attack_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackL");
+		animRect->SetScale(Vector2(425, 385) * totalSize);
+		break;
+	case Special_Attack_Up_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackUpR");
+		animRect->SetScale(Vector2(353, 396) * totalSize);
+		break;
+	case Special_Attack_Up_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackUpL");
+		animRect->SetScale(Vector2(353, 396) * totalSize);
+		break;
+
+	case Air_Special_Attack_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackR");
+		animRect->SetScale(Vector2(145, 145) * totalSize);
+		break;
+	case Air_Special_Attack_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackL");
+		animRect->SetScale(Vector2(145, 145) * totalSize);
+		break;
+	case Air_Special_Attack_Up_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackUpR");
+		animRect->SetScale(Vector2(126, 136) * totalSize);
+		break;
+	case Air_Special_Attack_Up_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackUpL");
+		animRect->SetScale(Vector2(126, 136) * totalSize);
+		break;
+	case Air_Special_Attack_Down_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackDownR");
+		animRect->SetScale(Vector2(134, 165) * totalSize);
+		break;
+	case Air_Special_Attack_Down_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackDownL");
+		animRect->SetScale(Vector2(134, 165) * totalSize);
+		break;
+		
+	case Super_Beam_R:
+		break;
+	case Super_Beam_L:
+		break;
+			
+	case Hit_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitR");
+		animRect->SetScale(Vector2(125, 188) * totalSize);
+		break;
+	case Hit_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitL");
+		animRect->SetScale(Vector2(125, 188) * totalSize);
+		break;
+	case Death:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
+		animRect->SetScale(Vector2(172, 106) * totalSize);
 		break;
 	}
 
-	if (INPUT->Press('X'))
+	bullet->SetTotalSize(totalSize);
+	SpecialAttack->SetTotalSize(totalSize);
+	if (INPUT->Press('X') && state != State::Death && specialAttack != 1)
 	{
 		bullet->SetTime(bullet->GetTime() + bullet->GetSpeakerSpeed() * DELTA);
 		if ((int)bullet->GetTime() != bullet->GetLastIndex())
@@ -652,7 +860,24 @@ void Player::GUI()
 	static bool bOpen = true;
 	if (ImGui::Begin("Player", &bOpen))
 	{
-		ImGui::SliderFloat("Scale", &scaleSize, 0.0f, 2.0f, "%.2f");
+		ImGui::SliderFloat("Scale", &totalSize, 0.0f, 2.0f, "%.2f");
+
+		string textHp = "Player Hp : " + to_string(hp);
+		ImGui::Text(textHp.c_str());
+		if (ImGui::Button("Down", ImVec2(50, 30)))
+			--hp;
+		ImGui::SameLine();
+		if (ImGui::Button("Up", ImVec2(50, 30)))
+			++hp;
+
+		int percent = superMeterCard / maxSuperMeterCard * 100;
+		string textSuperMeterCared = "Player super meter card : " + to_string(percent) + "%%";
+		ImGui::Text(textSuperMeterCared.c_str());
+		if (ImGui::Button("Down(-10)", ImVec2(70, 30)))
+			superMeterCard -= 10;
+		ImGui::SameLine();
+		if (ImGui::Button("Up(+10)", ImVec2(70, 30)))
+			superMeterCard += 10;
 	}
 	ImGui::End();
 }

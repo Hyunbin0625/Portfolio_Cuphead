@@ -1,28 +1,28 @@
 #include "stdafx.h"
-#include "BulletManager.h"
+#include "PlayerSpecialAttackManager.h"
 
-
-BulletManager::BulletManager(UINT totalBullet, float bulletSpeed, float speakerSpeed)
+PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float bulletSpeed, float speakerSpeed)
 	: totalBullet(totalBullet), bulletSpeed(bulletSpeed), speakerSpeed(speakerSpeed)
 {
 	// ÃÊ±âÈ­
 	time = 0;
 	count = 1;
+	totalSize = 1;
 
-	bullets.assign(this->totalBullet, make_shared<PlayerBullet>());
+	bullets.assign(this->totalBullet, make_shared<PlayerSpecialAttack>());
 	activation.assign(this->totalBullet, bool());
 
 	for (auto& bullet : bullets)
-		bullet = make_shared<PlayerBullet>(bulletSpeed);
+		bullet = make_shared<PlayerSpecialAttack>(bulletSpeed);
 	for (auto active : activation)
 		active = 0;
 }
 
-void BulletManager::CreateBullet()
+void PlayerSpecialAttackManager::CreateBullet()
 {
-	vector<shared_ptr<PlayerBullet>> tempBullets;
+	vector<shared_ptr<PlayerSpecialAttack>> tempBullets;
 	vector<bool> tempActivation;
-	tempBullets.assign(totalBullet * 2, make_shared<PlayerBullet>());
+	tempBullets.assign(totalBullet * 2, make_shared<PlayerSpecialAttack>());
 	tempActivation.assign(totalBullet * 2, bool());
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
@@ -31,11 +31,11 @@ void BulletManager::CreateBullet()
 	}
 
 	totalBullet *= 2;
-	bullets.assign(totalBullet, make_shared<PlayerBullet>());
+	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
 	activation.assign(totalBullet, bool());
 
 	for (auto& bullet : bullets)
-		bullet = make_shared<PlayerBullet>(bulletSpeed);
+		bullet = make_shared<PlayerSpecialAttack>(bulletSpeed);
 	for (auto active : activation)
 		active = 0;
 
@@ -46,7 +46,7 @@ void BulletManager::CreateBullet()
 	}
 }
 
-void BulletManager::Init(Vector2 position, float rotation, float rebound)
+void PlayerSpecialAttackManager::Init(Vector2 position, float rotation, float rebound)
 {
 	this->position = Vector2(position.x, position.y + count * rebound);
 
@@ -75,11 +75,12 @@ void BulletManager::Init(Vector2 position, float rotation, float rebound)
 	bullets[nextIndex]->Init(this->position, rotation);
 }
 
-void BulletManager::Update()
+void PlayerSpecialAttackManager::Update()
 {
 //	cout << time << '\n';
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
+		bullets[i]->SetTotalSize(totalSize);
 		if (activation[i] == true)
 		{
 			bullets[i]->Update();
@@ -108,7 +109,7 @@ void BulletManager::Update()
 	}
 }
 
-void BulletManager::Render()
+void PlayerSpecialAttackManager::Render()
 {
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{

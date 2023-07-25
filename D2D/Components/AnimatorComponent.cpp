@@ -65,7 +65,8 @@ void AnimatorComponent::AddAnimClip(const shared_ptr<AnimationClip>& animClip)
 
 void AnimatorComponent::SetCurrentAnimClip(const wstring& clipName)
 {
-	if (clipName == currentAnimClip->GetClipName() && currentAnimClip->GetIsLoop() == true) return;
+//	if (clipName == currentAnimClip->GetClipName() && currentAnimClip->GetIsLoop() == true) return;
+	if (clipName == currentAnimClip->GetClipName()) return;
 
 	const auto& iter = animClips.find(clipName);
 

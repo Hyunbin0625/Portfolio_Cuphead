@@ -34,6 +34,9 @@
     <Filter Include="Objects\Components">
       <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{93a74b53-29d8-402b-89a8-96c61dddf9ef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -133,9 +136,17 @@
       <Filter>Objects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Bullet\PlayerBullet.cpp">
-      <Filter>Objects</Filter>
+      <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet\BulletManager.cpp" />
+    <ClCompile Include="Bullet\PlayerBulletManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerSpecialAttack.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -250,9 +261,17 @@
       <Filter>Objects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Bullet\PlayerBullet.h">
-      <Filter>Objects</Filter>
+      <Filter>Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet\BulletManager.h" />
+    <ClInclude Include="Bullet\PlayerBulletManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerSpecialAttack.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerSpecialAttackManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

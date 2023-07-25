@@ -160,7 +160,9 @@ extern float gWinHeight;
 
 // Bullet
 #include "Bullet/PlayerBullet.h"
-#include "Bullet/BulletManager.h"
+#include "Bullet/PlayerBulletManager.h"
+#include "Bullet/PlayerSpecialAttack.h"
+#include "Bullet/PlayerSpecialAttackManager.h"
 
 // Character
 #include "Character/Player.h"

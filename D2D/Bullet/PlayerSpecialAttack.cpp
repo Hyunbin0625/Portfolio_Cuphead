@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "PlayerBullet.h"
+#include "PlayerSpecialAttack.h"
 
-PlayerBullet::PlayerBullet(float bulletSpeed)
+PlayerSpecialAttack::PlayerSpecialAttack(float bulletSpeed)
 	: speed(bulletSpeed)
 {
-	animRect = make_shared<AnimationRect>(Vector2(), Vector2(159, 43), 0.0f, L"_Textures/PlayerBullet/weapon_peashot_main.png");
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"IntroA", L"_Textures/PlayerBullet/weapon_peashot_intro_a.png", 3, false, true, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"Main", L"_Textures/PlayerBullet/weapon_peashot_main.png", 6, false, true, 0.1));
+	animRect = make_shared<AnimationRect>(Vector2(), Vector2(159, 43), 0.0f, L"_Textures/PlayerBullet/weapon_peashot_EX_loop.png");
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"IntroA", L"_Textures/PlayerBullet/weapon_peashot_EX_intro.png", 3, false, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Main", L"_Textures/PlayerBullet/weapon_peashot_EX_loop.png", 8, false, true, 0.1));
 	
 	// AddAnimator
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
@@ -17,14 +17,14 @@ PlayerBullet::PlayerBullet(float bulletSpeed)
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 }
 
-void PlayerBullet::Init(Vector2 position, float rotation)
+void PlayerSpecialAttack::Init(Vector2 position, float rotation)
 {
 	runTime = 0.0f;
 	animRect->SetPosition(position);
 	animRect->SetRotation(rotation);
 }
 
-void PlayerBullet::Update()
+void PlayerSpecialAttack::Update()
 {
 	runTime += 1 * DELTA;
 
@@ -43,7 +43,7 @@ void PlayerBullet::Update()
 	animRect->Update();
 }
 
-void PlayerBullet::Render()
+void PlayerSpecialAttack::Render()
 {
 	animRect->Render();
 }

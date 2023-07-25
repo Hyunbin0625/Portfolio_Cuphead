@@ -1,9 +1,9 @@
 #pragma once
 
-class BulletManager
+class PlayerBulletManager
 {
 public:
-	BulletManager(UINT totalBullet, float bulletSpeed, float speakerSpeed);
+	PlayerBulletManager(UINT totalBullet, float bulletSpeed, float speakerSpeed);
 
 public:
 	void CreateBullet();
@@ -25,6 +25,7 @@ public:
 	void SetActivation(int index, bool value) { activation[index] = value; }
 	void SetPosition(Vector2 position) { this->position = position; }
 	void SetRotation(float rotation) { this->rotation = rotation; }
+	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 
 private:
 	vector<shared_ptr<PlayerBullet>> bullets;
@@ -34,13 +35,15 @@ private:
 	float bulletSpeed;
 	float speakerSpeed;
 
-	// current Index
+	// Index
 	int nextIndex = 0;
 	float time = 0;	// time
 	int lastIndex = -1;	// last Index
 
 	Vector2 position;
 	float rotation = 0.0f;
+
+	float totalSize;
 
 	int count = 1;		// -1 ~ 1
 	bool bCount = 0;

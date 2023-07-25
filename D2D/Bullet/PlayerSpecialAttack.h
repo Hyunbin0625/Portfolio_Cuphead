@@ -1,10 +1,10 @@
 #pragma once
 
-class PlayerBullet
+class PlayerSpecialAttack
 {
 public:
-	PlayerBullet() : PlayerBullet(0.0f) {}
-	PlayerBullet(float bulletSpeed);
+	PlayerSpecialAttack() : PlayerSpecialAttack(0.0f) {}
+	PlayerSpecialAttack(float bulletSpeed);
 
 public:
 	void Init(Vector2 position, float rotation);
