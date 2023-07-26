@@ -19,6 +19,10 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"JumpR", L"_Textures/Player/cuphead_jump_R.png", 8, false, true, 0.1));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"JumpL", L"_Textures/Player/cuphead_jump_L.png", 8, true, true, 0.1));
 
+	// Parry
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"ParryR", L"_Textures/Player/cuphead_parry_R.png", 8, false, false, 0.06));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"ParryL", L"_Textures/Player/cuphead_parry_L.png", 8, true, false, 0.06));
+
 	// Shoot
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"ShootR", L"_Textures/Player/cuphead_shoot_straight.png", 6, false, true, 0.06));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"ShootL", L"_Textures/Player/cuphead_shoot_stleft.png", 6, true, true, 0.06));
@@ -81,18 +85,18 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 
 
 	// Ground_Special_Attack
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackR", L"_Textures/Player/cuphead_ex_straight_R.png", 15, false, false, 0.12));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackL", L"_Textures/Player/cuphead_ex_straight_L.png", 15, true, false, 0.12));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_R.png", 15, false, false, 0.12));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_L.png", 15, true, false, 0.12));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackR", L"_Textures/Player/cuphead_ex_straight_R.png", 15, false, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackL", L"_Textures/Player/cuphead_ex_straight_L.png", 15, true, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_R.png", 15, false, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_L.png", 15, true, false, 0.11));
 
 	// Air_Special_Attack
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackR", L"_Textures/Player/cuphead_ex_straight_air_R.png", 6, false, false, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackL", L"_Textures/Player/cuphead_ex_straight_air_L.png", 6, true, false, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_air_R.png", 6, false, false, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_air_L.png", 6, true, false, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownR", L"_Textures/Player/cuphead_ex_down_air_R.png", 6, false, false, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownL", L"_Textures/Player/cuphead_ex_down_air_L.png", 6, true, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackR", L"_Textures/Player/cuphead_ex_straight_air_R.png", 15, false, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackL", L"_Textures/Player/cuphead_ex_straight_air_L.png", 15, true, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpR", L"_Textures/Player/cuphead_ex_up_air_R.png", 15, false, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackUpL", L"_Textures/Player/cuphead_ex_up_air_L.png", 15, true, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownR", L"_Textures/Player/cuphead_ex_down_air_R.png", 15, false, false, 0.11));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"AirSpecialAttackDownL", L"_Textures/Player/cuphead_ex_down_air_L.png", 15, true, false, 0.11));
 		
 	// Super_Beam
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"SuperBeamR", L"_Textures/Player/cuphead_dash_R.png", 8, false, false, 0.1));
@@ -115,10 +119,10 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	bullet = make_shared<PlayerBulletManager>(10, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
 
 	// Create Special Attack
-	SpecialAttack = make_shared<PlayerSpecialAttackManager>(2, 500, 1);	// totalBullet, bulletSpeed, speakerSpeed
+	specialAttack = make_shared<PlayerSpecialAttackManager>(2, 500);	// totalBullet, bulletSpeed, speakerSpeed
 
-	SFXbullet = make_unique<AnimationRect>(Vector2(), Vector2(75, 69), 0.0f, L"_Textures/Player/weapon_peashot_spark.png");
-	SFXbullet->AddAnimClip(make_shared<AnimationClip>(L"SFXBullet", L"_Textures/Player/weapon_peashot_spark.png", 4, false, true, 0.1));
+	SFXbullet = make_unique<AnimationRect>(Vector2(), Vector2(75, 69), 0.0f, L"_Textures/SFX/weapon_peashot_spark.png");
+	SFXbullet->AddAnimClip(make_shared<AnimationClip>(L"SFXBullet", L"_Textures/SFX/weapon_peashot_spark.png", 4, false, true, 0.1));
 	// AddAnimator
 	SFXbullet->AddComponent(make_shared<AnimatorComponent>(SFXbullet->GetAnimClips()));
 	// animRect SetAnimator
@@ -166,12 +170,29 @@ void Player::Move()
 	}
 }
 
+void Player::Jump()
+{
+
+}
+
 void Player::Update()
 {
+	if (hit && hitCTime <= 0.0f)
+	{
+		hitCTime = 5.0f;
+		hp -= hit;
+		hit = 0;
+	}
+
+	if (hitCTime >= 0.0f)
+	{
+		hitCTime -= 1 * DELTA;
+	}
+
 	SFXbullet->SetPosition(Vector2(-1000, -1000));
 	SFXbullet->SetScale(Vector2(75, 69) * totalSize);
 
-	if (state != State::Death && specialAttack != 1)
+	if (state != State::Death && bSpecialAttack != 1)
 	{
 		if (platform == 1 && INPUT->Press(VK_DOWN) && INPUT->Press('Z'))
 		{
@@ -189,19 +210,46 @@ void Player::Update()
 		Move();
 	}
 
-	if (checkCollider == 0)
+	if (checkCollider == 0 && bSpecialAttack == 0)
 	{
 		G += 15 * DELTA;
 		jumpSpeed -= G;
 
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
 
-		if (direction == Direction::R)
-			state = State::Jump_R;
-		else
-			state = State::Jump_L;
+		if (jumpCount == 1 || (jumpCount == 0 && jumpSpeed < -5.0f))	// 보류
+		{
+			if (direction == Direction::R)
+				state = State::Jump_R;
+			else
+				state = State::Jump_L;
+		}
 
-		if (INPUT->Press('X') && state != State::Death && specialAttack != 1)
+		bParry = 0;
+		if (INPUT->Press('Z') && keyCheck == 1 && G > 4.0f)
+		{
+			bParry = 1;
+			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
+			{
+				direction = Direction::R;
+				state = State::Parry_R;
+			}
+			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+			{
+				direction = Direction::L;
+				state = State::Parry_L;
+			}
+
+			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				keyCheck = 0;
+			}
+		}
+		
+		if (!INPUT->Press('Z') && !INPUT->Down('Z') && jumpCount == 1)
+			keyCheck = 1;
+
+		if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1)
 		{
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
@@ -254,7 +302,7 @@ void Player::Update()
 			}
 		}
 	}
-	else
+	else if(bSpecialAttack == 0)
 	{
 		jumpCount = 0;
 		G = 0;
@@ -486,7 +534,7 @@ void Player::Update()
 		}
 	}
 
-	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f)
+	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0)
 	{
 		jumpSpeed = 0;
 		if (direction == Direction::R)
@@ -495,22 +543,13 @@ void Player::Update()
 			state = State::Dash_L;
 	}
 
-	cout << deltaTime << '\n';
-	if (INPUT->Press('V') && (superMeterCard / maxSuperMeterCard * 100) >= 20 && deltaTime == 0.0f)
+	if (INPUT->Press('V') && (superMeterCard / maxSuperMeterCard * 100) >= 20 && bSpecialAttack == 0)
 	{
-		cout << "true\n";
-		specialAttack = 1;
-	}
-
-	if (specialAttack == 1 && deltaTime <= 1.0f)
-	{
-		cout << "진입\n";
-		deltaTime += 1 * DELTA;
+		bSpecialAttack = 1;
 		check = 1;
 
-		if (checkCollider == 0)
+		if (checkCollider == 0 && jumpCount == 1)
 		{
-			jumpSpeed = 0;
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
@@ -540,6 +579,7 @@ void Player::Update()
 		}
 		else
 		{
+			animRect->SetPosition(animRect->GetPosition() + Vector2(0, 30));
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
@@ -561,24 +601,41 @@ void Player::Update()
 		}
 	}
 
-	if (!INPUT->Press('V') && deltaTime > 1.0f && specialAttack == 1)
-	{
-		superMeterCard = superMeterCard - 0.2 * maxSuperMeterCard;
-		deltaTime = 0.0f;
-		specialAttack = 0;
-	}
-
-	if (hp < lastHp && deltaTime < 0.3f)
+	if (bSpecialAttack == 1 && !animRect->GET_COMP(Animator)->GetEnd())
 	{
 		deltaTime += 1 * DELTA;
+		jumpSpeed = 30;
+
+		if (deltaTime >= 0.4f && (state == State::Special_Attack_R || state == State::Special_Attack_L || state == State::Air_Special_Attack_R || state == State::Air_Special_Attack_L))
+		{
+			if (direction == Direction::R)
+				animRect->Move(Vector2(-150, 0));
+			else
+				animRect->Move(Vector2(150, 0));
+		}
+	}
+
+	if (animRect->GET_COMP(Animator)->GetEnd() && bSpecialAttack == 1)
+	{
+		superMeterCard = superMeterCard - 0.2 * maxSuperMeterCard;
+		bSpecialAttack = 2;
+	}
+
+	if (!INPUT->Press('V') && bSpecialAttack == 2)
+	{
+		bSpecialAttack = 0;
+		deltaTime = 0.0f;
+	}
+
+	if (hp < lastHp && !animRect->GET_COMP(Animator)->GetEnd())
+	{
 		if (direction == Direction::R)
 			state = State::Hit_R;
 		else
 			state = State::Hit_L;
 	}
-	else if (hp < lastHp)
+	else if (animRect->GET_COMP(Animator)->GetEnd())
 	{
-		deltaTime = 0.0f;
 		lastHp = hp;
 	}
 	else if (hp > lastHp)
@@ -613,6 +670,14 @@ void Player::Update()
 	case Jump_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpL");
 		animRect->SetScale(Vector2(88, 109)* totalSize);
+		break;
+	case Parry_R:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ParryR");
+		animRect->SetScale(Vector2(137, 146) * totalSize);
+		break;
+	case Parry_L:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ParryL");
+		animRect->SetScale(Vector2(137, 146) * totalSize);
 		break;
 	case Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DuckR");
@@ -770,43 +835,53 @@ void Player::Update()
 	case Special_Attack_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackR");
 		animRect->SetScale(Vector2(425, 385) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x + 100 * totalSize, animRect->GetPosition().y), 0.0f);
 		break;
 	case Special_Attack_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackL");
 		animRect->SetScale(Vector2(425, 385) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x - 100 * totalSize, animRect->GetPosition().y), 180.0f);
 		break;
 	case Special_Attack_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackUpR");
 		animRect->SetScale(Vector2(353, 396) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x + 20 * totalSize, animRect->GetPosition().y + 100 * totalSize), -90.0f);
 		break;
 	case Special_Attack_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackUpL");
 		animRect->SetScale(Vector2(353, 396) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x - 20 * totalSize, animRect->GetPosition().y + 100 * totalSize), -90.0f);
 		break;
 
 	case Air_Special_Attack_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackR");
-		animRect->SetScale(Vector2(145, 145) * totalSize);
+		animRect->SetScale(Vector2(425, 385) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x + 100 * totalSize, animRect->GetPosition().y), 0.0f);
 		break;
 	case Air_Special_Attack_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackL");
-		animRect->SetScale(Vector2(145, 145) * totalSize);
+		animRect->SetScale(Vector2(425, 385) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x - 100 * totalSize, animRect->GetPosition().y), -180.0f);
 		break;
 	case Air_Special_Attack_Up_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackUpR");
-		animRect->SetScale(Vector2(126, 136) * totalSize);
+		animRect->SetScale(Vector2(353, 396) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x + 20 * totalSize, animRect->GetPosition().y + 100 * totalSize), -90.0f);
 		break;
 	case Air_Special_Attack_Up_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackUpL");
-		animRect->SetScale(Vector2(126, 136) * totalSize);
+		animRect->SetScale(Vector2(353, 396) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x - 20 * totalSize, animRect->GetPosition().y + 100 * totalSize), -90.0f);
 		break;
 	case Air_Special_Attack_Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackDownR");
-		animRect->SetScale(Vector2(134, 165) * totalSize);
+		animRect->SetScale(Vector2(356, 411) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x + 20 * totalSize, animRect->GetPosition().y - 100 * totalSize), 90.0f);
 		break;
 	case Air_Special_Attack_Down_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AirSpecialAttackDownL");
-		animRect->SetScale(Vector2(134, 165) * totalSize);
+		animRect->SetScale(Vector2(356, 411) * totalSize);
+		specialAttack->Init(Vector2(animRect->GetPosition().x - 20 * totalSize, animRect->GetPosition().y - 100 * totalSize), 90.0f);
 		break;
 		
 	case Super_Beam_R:
@@ -829,22 +904,23 @@ void Player::Update()
 	}
 
 	bullet->SetTotalSize(totalSize);
-	SpecialAttack->SetTotalSize(totalSize);
-	if (INPUT->Press('X') && state != State::Death && specialAttack != 1)
+	specialAttack->SetTotalSize(totalSize);
+	if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1)
 	{
-		bullet->SetTime(bullet->GetTime() + bullet->GetSpeakerSpeed() * DELTA);
-		if ((int)bullet->GetTime() != bullet->GetLastIndex())
-		{
-			bullet->SetLastIndex((int)bullet->GetTime());
-			bullet->SetActivation((int)bullet->GetTime(), 1);
-			bullet->SetNextIndex(bullet->GetNextIndex() + 1);
-		}
+		bullet->IndexManagement();
 	}
 	else
 		bullet->SetTime(bullet->GetLastIndex() + 1);
 
+	if (check == 1 && deltaTime >= 0.4f)
+	{
+		specialAttack->IndexManagement();
+		check = 0;
+	}
+
 	SFXbullet->Update();
 	animRect->Update();
+	specialAttack->Update();
 	bullet->Update();
 }
 
@@ -852,6 +928,7 @@ void Player::Render()
 {
 	SFXbullet->Render();
 	animRect->Render();
+	specialAttack->Render();
 	bullet->Render();
 }
 

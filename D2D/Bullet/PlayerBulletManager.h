@@ -8,6 +8,7 @@ public:
 public:
 	void CreateBullet();
 	void Init(Vector2 position, float rotation, float rebound);
+	void IndexManagement();
 
 	void Update();
 	void Render();

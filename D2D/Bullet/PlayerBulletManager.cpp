@@ -53,7 +53,7 @@ void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)
 	if (count >= -1 && bCount == 0)
 	{
 		--count;
-		cout << "감소 : " << count << ", " << bCount << '\n';
+	//	cout << "감소 : " << count << ", " << bCount << '\n';
 	}
 	else
 	{
@@ -64,7 +64,7 @@ void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)
 	if (count <= 1 && bCount == 1)
 	{
 		++count;
-		cout << "증가 : " << count << '\n';
+	//	cout << "증가 : " << count << '\n';
 	}
 	else
 	{
@@ -73,6 +73,17 @@ void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)
 	}
 	
 	bullets[nextIndex]->Init(this->position, rotation);
+}
+
+void PlayerBulletManager::IndexManagement()
+{
+	time += speakerSpeed * DELTA;
+	if ((int)time != lastIndex)
+	{
+		lastIndex = (int)time;
+		activation[time] = 1;
+		++nextIndex;
+	}
 }
 
 void PlayerBulletManager::Update()

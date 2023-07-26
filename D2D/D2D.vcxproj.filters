@@ -147,6 +147,7 @@
     <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -272,6 +273,7 @@
     <ClInclude Include="Bullet\PlayerSpecialAttackManager.h">
       <Filter>Bullet</Filter>
     </ClInclude>
+    <ClInclude Include="Objects\Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

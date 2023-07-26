@@ -1,16 +1,15 @@
 #include "stdafx.h"
 #include "PlayerSpecialAttackManager.h"
 
-PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float bulletSpeed, float speakerSpeed)
-	: totalBullet(totalBullet), bulletSpeed(bulletSpeed), speakerSpeed(speakerSpeed)
+PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float bulletSpeed)
+	: totalBullet(totalBullet), bulletSpeed(bulletSpeed)
 {
 	// 초기화
-	time = 0;
-	count = 1;
+	currentIndex = 0;
 	totalSize = 1;
 
-	bullets.assign(this->totalBullet, make_shared<PlayerSpecialAttack>());
-	activation.assign(this->totalBullet, bool());
+	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
+	activation.assign(totalBullet, bool());
 
 	for (auto& bullet : bullets)
 		bullet = make_shared<PlayerSpecialAttack>(bulletSpeed);
@@ -46,38 +45,32 @@ void PlayerSpecialAttackManager::CreateBullet()
 	}
 }
 
-void PlayerSpecialAttackManager::Init(Vector2 position, float rotation, float rebound)
+void PlayerSpecialAttackManager::Init(Vector2 position, float rotation)
 {
-	this->position = Vector2(position.x, position.y + count * rebound);
+	this->position = position;
+	this->rotation = rotation;
+}
 
-	if (count >= -1 && bCount == 0)
-	{
-		--count;
-		cout << "감소 : " << count << ", " << bCount << '\n';
-	}
-	else
-	{
-		bCount = 1;
-		count = 0;
-	}
+void PlayerSpecialAttackManager::IndexManagement()
+{
+	bullets[currentIndex]->Init(position, rotation);
+	activation[currentIndex++] = true;
 
-	if (count <= 1 && bCount == 1)
+	// Loop시 
+	if (currentIndex < totalBullet)
 	{
-		++count;
-		cout << "증가 : " << count << '\n';
+	//	if (activation[0] == true)	// 0이 활성화 되어 있을 때
+	//		CreateBullet();
+	//	else
+	//	{
+	//		
+	//	}
+		currentIndex = 0;
 	}
-	else
-	{
-		bCount = 0;
-		count = 0;
-	}
-	
-	bullets[nextIndex]->Init(this->position, rotation);
 }
 
 void PlayerSpecialAttackManager::Update()
 {
-//	cout << time << '\n';
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
 		bullets[i]->SetTotalSize(totalSize);
@@ -92,19 +85,6 @@ void PlayerSpecialAttackManager::Update()
 				activation[i] = false;
 				bullets[i]->GetAnimRect()->SetPosition(Vector2(-500, -500));
 			}
-		}
-	}
-
-	// Loop시 
-	if ((UINT)time >= totalBullet - 1)
-	{
-		if (activation[0] == 1)	// 0이 활성화 되어 있을 때
-			CreateBullet();
-		else
-		{
-			nextIndex = 0;
-			time = 0.0f;
-			lastIndex = -1;
 		}
 	}
 }

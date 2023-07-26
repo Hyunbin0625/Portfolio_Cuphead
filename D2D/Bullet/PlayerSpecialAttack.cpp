@@ -30,12 +30,12 @@ void PlayerSpecialAttack::Update()
 
 	if (runTime < 0.1f)
 	{
-		animRect->SetScale(Vector2(60, 43) * totalSize);
+		animRect->SetScale(Vector2(291, 186) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"IntroA");
 	}
 	else
 	{
-		animRect->SetScale(Vector2(159, 43) * totalSize);
+		animRect->SetScale(Vector2(469, 204) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Main");
 	}
 	animRect->Move(animRect->GetRightVector() * speed);

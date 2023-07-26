@@ -9,6 +9,8 @@ enum State
 	Run_L,
 	Jump_R,
 	Jump_L,
+	Parry_R,
+	Parry_L,
 
 	Down_R,
 	Down_L,
@@ -79,6 +81,7 @@ public:
 
 public:
 	void Move();
+	void Jump();
 
 public:
 	void Update();
@@ -88,28 +91,41 @@ public:
 
 public:
 	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
+	State GetState() { return state; }
 	bool GetPlatform() { return platform; }
 	UINT GetHp() { return hp; }
-	int GetSuperMeterCard() { return superMeterCard / maxSuperMeterCard * 100; }
+	int GetSuperMeterCard() { return superMeterCard; }
+	int GetPercentSuperMeterCard() { return superMeterCard / maxSuperMeterCard * 100; }
+	int GetMaxSuperMeterCard() { return maxSuperMeterCard; }
+	bool GetParry() { return bParry; }
 
+	void SetHp(int hp) { this->hp = hp; }
+	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
+	void SetMaxSuperMeterCard(float maxSuperMeterCard) { this->maxSuperMeterCard = maxSuperMeterCard; }
+	void SetHit(bool hit) { this->hit = hit; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
+	void SetJumpSpeed(float jumpSpeed) { this->jumpSpeed = jumpSpeed * totalSize; }
+	void SetG(float G) { this->G = G; }
 
 private:
 	UINT hp;
 	UINT lastHp;
+
+	bool hit = 0;
+	float hitCTime = 0;
 	
 	float superMeterCard = 0;
 	float maxSuperMeterCard;
 
 	shared_ptr<AnimationRect> animRect;
 	shared_ptr<PlayerBulletManager> bullet;
-	shared_ptr<PlayerSpecialAttackManager> SpecialAttack;
+	shared_ptr<PlayerSpecialAttackManager> specialAttack;
 	unique_ptr<AnimationRect> SFXbullet;
 
+	Vector2 position;
 	Vector2 scale;
 	
-	Vector2 position;
 	float totalSize = 1.0f;
 
 	State state = State::Idle_R;
@@ -122,11 +138,14 @@ private:
 	bool checkCollider = 0;
 	UINT jumpCount = 2;
 
+	bool bParry = 0;
+	bool keyCheck = 0;
+
 	float deltaTime = 0;
 	int dash = 0;
 
 	bool check = 0;
-	bool specialAttack = 0;
+	int bSpecialAttack = 0;
 
 	bool platform = 0;
 };

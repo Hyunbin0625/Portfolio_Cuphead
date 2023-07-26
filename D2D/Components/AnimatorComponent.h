@@ -12,6 +12,7 @@ public:
 
 	Vector2 GetCurrentFrame() const { return currentFrame; }
 	Vector2 GetTexelFrameSize() const { return currentAnimClip->GetTexelFrameSize(); }
+	bool GetEnd() { return end; }
 
 	void SetCurrentAnimClip(const wstring& clipName);
 	void SetStop(bool bStop) { this->bStop = bStop; }
@@ -26,4 +27,5 @@ private:
 	Vector2 texelFrameSize;
 
 	bool bStop = false;
+	bool end = false;
 };

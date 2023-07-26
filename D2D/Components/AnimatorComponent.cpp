@@ -37,7 +37,10 @@ void AnimatorComponent::Update()
 				if (currentAnimClip->GetIsLoop())
 					currentFrameIndex = 0;
 				else
+				{
 					currentFrameIndex = currentAnimClip->GetLastFrameIndex();
+					end = true;
+				}
 			}	
 		}
 		else	// 이미지의 역방향
@@ -48,7 +51,10 @@ void AnimatorComponent::Update()
 				if (currentAnimClip->GetIsLoop())
 					currentFrameIndex = currentAnimClip->GetLastFrameIndex();
 				else
+				{
 					currentFrameIndex = 0;
+					end = true;
+				}
 			}
 		}
 
@@ -67,6 +73,7 @@ void AnimatorComponent::SetCurrentAnimClip(const wstring& clipName)
 {
 //	if (clipName == currentAnimClip->GetClipName() && currentAnimClip->GetIsLoop() == true) return;
 	if (clipName == currentAnimClip->GetClipName()) return;
+	end = false;
 
 	const auto& iter = animClips.find(clipName);
 

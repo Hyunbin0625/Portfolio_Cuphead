@@ -157,6 +157,7 @@ extern float gWinHeight;
 #include "Objects/ColorRect.h"
 #include "Objects/TextureRect.h"
 #include "Objects/AnimationRect.h"
+#include "Objects/Sphere.h"
 
 // Bullet
 #include "Bullet/PlayerBullet.h"
