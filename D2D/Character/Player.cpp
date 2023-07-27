@@ -83,7 +83,6 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashR", L"_Textures/Player/cuphead_dash_R.png", 8, false, true, 0.1));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashL", L"_Textures/Player/cuphead_dash_L.png", 8, true, true, 0.1));
 
-
 	// Ground_Special_Attack
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackR", L"_Textures/Player/cuphead_ex_straight_R.png", 15, false, false, 0.11));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackL", L"_Textures/Player/cuphead_ex_straight_L.png", 15, true, false, 0.11));
@@ -123,7 +122,7 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 
 	// Create Player Bullet
-	bullet = make_shared<PlayerBulletManager>(10, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
+	bullet = make_shared<PlayerBulletManager>(2, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
 
 	// Create Special Attack
 	specialAttack = make_shared<PlayerSpecialAttackManager>(2, 800);	// totalBullet, bulletSpeed, speakerSpeed
@@ -266,7 +265,7 @@ void Player::Update()
 		if (!INPUT->Press('Z') && !INPUT->Down('Z') && jumpCount == 1)
 			keyCheck = 1;
 
-		if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1)
+		if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1 && bSuperBeam != 1)
 		{
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
@@ -552,7 +551,7 @@ void Player::Update()
 	}
 
 	// Dash
-	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0)
+	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
 		if (direction == Direction::R)
@@ -567,6 +566,18 @@ void Player::Update()
 		superBeam->SetIsSuperBeam(true);
 		bSuperBeam = 1;
 		check = 1;
+		if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
+		{
+			direction = Direction::R;
+			state = State::Super_Beam_R;
+			SFXMANAGER->Init(L"SuperIntroR", 1, Vector2(animRect->GetPosition().x - 48, animRect->GetPosition().y + 35), Vector2(318, 217) * 7 * totalSize, 0.0f);
+		}
+		else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+		{
+			direction = Direction::L;
+			state = State::Super_Beam_L;
+			SFXMANAGER->Init(L"SuperIntroL", 1, Vector2(animRect->GetPosition().x + 16, animRect->GetPosition().y + 30), Vector2(318, 217) * 7 * totalSize, 0.0f);
+		}
 	}		// Special Attack
 	else if (INPUT->Press('V') && (int)(superMeterCard / maxSuperMeterCard * 100) >= 20 && bSpecialAttack == 0 && !bSuperBeam)
 	{
@@ -630,7 +641,7 @@ void Player::Update()
 	if (bSpecialAttack == 1 && !animRect->GET_COMP(Animator)->GetEnd())
 	{
 		deltaTime += 1 * DELTA;
-		jumpSpeed = 30;
+		jumpSpeed = 10 * totalSize;
 
 		if (deltaTime >= 0.4f && (state == State::Special_Attack_R || state == State::Special_Attack_L || state == State::Air_Special_Attack_R || state == State::Air_Special_Attack_L))
 		{
@@ -660,17 +671,6 @@ void Player::Update()
 	if (bSuperBeam == 1)
 	{
 		deltaTime += 1 * DELTA;
-
-		if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
-		{
-			direction = Direction::R;
-			state = State::Super_Beam_R;
-		}
-		else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
-		{
-			direction = Direction::L;
-			state = State::Super_Beam_L;
-		}
 
 		if (hit)
 			hit = false;
@@ -999,14 +999,19 @@ void Player::Update()
 		break;
 	}
 	
-	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L) && checkCollider)
+	// ¶¥ Ãæµ¹
+	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L && state == State::Jump_R && state == State::Jump_L) && checkCollider)
 	{
+		cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
+		cout << "Ground : " << groundPos.y << '\n';
+		cout << groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
+
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 	}
 
 	bullet->SetTotalSize(totalSize);
 	specialAttack->SetTotalSize(totalSize);
-	if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1)
+	if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1 && bSuperBeam != 1)
 	{
 		bullet->IndexManagement();
 	}
@@ -1021,6 +1026,7 @@ void Player::Update()
 
 	SFXbullet->Update();
 	animRect->Update();
+	SFXMANAGER->Update();
 	specialAttack->Update();
 	superBeam->Update();
 	bullet->Update();
@@ -1031,6 +1037,7 @@ void Player::Render()
 	SFXbullet->Render();
 	superBeam->Render();
 	animRect->Render();
+	SFXMANAGER->Render();
 	specialAttack->Render();
 	bullet->Render();
 }
@@ -1040,7 +1047,7 @@ void Player::GUI()
 	static bool bOpen = true;
 	if (ImGui::Begin("Player", &bOpen))
 	{
-		ImGui::SliderFloat("Scale", &totalSize, 0.0f, 2.0f, "%.2f");
+		ImGui::SliderFloat("Scale", &totalSize, 0.0f, 2.0f, "%.1f");
 
 		string textHp = "Player Hp : " + to_string(hp);
 		ImGui::Text(textHp.c_str());

@@ -26,6 +26,7 @@
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
+    <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Scenes\Scene_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -33,6 +34,7 @@
     <ClCompile Include="Objects\Sphere.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="Objects\AnimationRect.cpp" />
+    <ClCompile Include="Systems\SFXManager.cpp" />
     <ClCompile Include="Utilities\Animator.cpp" />
     <ClCompile Include="Components\ColliderComponent.cpp" />
     <ClCompile Include="Systems\Gui.cpp" />
@@ -76,6 +78,7 @@
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />
+    <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Scenes\Scene_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -83,6 +86,7 @@
     <ClInclude Include="Objects\Sphere.h" />
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="Objects\AnimationRect.h" />
+    <ClInclude Include="Systems\SFXManager.h" />
     <ClInclude Include="Utilities\Animator.h" />
     <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Systems\Gui.h" />

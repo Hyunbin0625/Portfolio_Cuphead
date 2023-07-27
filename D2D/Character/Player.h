@@ -116,7 +116,7 @@ private:
 	bool hit = 0;
 	float hitCTime = 0;
 	
-	float superMeterCard = 0;
+	float superMeterCard = 100;
 	float maxSuperMeterCard;
 
 	shared_ptr<AnimationRect> animRect;

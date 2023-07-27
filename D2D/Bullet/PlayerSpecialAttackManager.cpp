@@ -6,9 +6,10 @@ PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float b
 {
 	// 초기화
 	currentIndex = 0;
-	totalSize = 1;
+	totalSize = 3;
 
-	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
+//	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
+	bullets.resize(totalBullet);
 	activation.assign(totalBullet, bool());
 
 	for (auto& bullet : bullets)
@@ -19,30 +20,9 @@ PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float b
 
 void PlayerSpecialAttackManager::CreateBullet()
 {
-	vector<shared_ptr<PlayerSpecialAttack>> tempBullets;
-	vector<bool> tempActivation;
-	tempBullets.assign(totalBullet * 2, make_shared<PlayerSpecialAttack>());
-	tempActivation.assign(totalBullet * 2, bool());
-	for (int i = 0; i < (int)totalBullet; ++i)
-	{
-		tempBullets[i] = bullets[i];
-		tempActivation[i] = activation[i];
-	}
-
 	totalBullet *= 2;
-	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
-	activation.assign(totalBullet, bool());
-
-	for (auto& bullet : bullets)
-		bullet = make_shared<PlayerSpecialAttack>(bulletSpeed);
-	for (auto active : activation)
-		active = 0;
-
-	for (int i = 0; i < (int)totalBullet / 2; ++i)
-	{
-		bullets[i] = tempBullets[i];
-		activation[i] = tempActivation[i];
-	}
+	bullets.resize(totalBullet, make_shared<PlayerSpecialAttack>(bulletSpeed));
+	activation.resize(totalBullet, bool());
 }
 
 void PlayerSpecialAttackManager::Init(Vector2 position, float rotation)
@@ -57,15 +37,14 @@ void PlayerSpecialAttackManager::IndexManagement()
 	activation[currentIndex++] = true;
 
 	// Loop시 
-	if (currentIndex < totalBullet)
+	if (currentIndex > totalBullet - 1)
 	{
-	//	if (activation[0] == true)	// 0이 활성화 되어 있을 때
-	//		CreateBullet();
-	//	else
-	//	{
-	//		
-	//	}
-		currentIndex = 0;
+		if (activation[0] == true)	// 0이 활성화 되어 있을 때
+			CreateBullet();
+		else
+		{
+			currentIndex = 0;
+		}
 	}
 }
 

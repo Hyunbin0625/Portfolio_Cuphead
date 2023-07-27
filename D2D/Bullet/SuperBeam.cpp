@@ -3,7 +3,7 @@
 
 SuperBeam::SuperBeam()
 {
-	animRect = make_shared<AnimationRect>(Vector2(), Vector2(238, 177), 0.0f, L"_Textures/PlayerBullet/weapon_peashot_main.png");
+	animRect = make_shared<AnimationRect>(Vector2(), Vector2(238, 177), 0.0f, L"_Textures/PlayerBullet/super_beam_end_R.png");
 
 	// Intro
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"IntroR", L"_Textures/PlayerBullet/super_beam_intro_R.png", 9, false, false, 0.1));

@@ -9,7 +9,8 @@ PlayerBulletManager::PlayerBulletManager(UINT totalBullet, float bulletSpeed, fl
 	count = 1;
 	totalSize = 1;
 
-	bullets.assign(this->totalBullet, make_shared<PlayerBullet>());
+//	bullets.assign(this->totalBullet, make_shared<PlayerBullet>());
+	bullets.resize(totalBullet);
 	activation.assign(this->totalBullet, bool());
 
 	for (auto& bullet : bullets)
@@ -44,6 +45,10 @@ void PlayerBulletManager::CreateBullet()
 		bullets[i] = tempBullets[i];
 		activation[i] = tempActivation[i];
 	}
+
+//	totalBullet *= 2;
+//	bullets.resize(totalBullet, make_shared<PlayerBullet>(bulletSpeed));
+//	activation.resize(totalBullet, bool());
 }
 
 void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)

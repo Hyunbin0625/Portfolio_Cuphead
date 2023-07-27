@@ -143,7 +143,7 @@ void Scene::CheckGround()
 		player->SetGroundPos(Vector2(ground->GetPosition().x, ground->GetPosition().y + ground->GetScale().y / 2));
 		player->SetCheckCollider(1);
 		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < ground->GetPosition().y + ground->GetScale().y / 2 - 1)
-			player->GetAnimRect()->Move(Vector2(0, 400));
+			player->GetAnimRect()->Move(Vector2(0, 100));
 	}
 
 	if (ground2->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
@@ -152,6 +152,6 @@ void Scene::CheckGround()
 		player->SetCheckCollider(1);
 		player->SetPlatform(1);
 		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < ground2->GetPosition().y + ground2->GetScale().y / 2 - 1)
-			player->GetAnimRect()->Move(Vector2(0, 400));
+			player->GetAnimRect()->Move(Vector2(0, 100));
 	}
 }

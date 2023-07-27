@@ -151,6 +151,8 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Bullet\SuperBeam.cpp" />
+    <ClCompile Include="Objects\SFX.cpp" />
+    <ClCompile Include="Systems\SFXManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -280,6 +282,8 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Bullet\SuperBeam.h" />
+    <ClInclude Include="Objects\SFX.h" />
+    <ClInclude Include="Systems\SFXManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

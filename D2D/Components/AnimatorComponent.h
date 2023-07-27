@@ -9,6 +9,7 @@ public:
 	void Update();
 
 	void AddAnimClip(const shared_ptr<AnimationClip>& animClip);
+	void ResetFrame();
 
 	Vector2 GetCurrentFrame() const { return currentFrame; }
 	Vector2 GetTexelFrameSize() const { return currentAnimClip->GetTexelFrameSize(); }

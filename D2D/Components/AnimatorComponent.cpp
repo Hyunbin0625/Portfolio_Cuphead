@@ -69,6 +69,18 @@ void AnimatorComponent::AddAnimClip(const shared_ptr<AnimationClip>& animClip)
 	animClips.emplace(animClip->GetClipName(), animClip);
 }
 
+void AnimatorComponent::ResetFrame()
+{
+	end = false;
+	deltaTime = 0.0f;
+	if (currentAnimClip->GetIsReverse())
+		currentFrameIndex = currentAnimClip->GetLastFrameIndex();
+	else
+		currentFrameIndex = 0;
+
+	currentFrame = currentAnimClip->GetKeyframe(currentFrameIndex);
+}
+
 void AnimatorComponent::SetCurrentAnimClip(const wstring& clipName)
 {
 //	if (clipName == currentAnimClip->GetClipName() && currentAnimClip->GetIsLoop() == true) return;
