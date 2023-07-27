@@ -103,6 +103,7 @@ public:
 	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
 	void SetMaxSuperMeterCard(float maxSuperMeterCard) { this->maxSuperMeterCard = maxSuperMeterCard; }
 	void SetHit(bool hit) { this->hit = hit; }
+	void SetGroundPos(Vector2 groundPos) { this->groundPos = groundPos; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
 	void SetJumpSpeed(float jumpSpeed) { this->jumpSpeed = jumpSpeed * totalSize; }
@@ -121,10 +122,15 @@ private:
 	shared_ptr<AnimationRect> animRect;
 	shared_ptr<PlayerBulletManager> bullet;
 	shared_ptr<PlayerSpecialAttackManager> specialAttack;
+	shared_ptr<SuperBeam> superBeam;
 	unique_ptr<AnimationRect> SFXbullet;
 
+	// start
 	Vector2 position;
 	Vector2 scale;
+
+	// ground
+	Vector2 groundPos;
 	
 	float totalSize = 1.0f;
 
@@ -144,8 +150,10 @@ private:
 	float deltaTime = 0;
 	int dash = 0;
 
-	bool check = 0;
 	int bSpecialAttack = 0;
+	int bSuperBeam = 0;
+	float maxTime = 3.0f;
+	bool check = 0;
 
 	bool platform = 0;
 };

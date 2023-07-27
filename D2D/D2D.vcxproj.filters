@@ -147,7 +147,10 @@
     <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Sphere.cpp" />
+    <ClCompile Include="Objects\Sphere.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\SuperBeam.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -273,7 +276,10 @@
     <ClInclude Include="Bullet\PlayerSpecialAttackManager.h">
       <Filter>Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Sphere.h" />
+    <ClInclude Include="Objects\Sphere.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\SuperBeam.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

@@ -12,6 +12,7 @@ void Scene::Init()
 	hp->AddAnimClip(make_shared<AnimationClip>(L"HP2", L"_Textures/Scene/hud_hp_2.png", 1, false, false, 1));
 	hp->AddAnimClip(make_shared<AnimationClip>(L"HP1", L"_Textures/Scene/hud_hp_1.png", 1, false, false, 1));
 	hp->AddAnimClip(make_shared<AnimationClip>(L"AnimHP1", L"_Textures/Scene/hud_hp_1_flash.png", 2, false, true, 0.1));
+	hp->AddAnimClip(make_shared<AnimationClip>(L"Dead", L"_Textures/Scene/hud_hp_dead.png", 1, false, false, 1));
 	// AddAnimator
 	hp->AddComponent(make_shared<AnimatorComponent>(hp->GetAnimClips()));
 	// animRect SetAnimator
@@ -33,7 +34,7 @@ void Scene::Init()
 	for (auto& superMeterCard : superMeterCards)
 		superMeterCard->GET_COMP(Animator)->SetCurrentAnimClip(L"AnimCardMax");
 
-	sphere = make_unique<Sphere>(Vector2(100, 100), Vector2(48, 48), 0.0f, true);
+	sphere = make_unique<Sphere>(Vector2(1100, 300), Vector2(48, 48), 0.0f, true);
 
 	// AddComponent
 	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
@@ -94,6 +95,9 @@ void Scene::Update()
 
 	switch (player->GetHp())
 	{
+	case 0:
+		hp->GET_COMP(Animator)->SetCurrentAnimClip(L"Dead");
+		break;
 	case 1:
 		hp->GET_COMP(Animator)->SetCurrentAnimClip(L"HP1");
 		break;
@@ -136,6 +140,7 @@ void Scene::CheckGround()
 	player->SetPlatform(0);
 	if (ground->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
 	{
+		player->SetGroundPos(Vector2(ground->GetPosition().x, ground->GetPosition().y + ground->GetScale().y / 2));
 		player->SetCheckCollider(1);
 		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < ground->GetPosition().y + ground->GetScale().y / 2 - 1)
 			player->GetAnimRect()->Move(Vector2(0, 400));
@@ -143,6 +148,7 @@ void Scene::CheckGround()
 
 	if (ground2->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
 	{
+		player->SetGroundPos(Vector2(ground2->GetPosition().x, ground2->GetPosition().y + ground2->GetScale().y / 2));
 		player->SetCheckCollider(1);
 		player->SetPlatform(1);
 		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < ground2->GetPosition().y + ground2->GetScale().y / 2 - 1)

@@ -83,7 +83,7 @@ void PlayerSpecialAttackManager::Update()
 				|| bullets[i]->GetAnimRect()->GetPosition().x > WIN_DEFAULT_WIDTH + 200 || bullets[i]->GetAnimRect()->GetPosition().x < -200)
 			{
 				activation[i] = false;
-				bullets[i]->GetAnimRect()->SetPosition(Vector2(-500, -500));
+				bullets[i]->GetAnimRect()->SetPosition(Vector2(-1000, -1000));
 			}
 		}
 	}

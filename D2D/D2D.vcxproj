@@ -22,6 +22,7 @@
     <ClCompile Include="Bullet\PlayerBulletManager.cpp" />
     <ClCompile Include="Bullet\PlayerSpecialAttack.cpp" />
     <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp" />
+    <ClCompile Include="Bullet\SuperBeam.cpp" />
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Bullet\PlayerBulletManager.h" />
     <ClInclude Include="Bullet\PlayerSpecialAttack.h" />
     <ClInclude Include="Bullet\PlayerSpecialAttackManager.h" />
+    <ClInclude Include="Bullet\SuperBeam.h" />
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />

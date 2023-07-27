@@ -21,6 +21,8 @@ private:
 	float size = 1;
 	float rotation;
 
-	bool parrySlap;
+	bool bParrySlap;
+
+	bool bObstacle;
 };
 

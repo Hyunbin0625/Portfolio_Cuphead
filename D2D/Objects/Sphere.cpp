@@ -2,7 +2,7 @@
 #include "Sphere.h"
 
 Sphere::Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap)
-	: position(position), rotation(rotation), parrySlap(parrySlap)
+	: position(position), rotation(rotation), bParrySlap(parrySlap)
 {
 	animRect = make_unique<AnimationRect>(position, Scale, rotation, L"_Textures/Tutorial/tutorial_sphere.png");
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"Sphere", L"_Textures/Tutorial/tutorial_sphere.png", 2, false, true, 1));
@@ -17,19 +17,19 @@ Sphere::Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap)
 
 void Sphere::CheckCollision(shared_ptr<Player> player)
 {
-	if (!parrySlap) return;
+	if (!bParrySlap) return;
 
 	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
 	{
 		if (player->GetParry())
 		{
-			player->SetJumpSpeed(300.0f);
+			player->SetJumpSpeed(400.0f);
 			player->SetG(0.0f);
 			player->SetSuperMeterCard(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard());	// 20 퍼센트 추가
-			parrySlap = 0;
+			bParrySlap = 0;
 		}
-	//	else	// 충돌 object인 경우
-	//		player->SetHit(true);
+		else if (bObstacle)	// 충돌 object인 경우
+			player->SetHit(true);
 	}
 }
 
@@ -38,7 +38,7 @@ void Sphere::Update()
 	animRect->SetPosition(position);
 	animRect->SetRotation(rotation);
 
-	if (parrySlap)
+	if (bParrySlap)
 	{
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"PinkSphere");
 		animRect->SetScale(Vector2(73, 71) * size);
@@ -66,7 +66,8 @@ void Sphere::GUI()
 		ImGui::SliderFloat("Size", &size, 0, 2, "%.2f");
 		ImGui::SliderAngle("Rotation", &rotation);
 		
-		ImGui::Checkbox("ParrySlap", &parrySlap);
+		ImGui::Checkbox("ParrySlap", &bParrySlap);
+		ImGui::Checkbox("obstacle", &bObstacle);
 	}
 	ImGui::End();
 }
