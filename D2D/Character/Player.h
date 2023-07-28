@@ -156,4 +156,6 @@ private:
 	bool check = 0;
 
 	bool platform = 0;
+
+	float tempTime = 0;
 };

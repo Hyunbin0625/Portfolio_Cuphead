@@ -3,7 +3,7 @@
 
 void Scene::Init()
 {
-	player = make_shared<Player>(CENTER, Vector2(101, 159), 300.0f, 3, 100.0f);
+	player = make_shared<Player>(CENTER, Vector2(101, 159), 400.0f, 3, 100.0f);
 	ground = make_unique<ColorRect>(Vector2(CENTER_X, 100), Vector2(WIN_DEFAULT_WIDTH, 3), 0.0f, BLACK);
 	ground2 = make_unique<ColorRect>(Vector2(CENTER_X, 300), Vector2(300, 3), 0.0f, BLACK);
 

@@ -154,16 +154,16 @@ void Player::Move()
 	if (INPUT->Down(VK_SHIFT) && deltaTime == 0.0f)
 	{
 		if (direction == Direction::L)
-			animRect->Move(Vector2(-speed * 150, 0) * totalSize);
+			animRect->Move(Vector2(-300 * 150, 0) * totalSize);
 		else
-			animRect->Move(Vector2(speed * 150, 0) * totalSize);
+			animRect->Move(Vector2(300 * 150, 0) * totalSize);
 		dash = 1;
 	}
 
 	if (dash == 1)
 		deltaTime += 1 * DELTA;
 
-	if (deltaTime > 0.4f && dash == 1)
+	if (deltaTime > 0.35f && dash == 1)
 	{
 		++dash;
 		if (direction == Direction::L)
@@ -172,7 +172,7 @@ void Player::Move()
 			animRect->Move(Vector2(speed * 150, 0) * totalSize);
 	}
 
-	if (!INPUT->Press(VK_SHIFT) && deltaTime > 0.4f && dash == 2)
+	if (!INPUT->Press(VK_SHIFT) && deltaTime > 0.35f && dash == 2)
 	{
 		dash = 0;
 		deltaTime = 0.0f;
@@ -1031,6 +1031,11 @@ void Player::Update()
 	specialAttack->Update();
 	superBeam->Update();
 	bullet->Update();
+
+
+	Vector2 temp = (animRect->GetPosition() - CENTER) - CAMERA->GetPosition();
+	CAMERA->SetPosition(CAMERA->GetPosition() + temp * 2 * DELTA);
+
 }
 
 void Player::Render()
@@ -1049,6 +1054,7 @@ void Player::GUI()
 	if (ImGui::Begin("Player", &bOpen))
 	{
 		ImGui::SliderFloat("Scale", &totalSize, 0.0f, 2.0f, "%.1f");
+		ImGui::SliderFloat("Speed", &speed, 1.0f, 500.0f, "%.1f");
 
 		string textHp = "Player Hp : " + to_string(hp);
 		ImGui::Text(textHp.c_str());
