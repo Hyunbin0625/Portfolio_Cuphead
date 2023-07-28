@@ -32,9 +32,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Objects\Sphere.cpp" />
+    <ClCompile Include="Objects\SuperMeterCard.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="Objects\AnimationRect.cpp" />
     <ClCompile Include="Systems\SFXManager.cpp" />
+    <ClCompile Include="Systems\UI.cpp" />
     <ClCompile Include="Utilities\Animator.cpp" />
     <ClCompile Include="Components\ColliderComponent.cpp" />
     <ClCompile Include="Systems\Gui.cpp" />
@@ -84,9 +86,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Objects\Sphere.h" />
+    <ClInclude Include="Objects\SuperMeterCard.h" />
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="Objects\AnimationRect.h" />
     <ClInclude Include="Systems\SFXManager.h" />
+    <ClInclude Include="Systems\UI.h" />
     <ClInclude Include="Utilities\Animator.h" />
     <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Systems\Gui.h" />

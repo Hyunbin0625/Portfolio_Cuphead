@@ -19,7 +19,10 @@ SFXManager::~SFXManager()
 void SFXManager::CreateBullet()
 {
 	totalIndex *= 2;
-	sfxs.resize(totalIndex, make_shared<SFX>());
+	sfxs.resize(totalIndex);
+
+	for (int i = totalIndex / 2; i < totalIndex; ++i)
+		sfxs[i] = make_shared<SFX>();
 }
 
 void SFXManager::Init(const wstring& clipName,UINT id, Vector2 position, Vector2 scale, float rotation)

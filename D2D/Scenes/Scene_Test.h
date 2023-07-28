@@ -18,8 +18,7 @@ public:
 
 private:
 	shared_ptr<Player> player;
-	unique_ptr<AnimationRect> hp;
-	vector<shared_ptr<AnimationRect>> superMeterCards;
+
 	unique_ptr<Sphere> sphere;
 
 	shared_ptr<ColorRect> ground;

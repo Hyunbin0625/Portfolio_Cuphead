@@ -115,6 +115,7 @@ extern float gWinHeight;
 #include "Systems/Sound.h"
 #include "Systems/Camera.h"
 #include "Systems/SFXManager.h"
+#include "Systems/UI.h"
 
 #define INPUT Input::Get()
 #define TIME Time::Get()
@@ -126,6 +127,7 @@ extern float gWinHeight;
 #define SOUND Sound::Get()
 #define CAMERA Camera::Get()
 #define SFXMANAGER SFXManager::Get()
+#define UI Ui::Get()
 
 // Renders
 #include "Renders/Resources/VertexType.h"
@@ -161,6 +163,7 @@ extern float gWinHeight;
 #include "Objects/AnimationRect.h"
 #include "Objects/Sphere.h"
 #include "Objects/SFX.h"
+#include "Objects/SuperMeterCard.h"
 
 // Bullet
 #include "Bullet/PlayerBullet.h"

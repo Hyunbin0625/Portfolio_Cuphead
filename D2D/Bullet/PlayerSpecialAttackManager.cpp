@@ -10,19 +10,20 @@ PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float b
 
 //	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
 	bullets.resize(totalBullet);
-	activation.assign(totalBullet, bool());
+	activation.resize(totalBullet, bool());
 
 	for (auto& bullet : bullets)
 		bullet = make_shared<PlayerSpecialAttack>(bulletSpeed);
-	for (auto active : activation)
-		active = 0;
 }
 
 void PlayerSpecialAttackManager::CreateBullet()
 {
 	totalBullet *= 2;
-	bullets.resize(totalBullet, make_shared<PlayerSpecialAttack>(bulletSpeed));
+	bullets.resize(totalBullet);
 	activation.resize(totalBullet, bool());
+
+	for (int i = totalBullet / 2; i < totalBullet; ++i)
+		bullets[i] = make_shared<PlayerSpecialAttack>(bulletSpeed);
 }
 
 void PlayerSpecialAttackManager::Init(Vector2 position, float rotation)
@@ -42,9 +43,7 @@ void PlayerSpecialAttackManager::IndexManagement()
 		if (activation[0] == true)	// 0이 활성화 되어 있을 때
 			CreateBullet();
 		else
-		{
 			currentIndex = 0;
-		}
 	}
 }
 

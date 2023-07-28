@@ -20,30 +20,12 @@ PlayerBulletManager::PlayerBulletManager(UINT totalBullet, float bulletSpeed, fl
 
 void PlayerBulletManager::CreateBullet()
 {
-	vector<shared_ptr<PlayerBullet>> tempBullets;
-	vector<bool> tempActivation;
-	tempBullets.assign(totalBullet * 2, make_shared<PlayerBullet>());
-	tempActivation.assign(totalBullet * 2, bool());
-	for (int i = 0; i < (int)totalBullet; ++i)
-	{
-		tempBullets[i] = bullets[i];
-		tempActivation[i] = activation[i];
-	}
-
 	totalBullet *= 2;
-	bullets.assign(totalBullet, make_shared<PlayerBullet>());
-	activation.assign(totalBullet, bool());
+	bullets.resize(totalBullet);
+	activation.resize(totalBullet, bool());
 
-	for (auto& bullet : bullets)
-		bullet = make_shared<PlayerBullet>(bulletSpeed);
-	for (auto active : activation)
-		active = 0;
-
-	for (int i = 0; i < (int)totalBullet / 2; ++i)
-	{
-		bullets[i] = tempBullets[i];
-		activation[i] = tempActivation[i];
-	}
+	for (int i = totalBullet / 2; i < totalBullet; ++i)
+		bullets[i] = make_shared<PlayerBullet>(bulletSpeed);
 }
 
 void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)

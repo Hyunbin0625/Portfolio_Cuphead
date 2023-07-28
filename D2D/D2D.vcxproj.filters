@@ -31,11 +31,11 @@
     <Filter Include="Character">
       <UniqueIdentifier>{8c259163-0078-47c3-87a2-ee0511cbe266}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects\Components">
-      <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Bullet">
       <UniqueIdentifier>{93a74b53-29d8-402b-89a8-96c61dddf9ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,16 +85,16 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="Components\ColorComponent.cpp">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Components\MoveComponent.cpp">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\Collision.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Components\ColliderComponent.cpp">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Objects\TextureRect.cpp">
       <Filter>Objects</Filter>
@@ -103,7 +103,7 @@
       <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Components\SelectionComponent.cpp">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Utilities\String.cpp">
       <Filter>Utilities</Filter>
@@ -133,7 +133,7 @@
       <Filter>Character</Filter>
     </ClCompile>
     <ClCompile Include="Components\AnimatorComponent.cpp">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Bullet\PlayerBullet.cpp">
       <Filter>Bullet</Filter>
@@ -147,12 +147,24 @@
     <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Sphere.cpp">
+    <ClCompile Include="Objects\SuperMeterCard.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet\SuperBeam.cpp" />
-    <ClCompile Include="Objects\SFX.cpp" />
-    <ClCompile Include="Systems\SFXManager.cpp" />
+    <ClCompile Include="Objects\Sphere.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\UI.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\SFXManager.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\SFX.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\SuperBeam.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -201,7 +213,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Components\Component.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Drawable.h">
       <Filter>Objects</Filter>
@@ -210,7 +222,7 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Components\ColorComponent.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Scenes\SceneList.h">
       <Filter>Scenes</Filter>
@@ -219,13 +231,13 @@
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Components\MoveComponent.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Collision.h">
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Components\ColliderComponent.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Objects\TextureRect.h">
       <Filter>Objects</Filter>
@@ -234,7 +246,7 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Components\SelectionComponent.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\String.h">
       <Filter>Utilities</Filter>
@@ -264,7 +276,7 @@
       <Filter>Character</Filter>
     </ClInclude>
     <ClInclude Include="Components\AnimatorComponent.h">
-      <Filter>Objects\Components</Filter>
+      <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Bullet\PlayerBullet.h">
       <Filter>Bullet</Filter>
@@ -281,9 +293,21 @@
     <ClInclude Include="Objects\Sphere.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet\SuperBeam.h" />
-    <ClInclude Include="Objects\SFX.h" />
-    <ClInclude Include="Systems\SFXManager.h" />
+    <ClInclude Include="Objects\SuperMeterCard.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\UI.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\SFXManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SFX.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\SuperBeam.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">
