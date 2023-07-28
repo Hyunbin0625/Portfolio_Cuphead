@@ -165,6 +165,9 @@
     <ClCompile Include="Bullet\SuperBeam.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Scene_Main.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="Bullet\SuperBeam.h">
       <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Main.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

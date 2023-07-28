@@ -4,12 +4,12 @@
 Ui::Ui()
 {
 	// Hp
-	hp = make_unique<AnimationRect>(Vector2(), Vector2(78, 32), 0.0f, L"_Textures/Scene/hud_hp_3.png");
-	hp->AddAnimClip(make_shared<AnimationClip>(L"HP3", L"_Textures/Scene/hud_hp_3.png", 1, false, false, 1));
-	hp->AddAnimClip(make_shared<AnimationClip>(L"HP2", L"_Textures/Scene/hud_hp_2.png", 1, false, false, 1));
-	hp->AddAnimClip(make_shared<AnimationClip>(L"HP1", L"_Textures/Scene/hud_hp_1.png", 1, false, false, 1));
-	hp->AddAnimClip(make_shared<AnimationClip>(L"AnimHP1", L"_Textures/Scene/hud_hp_1_flash.png", 2, false, true, 0.1));
-	hp->AddAnimClip(make_shared<AnimationClip>(L"Dead", L"_Textures/Scene/hud_hp_dead.png", 1, false, false, 1));
+	hp = make_unique<AnimationRect>(Vector2(), Vector2(78, 32), 0.0f, L"_Textures/UI/hud_hp_3.png");
+	hp->AddAnimClip(make_shared<AnimationClip>(L"HP3", L"_Textures/UI/hud_hp_3.png", 1, false, false, 1));
+	hp->AddAnimClip(make_shared<AnimationClip>(L"HP2", L"_Textures/UI/hud_hp_2.png", 1, false, false, 1));
+	hp->AddAnimClip(make_shared<AnimationClip>(L"HP1", L"_Textures/UI/hud_hp_1.png", 1, false, false, 1));
+	hp->AddAnimClip(make_shared<AnimationClip>(L"AnimHP1", L"_Textures/UI/hud_hp_1_flash.png", 2, false, true, 0.1));
+	hp->AddAnimClip(make_shared<AnimationClip>(L"Dead", L"_Textures/UI/hud_hp_dead.png", 1, false, false, 1));
 	// AddAnimator
 	hp->AddComponent(make_shared<AnimatorComponent>(hp->GetAnimClips()));
 	// animRect SetAnimator
