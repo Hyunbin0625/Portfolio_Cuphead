@@ -6,7 +6,6 @@ SFXManager::SFXManager()
 	// 초기화
 	totalIndex = 2;
 
-//	sfxs.assign(this->totalIndex, make_shared<SFX>());
 	sfxs.resize(totalIndex);
 
 	for (auto& sfx : sfxs)
@@ -35,7 +34,6 @@ void SFXManager::Init(const wstring& clipName,UINT id, Vector2 position, Vector2
 		}
 	}
 
-	cout << currentIndex << '\n';
 	// 없다면, Set
 	sfxs[currentIndex++]->SetAnimClip(clipName, id, position, scale, rotation);
 	

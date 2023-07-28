@@ -73,6 +73,7 @@ void AnimatorComponent::ResetFrame()
 {
 	end = false;
 	deltaTime = 0.0f;
+
 	if (currentAnimClip->GetIsReverse())
 		currentFrameIndex = currentAnimClip->GetLastFrameIndex();
 	else

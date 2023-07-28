@@ -6,7 +6,7 @@ PlayerSpecialAttackManager::PlayerSpecialAttackManager(UINT totalBullet, float b
 {
 	// √ ±‚»≠
 	currentIndex = 0;
-	totalSize = 3;
+	totalSize = 1;
 
 //	bullets.assign(totalBullet, make_shared<PlayerSpecialAttack>());
 	bullets.resize(totalBullet);

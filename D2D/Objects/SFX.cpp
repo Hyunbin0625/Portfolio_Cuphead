@@ -19,13 +19,15 @@ SFX::SFX()
 
 void SFX::SetAnimClip(const wstring& clipName, UINT id, Vector2 position, Vector2 scale, float rotation)
 {
-	this->clipName = clipName;
-	this->id = id;
 	activation = 1;
-	if (this->id == id && this->clipName == clipName)
+	this->id = id;
+	if (this->clipName == clipName)
 		animRect->GET_COMP(Animator)->ResetFrame();
 	else
+	{
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(clipName);
+		this->clipName = clipName;
+	}
 	animRect->SetPosition(position);
 	animRect->SetScale(scale);
 	animRect->SetRotation(rotation);
@@ -35,7 +37,6 @@ void SFX::Update()
 {
 	if (animRect->GET_COMP(Animator)->GetEnd())
 	{
-		cout << "End\n";
 		activation = 0;
 		animRect->SetPosition(Vector2(-500, -500));
 		animRect->SetScale(Vector2(100, 100));
@@ -43,7 +44,6 @@ void SFX::Update()
 	else
 	{
 		animRect->Update();
-		cout << "Update\n";
 	}
 }
 

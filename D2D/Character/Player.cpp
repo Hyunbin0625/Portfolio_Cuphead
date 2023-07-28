@@ -125,7 +125,7 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	bullet = make_shared<PlayerBulletManager>(2, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
 
 	// Create Special Attack
-	specialAttack = make_shared<PlayerSpecialAttackManager>(2, 800);	// totalBullet, bulletSpeed, speakerSpeed
+	specialAttack = make_shared<PlayerSpecialAttackManager>(1, 800);	// totalBullet, bulletSpeed, speakerSpeed
 
 	// Create Special Attack
 	superBeam = make_shared<SuperBeam>();
@@ -568,15 +568,17 @@ void Player::Update()
 		check = 1;
 		if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 		{
+			cout << "RIGHT" << '\n';
 			direction = Direction::R;
 			state = State::Super_Beam_R;
-			SFXMANAGER->Init(L"SuperIntroR", 1, Vector2(animRect->GetPosition().x - 48, animRect->GetPosition().y + 35), Vector2(318, 217) * 7 * totalSize, 0.0f);
+			SFXMANAGER->Init(L"SuperIntroR", 1, Vector2(animRect->GetPosition().x - 48 * totalSize, animRect->GetPosition().y + 35 * totalSize), Vector2(318, 217) * 7 * totalSize, 0.0f);
 		}
 		else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 		{
+			cout << "LEFT" << '\n';
 			direction = Direction::L;
 			state = State::Super_Beam_L;
-			SFXMANAGER->Init(L"SuperIntroL", 1, Vector2(animRect->GetPosition().x + 16, animRect->GetPosition().y + 30), Vector2(318, 217) * 7 * totalSize, 0.0f);
+			SFXMANAGER->Init(L"SuperIntroL", 1, Vector2(animRect->GetPosition().x + 16 * totalSize, animRect->GetPosition().y + 30 * totalSize), Vector2(318, 217) * 7 * totalSize, 0.0f);
 		}
 	}		// Special Attack
 	else if (INPUT->Press('V') && (int)(superMeterCard / maxSuperMeterCard * 100) >= 20 && bSpecialAttack == 0 && !bSuperBeam)
@@ -948,7 +950,6 @@ void Player::Update()
 		animRect->SetScale(Vector2(356, 411) * totalSize);
 		specialAttack->Init(Vector2(animRect->GetPosition().x - 20 * totalSize, animRect->GetPosition().y - 100 * totalSize), 90.0f);
 		break;
-		
 	case Super_Beam_R:
 		superBeam->Init(animRect->GetPosition(), totalSize, deltaTime, maxTime, 0);
 		if (deltaTime < 0.9f)
@@ -1002,9 +1003,9 @@ void Player::Update()
 	// ¶¥ Ãæµ¹
 	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L && state == State::Jump_R && state == State::Jump_L) && checkCollider)
 	{
-		cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
-		cout << "Ground : " << groundPos.y << '\n';
-		cout << groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
+	//	cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
+	//	cout << "Ground : " << groundPos.y << '\n';
+	//	cout << groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
 
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 	}

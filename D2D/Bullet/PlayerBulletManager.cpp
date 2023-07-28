@@ -6,10 +6,9 @@ PlayerBulletManager::PlayerBulletManager(UINT totalBullet, float bulletSpeed, fl
 {
 	// 초기화
 	time = 0;
-	count = 1;
+	count = 0;
 	totalSize = 1;
 
-//	bullets.assign(this->totalBullet, make_shared<PlayerBullet>());
 	bullets.resize(totalBullet);
 	activation.assign(this->totalBullet, bool());
 
@@ -45,39 +44,26 @@ void PlayerBulletManager::CreateBullet()
 		bullets[i] = tempBullets[i];
 		activation[i] = tempActivation[i];
 	}
-
-//	totalBullet *= 2;
-//	bullets.resize(totalBullet, make_shared<PlayerBullet>(bulletSpeed));
-//	activation.resize(totalBullet, bool());
 }
 
 void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)
 {
-	this->position = Vector2(position.x, position.y + count * rebound);
-
-	if (count >= -1 && bCount == 0)
-	{
-		--count;
-	//	cout << "감소 : " << count << ", " << bCount << '\n';
-	}
-	else
-	{
-		bCount = 1;
-		count = 0;
-	}
-
-	if (count <= 1 && bCount == 1)
-	{
-		++count;
-	//	cout << "증가 : " << count << '\n';
-	}
-	else
-	{
-		bCount = 0;
-		count = 0;
-	}
-	
-	bullets[nextIndex]->Init(this->position, rotation);
+//	if (count >= -1 && bCount == 0)
+//		--count;
+//	else if (bCount == 0)
+//	{
+//		bCount = 1;
+//		count = 0;
+//	}
+//
+//	if (count <= 1 && bCount == 1)
+//		++count;
+//	else if (bCount == 1)
+//	{
+//		bCount = 0;
+//		count = 0;
+//	}
+	bullets[nextIndex]->Init(Vector2(position.x, position.y + count * rebound), rotation);
 }
 
 void PlayerBulletManager::IndexManagement()
