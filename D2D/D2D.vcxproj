@@ -27,6 +27,7 @@
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
+    <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
     <ClCompile Include="Scenes\Scene_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -83,6 +84,7 @@
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />
     <ClInclude Include="Objects\SFX.h" />
+    <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />
     <ClInclude Include="Scenes\Scene_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

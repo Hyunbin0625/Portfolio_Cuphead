@@ -168,7 +168,12 @@
     <ClCompile Include="Scenes\Scene_Main.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\Scene_Tutorial.cpp" />
+    <ClCompile Include="Scenes\Scene_ForestFollies.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Tutorial.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -315,7 +320,12 @@
     <ClInclude Include="Scenes\Scene_Main.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\Scene_Tutorial.h" />
+    <ClInclude Include="Scenes\Scene_ForestFollies.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Tutorial.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">
