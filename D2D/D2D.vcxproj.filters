@@ -168,6 +168,7 @@
     <ClCompile Include="Scenes\Scene_Main.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Scenes\Scene_Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -314,6 +315,7 @@
     <ClInclude Include="Scenes\Scene_Main.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Scenes\Scene_Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

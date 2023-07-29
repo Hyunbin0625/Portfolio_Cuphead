@@ -8,6 +8,8 @@ Program::Program()
 
 void Program::Init()
 {
+	sceneList.push_back(make_shared<SceneMain>());
+	sceneList.push_back(make_shared<SceneTutorial>());
 	sceneList.push_back(make_shared<Scene>());
 
 	currentScene = sceneList[0];
@@ -16,6 +18,13 @@ void Program::Init()
 
 void Program::Update()
 {
+	if (dynamic_pointer_cast<SceneMain>(sceneList[0])->GetStart())
+	{
+		dynamic_pointer_cast<SceneMain>(sceneList[0])->Reset();
+		currentScene = sceneList[1];
+		currentScene->Init();
+	}
+
 	CAMERA->Update();
 	currentScene->Update();
 }

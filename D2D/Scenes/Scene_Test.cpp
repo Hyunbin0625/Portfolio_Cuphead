@@ -25,6 +25,10 @@ void Scene::Update()
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
+
+	Vector2 temp = (player->GetAnimRect()->GetPosition() - CENTER) - CAMERA->GetPosition();
+	CAMERA->SetPosition(CAMERA->GetPosition() + temp * 2 * DELTA);
+
 	ground->Update();
 	ground2->Update();
 

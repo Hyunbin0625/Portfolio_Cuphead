@@ -226,8 +226,8 @@ void Player::Update()
 	// Air or Ground
 	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
-		G += 15 * DELTA;
-		jumpSpeed -= G;
+		G += 9.8 * 400 * DELTA;
+		jumpSpeed -= G * DELTA;
 
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
 
@@ -320,6 +320,7 @@ void Player::Update()
 	}
 	else if(bSpecialAttack == 0 && bSuperBeam == 0)
 	{
+		jumpSpeed = 0;
 		jumpCount = 0;
 		G = 0;
 
@@ -554,6 +555,7 @@ void Player::Update()
 	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
+		G = 0;
 		if (direction == Direction::R)
 			state = State::Dash_R;
 		else
@@ -584,6 +586,7 @@ void Player::Update()
 		bSpecialAttack = 1;
 		check = 1;
 
+		
 		if (checkCollider == 0 && jumpCount == 1)
 		{
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
@@ -615,7 +618,7 @@ void Player::Update()
 		}
 		else
 		{
-			animRect->SetPosition(animRect->GetPosition() + Vector2(0, 30));
+			animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + 30 * totalSize));
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
@@ -641,7 +644,6 @@ void Player::Update()
 	if (bSpecialAttack == 1 && !animRect->GET_COMP(Animator)->GetEnd())
 	{
 		deltaTime += 1 * DELTA;
-		jumpSpeed = 10 * totalSize;
 
 		if (deltaTime >= 0.4f && (state == State::Special_Attack_R || state == State::Special_Attack_L || state == State::Air_Special_Attack_R || state == State::Air_Special_Attack_L))
 		{
@@ -999,7 +1001,7 @@ void Player::Update()
 	}
 	
 	// ¶¥ Ãæµ¹
-	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L && state == State::Jump_R && state == State::Jump_L) && checkCollider)
+	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L || state == State::Jump_R || state == State::Jump_L) && checkCollider)
 	{
 	//	cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
 	//	cout << "Ground : " << groundPos.y << '\n';
@@ -1023,17 +1025,15 @@ void Player::Update()
 		check = 0;
 	}
 
+	if (superMeterCard > maxSuperMeterCard)
+		superMeterCard = maxSuperMeterCard;
+
 	SFXbullet->Update();
 	animRect->Update();
 	SFXMANAGER->Update();
 	specialAttack->Update();
 	superBeam->Update();
 	bullet->Update();
-
-
-	Vector2 temp = (animRect->GetPosition() - CENTER) - CAMERA->GetPosition();
-	CAMERA->SetPosition(CAMERA->GetPosition() + temp * 2 * DELTA);
-
 }
 
 void Player::Render()

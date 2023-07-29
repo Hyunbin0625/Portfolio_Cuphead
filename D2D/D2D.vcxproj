@@ -34,6 +34,7 @@
     </ClCompile>
     <ClCompile Include="Objects\Sphere.cpp" />
     <ClCompile Include="Objects\SuperMeterCard.cpp" />
+    <ClCompile Include="Scenes\Scene_Tutorial.cpp" />
     <ClCompile Include="Systems\Camera.cpp" />
     <ClCompile Include="Objects\AnimationRect.cpp" />
     <ClCompile Include="Systems\SFXManager.cpp" />
@@ -89,6 +90,7 @@
     </ClInclude>
     <ClInclude Include="Objects\Sphere.h" />
     <ClInclude Include="Objects\SuperMeterCard.h" />
+    <ClInclude Include="Scenes\Scene_Tutorial.h" />
     <ClInclude Include="Systems\Camera.h" />
     <ClInclude Include="Objects\AnimationRect.h" />
     <ClInclude Include="Systems\SFXManager.h" />

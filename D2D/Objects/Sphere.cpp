@@ -4,9 +4,9 @@
 Sphere::Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap)
 	: position(position), rotation(rotation), bParrySlap(parrySlap)
 {
-	animRect = make_unique<AnimationRect>(position, Scale, rotation, L"_Textures/Tutorial/tutorial_sphere.png");
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"Sphere", L"_Textures/Tutorial/tutorial_sphere.png", 2, false, true, 1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"PinkSphere", L"_Textures/Tutorial/tutorial_pink_sphere.png", 2, false, true, 1));
+	animRect = make_unique<AnimationRect>(position, Scale, rotation, L"_Textures/Scene_Tutorial/tutorial_sphere.png");
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Sphere", L"_Textures/Scene_Tutorial/tutorial_sphere.png", 2, false, true, 1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"PinkSphere", L"_Textures/Scene_Tutorial/tutorial_pink_sphere.png", 2, false, true, 1));
 	// AddAnimator
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
 	// animRect SetAnimator
