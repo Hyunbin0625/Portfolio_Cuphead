@@ -180,3 +180,10 @@ extern float gWinHeight;
 
 // Scenes
 #include "Scenes/IScene.h"
+
+// Tuto
+#include "TutorialObject/ITutoObjects.h"
+
+// Tuto
+#include "TutorialObject/Tuto_Cube.h"
+#include "TutorialObject/TutoSet.h"

@@ -37,6 +37,9 @@
     <Filter Include="Components">
       <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TutorialObject">
+      <UniqueIdentifier>{1a9be92c-04ee-4e85-9218-095e7b1e1de0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -173,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="Scenes\Scene_Tutorial.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_Cube.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\TutoSet.cpp">
+      <Filter>TutorialObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,6 +335,18 @@
     <ClInclude Include="Scenes\Scene_Tutorial.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_Cube.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\TutoObjectList.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\TutoSet.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\ITutoObjects.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">
@@ -341,6 +362,9 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="_Shaders\Blur.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\CBuffers.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

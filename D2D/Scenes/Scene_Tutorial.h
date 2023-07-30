@@ -12,6 +12,8 @@ public:
 	void PostRender() override;
 
 public:
+	void SaveTutorialMap(const wstring& path = L"");
+	void LoadTutorialMap(const wstring& path = L"");
 
 	// 임시 함수
 	void CheckGround();
@@ -23,4 +25,8 @@ private:
 	unique_ptr<TextureRect> frontLayer;
 
 	unique_ptr<ColorRect> ground;
+
+	vector<shared_ptr<ITutoObjects>> objectList;
+
+	unique_ptr<class TutoSet> tutoSet;
 };

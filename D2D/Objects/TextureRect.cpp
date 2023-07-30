@@ -27,6 +27,8 @@ TextureRect::TextureRect(const Vector2& position, const Vector2& scale, float ro
 	if (texturePath != L"")
 		SetSRV(texturePath);
 
+	OB = make_unique<OutlineBuffer>();
+
 	// CreateBlendState
 	{
 		D3D11_BLEND_DESC desc;
@@ -75,6 +77,8 @@ void TextureRect::Render()
 
 	if (Path::GetExtension(texturePath) == L"png")
 		DC->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFF);
+
+	OB->SetPSBuffer(0);
 
 	DrawCall(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST, IB->GetCount());
 

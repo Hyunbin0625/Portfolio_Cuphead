@@ -13,7 +13,7 @@ void Program::Init()
 	sceneList.push_back(make_shared<SceneForestFollies>());
 	sceneList.push_back(make_shared<Scene>());
 
-	currentScene = sceneList[2];
+	currentScene = sceneList[1];
 	currentScene->Init();
 }
 

@@ -72,6 +72,19 @@ void Gui::TextureRectGUIS(vector<shared_ptr<class TextureRect>>& trVec, const ch
 	ImGui::End();
 }
 
+void Gui::TutoObjectsGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const char* name)
+{
+	if (trVec.empty()) return;
+
+	bool temp = true;
+	if (ImGui::Begin(name), &temp)
+	{
+		for (UINT i = 0; i < trVec.size(); ++i)
+			trVec[i]->GUI(i);
+	}
+	ImGui::End();
+}
+
 void Gui::ApplyStyle()
 {
 }

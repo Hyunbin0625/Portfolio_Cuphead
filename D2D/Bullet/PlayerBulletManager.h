@@ -15,7 +15,7 @@ public:
 
 	int GetNextIndex() { return nextIndex; }
 	float GetTime() { return time; }
-	float GetLastIndex() { return lastIndex; }
+	int GetLastIndex() { return lastIndex; }
 	float GetSpeakerSpeed() { return speakerSpeed; }
 	shared_ptr<PlayerBullet> GetBullet(int index) { return bullets[index]; }
 

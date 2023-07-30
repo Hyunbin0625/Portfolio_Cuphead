@@ -14,6 +14,7 @@ public:
 	void Render();
 
 	void TextureRectGUIS(vector<shared_ptr<class TextureRect>>& trVec, const char* name);
+	void TutoObjectsGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const char* name);
 
 private:
 	void ApplyStyle();

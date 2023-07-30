@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "Scene_Tutorial.h"
 
 void SceneTutorial::Init()
@@ -10,6 +10,8 @@ void SceneTutorial::Init()
 
 	ground = make_unique<ColorRect>(Vector2(5000, 300), Vector2(10000, 50), 0.0f, BLACK);
 	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	tutoSet = make_unique<TutoSet>();
 }
 
 void SceneTutorial::Destroy()
@@ -19,6 +21,18 @@ void SceneTutorial::Destroy()
 void SceneTutorial::Update()
 {
 	CheckGround();
+
+	for (int i = 0; i < objectList.size(); ++i)
+	{
+		if (objectList[i]->GetDelete())
+			objectList.erase(objectList.begin() + i);
+	}
+
+	if (tutoSet->GetSelectedIndex() == 0)
+		objectList.push_back(make_shared<Tuto_Cube>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+
+	for (const auto& object : objectList)
+		object->Update();
 
 	ground->Update();
 	player->Update();
@@ -44,7 +58,11 @@ void SceneTutorial::Render()
 	CAMERA->Render();
 	backLayer->Render();
 	{
-	//	ground->Render();
+		ground->Render();
+
+		for (const auto& object : objectList)
+			object->Render();
+
 		player->Render();
 	}
 	frontLayer->Render();
@@ -54,9 +72,106 @@ void SceneTutorial::Render()
 void SceneTutorial::PostRender()
 {
 	player->GUI();
+
+	tutoSet->GUI();
+	
+	IMGUI->TutoObjectsGUIS(objectList, "TutoObjects");
+
+	static bool bOpen = true;
+	if (ImGui::Begin("TutorialMap", &bOpen))
+	{
+		if (ImGui::Button("Save", ImVec2(50, 30)))
+			SaveTutorialMap();
+		ImGui::SameLine();
+		if (ImGui::Button("Load", ImVec2(50, 30)))
+			LoadTutorialMap();
+	}
+	ImGui::End();
 }
 
-// °¢ ÇÃ·¿Æû¿¡¼­ °Ë»çÇÒ ¿¹Á¤
+void SceneTutorial::SaveTutorialMap(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneTutorial::SaveTutorialMap, this, placeholders::_1);
+		Path::SaveFileDialog(L"", Path::TutorialFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		if (objectList.empty()) return;
+
+		ofstream out(path.c_str());
+
+		if (out.is_open())
+		{
+			Vector2 tempPos = player->GetAnimRect()->GetPosition();
+			out.write((char*)&tempPos, sizeof(tempPos));
+			float tempSize = player->GetTotalSize();
+			out.write((char*)&tempSize, sizeof(tempSize));
+
+			cout << "position : " << tempPos.x << ", " << tempPos.y << '\n';
+			cout << "Size : " << tempSize << '\n';
+
+			int listSize = objectList.size();
+			out.write((char*)&listSize, sizeof(listSize));
+			cout << listSize << "\n";
+
+			TutoState tempState;
+			for (UINT i = 0; i < objectList.size(); ++i)
+			{
+				tempState = objectList[i]->GetState();
+				out.write((char*)&tempState, sizeof(tempState));
+			}
+		}
+
+		out.close();
+	}
+}
+
+void SceneTutorial::LoadTutorialMap(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneTutorial::LoadTutorialMap, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::TutorialFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		ifstream in(path.c_str());
+
+		if (in.is_open())
+		{
+			Vector2 tempPos;
+			in.read((char*)&tempPos, sizeof(tempPos));
+			player->GetAnimRect()->SetPosition(tempPos);
+			float tempSize;
+			in.read((char*)&tempSize, sizeof(tempSize));
+			player->SetTotalSize(tempSize);
+
+			int listSize;
+			in.read((char*)&listSize, sizeof(listSize));
+
+			objectList.clear();
+			objectList.resize(listSize);
+
+		//	for (auto& object : objectList)
+		//		object = make_shared<Tuto_Cube>();
+
+			TutoState tempState;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in.read((char*)&tempState, sizeof(tempState));
+
+				if (tempState.type == TutoType::Cube)
+					objectList[i] = make_shared<Tuto_Cube>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+			}
+		}
+
+		in.close();
+	}
+}
+
+// ê° í”Œë ›í¼ì—ì„œ ê²€ì‚¬í•  ì˜ˆì •
 void SceneTutorial::CheckGround()
 {
 	player->SetCheckCollider(0);

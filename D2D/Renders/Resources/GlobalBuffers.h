@@ -84,3 +84,25 @@ public:
 private:
 	SelectionStruct data;
 };
+
+class OutlineBuffer : public ConstantBuffer
+{
+	struct OutlineStruct
+	{
+		bool bOutline = false;	// 16 배수로 해야한다. 바이트 패딩
+		char dumy;
+		short dumy1;
+		Vector3 dummy2;
+	};
+
+public:
+	OutlineBuffer() : ConstantBuffer(&data, sizeof(data)) {}
+
+	void SetOutline(const bool& bOutline)
+	{
+		data.bOutline = bOutline;
+	}
+
+private:
+	OutlineStruct data;
+};

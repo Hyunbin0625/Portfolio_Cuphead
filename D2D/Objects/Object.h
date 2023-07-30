@@ -32,6 +32,7 @@ public:
 	Matrix GetS() const { return S; }
 	Matrix GetR() const { return R; }
 	Matrix GetT() const { return T; }
+	string GetName() { return name; }
 
 	void SetPosition(const Vector2& position) { this->position = position; }
 	void SetScale(const Vector2& scale) { this->scale = scale; }

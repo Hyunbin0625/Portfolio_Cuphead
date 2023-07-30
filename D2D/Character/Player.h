@@ -91,17 +91,23 @@ public:
 
 public:
 	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
+
 	State GetState() { return state; }
-	bool GetPlatform() { return platform; }
+
 	UINT GetHp() { return hp; }
-	int GetSuperMeterCard() { return superMeterCard; }
-	int GetPercentSuperMeterCard() { return superMeterCard / maxSuperMeterCard * 100; }
-	int GetMaxSuperMeterCard() { return maxSuperMeterCard; }
+	int GetSuperMeterCard() { return (int)superMeterCard; }
+	int GetPercentSuperMeterCard() { return (int)(superMeterCard / maxSuperMeterCard * 100); }
+	int GetMaxSuperMeterCard() { return (int)maxSuperMeterCard; }
+
+	float GetTotalSize() const { return totalSize; }
+
 	bool GetParry() { return bParry; }
+	bool GetPlatform() { return platform; }
 
 	void SetHp(int hp) { this->hp = hp; }
 	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
 	void SetMaxSuperMeterCard(float maxSuperMeterCard) { this->maxSuperMeterCard = maxSuperMeterCard; }
+	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 	void SetHit(bool hit) { this->hit = hit; }
 	void SetGroundPos(Vector2 groundPos) { this->groundPos = groundPos; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }

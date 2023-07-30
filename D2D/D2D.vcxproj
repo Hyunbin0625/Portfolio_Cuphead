@@ -40,6 +40,8 @@
     <ClCompile Include="Objects\AnimationRect.cpp" />
     <ClCompile Include="Systems\SFXManager.cpp" />
     <ClCompile Include="Systems\UI.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Cube.cpp" />
+    <ClCompile Include="TutorialObject\TutoSet.cpp" />
     <ClCompile Include="Utilities\Animator.cpp" />
     <ClCompile Include="Components\ColliderComponent.cpp" />
     <ClCompile Include="Systems\Gui.cpp" />
@@ -97,6 +99,10 @@
     <ClInclude Include="Objects\AnimationRect.h" />
     <ClInclude Include="Systems\SFXManager.h" />
     <ClInclude Include="Systems\UI.h" />
+    <ClInclude Include="TutorialObject\ITutoObjects.h" />
+    <ClInclude Include="TutorialObject\TutoObjectList.h" />
+    <ClInclude Include="TutorialObject\Tuto_Cube.h" />
+    <ClInclude Include="TutorialObject\TutoSet.h" />
     <ClInclude Include="Utilities\Animator.h" />
     <ClInclude Include="Components\ColliderComponent.h" />
     <ClInclude Include="Systems\Gui.h" />
@@ -148,6 +154,10 @@
     <FxCompile Include="_Shaders\Vertex.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="_Shaders\CBuffers.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
