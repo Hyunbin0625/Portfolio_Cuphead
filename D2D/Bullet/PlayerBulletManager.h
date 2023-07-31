@@ -13,6 +13,8 @@ public:
 	void Update();
 	void Render();
 
+
+	vector<shared_ptr<PlayerBullet>> GetBullets() { return bullets; }
 	int GetNextIndex() { return nextIndex; }
 	float GetTime() { return time; }
 	int GetLastIndex() { return lastIndex; }

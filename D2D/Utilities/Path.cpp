@@ -122,6 +122,7 @@ const WCHAR* Path::ShaderFilter = L"HLSL File (*.hlsl)\0*.hlsl";
 const WCHAR* Path::TextFilter = L"Text File (*.txt)\0*.txt";
 const WCHAR* Path::SoundFilter = L"Text File (*.mp3;*.wav;*.flac)\0*.mp3;*.wav;*.flac";
 const WCHAR* Path::TutorialFilter = L"Tutorial File (*.tuto)\0*.tuto";
+const WCHAR* Path::ForestFilter = L"ForestFollies File (*.frst)\0*.frst";
 
 void Path::OpenFileDialog(const wstring& file, const WCHAR* filter, const wstring& folder, function<void(wstring)>& func, const HWND& hwnd)
 {
@@ -177,6 +178,8 @@ void Path::SaveFileDialog(const wstring& file, const WCHAR* filter, const wstrin
 		ofn.lpstrDefExt = L".hlsl";
 	else if (filter == TutorialFilter)
 		ofn.lpstrDefExt = L".tuto";
+	else if (filter == ForestFilter)
+		ofn.lpstrDefExt = L".frst";
 
 	if (GetOpenFileName(&ofn))
 	{

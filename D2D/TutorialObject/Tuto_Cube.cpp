@@ -62,7 +62,7 @@ void Tuto_Cube::GUI(int ordinal)
 
 void Tuto_Cube::Collision(shared_ptr<Player> player)
 {
-	if (collision->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
+	if (collision->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
 	{
 		// 충돌시 player가 object 위인 경우
 		if ( player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 + 5 > collision->GetPosition().y + collision->GetScale().y / 2

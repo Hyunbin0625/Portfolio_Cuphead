@@ -115,12 +115,8 @@ void SceneTutorial::SaveTutorialMap(const wstring& path)
 			float tempSize = player->GetTotalSize();
 			out.write((char*)&tempSize, sizeof(tempSize));
 
-			cout << "position : " << tempPos.x << ", " << tempPos.y << '\n';
-			cout << "Size : " << tempSize << '\n';
-
 			int listSize = objectList.size();
 			out.write((char*)&listSize, sizeof(listSize));
-			cout << listSize << "\n";
 
 			TutoState tempState;
 			for (UINT i = 0; i < objectList.size(); ++i)
@@ -179,7 +175,7 @@ void SceneTutorial::CheckGround()
 {
 	player->SetCheckCollider(0);
 	player->SetPlatform(0);
-	if (ground->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
+	if (ground->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
 	{
 		player->SetGroundPos(Vector2(ground->GetPosition().x, ground->GetPosition().y + ground->GetScale().y / 2));
 		player->SetCheckCollider(1);

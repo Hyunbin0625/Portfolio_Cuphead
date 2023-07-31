@@ -205,7 +205,7 @@ void Player::Update()
 	SFXbullet->SetScale(Vector2(75, 69) * totalSize);
 
 	// Down Platform or Jump
-	if (state != State::Death && bSpecialAttack == 0 && bSuperBeam == 0)
+	if (state != PlayerState::Death && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		if (platform == 1 && INPUT->Press(VK_DOWN) && INPUT->Press('Z'))
 		{
@@ -235,9 +235,9 @@ void Player::Update()
 		if (jumpCount == 1 || (jumpCount == 0 && jumpSpeed < -5.0f))	// 보류
 		{
 			if (direction == Direction::R)
-				state = State::Jump_R;
+				state = PlayerState::Jump_R;
 			else
-				state = State::Jump_L;
+				state = PlayerState::Jump_L;
 		}
 
 		// Parry Slap
@@ -248,12 +248,12 @@ void Player::Update()
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
-				state = State::Parry_R;
+				state = PlayerState::Parry_R;
 			}
 			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 			{
 				direction = Direction::L;
-				state = State::Parry_L;
+				state = PlayerState::Parry_L;
 			}
 
 			if (animRect->GET_COMP(Animator)->GetEnd())
@@ -265,7 +265,7 @@ void Player::Update()
 		if (!INPUT->Press('Z') && !INPUT->Down('Z') && jumpCount == 1)
 			keyCheck = 1;
 
-		if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1 && bSuperBeam != 1)
+		if (INPUT->Press('X') && state != PlayerState::Death && bSpecialAttack != 1 && bSuperBeam != 1)
 		{
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
@@ -326,9 +326,9 @@ void Player::Update()
 
 		// Idle
 		if (direction == Direction::R)
-			state = State::Idle_R;
+			state = PlayerState::Idle_R;
 		else
-			state = State::Idle_L;
+			state = PlayerState::Idle_L;
 
 		// 조준
 		if (INPUT->Press('C'))
@@ -338,53 +338,53 @@ void Player::Update()
 			{
 				if (INPUT->Press(VK_RIGHT))
 				{
-					state = State::Shoot_R;
+					state = PlayerState::Shoot_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT))
 				{
-					state = State::Shoot_L;
+					state = PlayerState::Shoot_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_UP))
 				{
 					if (direction == Direction::R)
-						state = State::Aim_Shoot_Up_R;
+						state = PlayerState::Aim_Shoot_Up_R;
 					else
-						state = State::Aim_Shoot_Up_L;
+						state = PlayerState::Aim_Shoot_Up_L;
 				}
 					
 				if (INPUT->Press(VK_DOWN))
 				{
 					if (direction == Direction::R)
-						state = State::Aim_Shoot_Down_R;
+						state = PlayerState::Aim_Shoot_Down_R;
 					else
-						state = State::Aim_Shoot_Down_L;
+						state = PlayerState::Aim_Shoot_Down_L;
 				}
 					
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
 				{
-					state = State::Aim_Shoot_Diagonal_Up_R;
+					state = PlayerState::Aim_Shoot_Diagonal_Up_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
 				{
-					state = State::Aim_Shoot_Diagonal_Up_L;
+					state = PlayerState::Aim_Shoot_Diagonal_Up_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_DOWN))
 				{
-					state = State::Aim_Shoot_Diagonal_Down_R;
+					state = PlayerState::Aim_Shoot_Diagonal_Down_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_DOWN))
 				{
-					state = State::Aim_Shoot_Diagonal_Down_L;
+					state = PlayerState::Aim_Shoot_Diagonal_Down_L;
 					direction = Direction::L;
 				}
 			}
@@ -392,53 +392,53 @@ void Player::Update()
 			{
 				if (INPUT->Press(VK_RIGHT))
 				{
-					state = State::Aim_R;
+					state = PlayerState::Aim_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT))
 				{
-					state = State::Aim_L;
+					state = PlayerState::Aim_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_UP))
 				{
 					if (direction == Direction::R)
-						state = State::Aim_Up_R;
+						state = PlayerState::Aim_Up_R;
 					else
-						state = State::Aim_Up_L;
+						state = PlayerState::Aim_Up_L;
 				}
 
 				if (INPUT->Press(VK_DOWN))
 				{
 					if (direction == Direction::R)
-						state = State::Aim_Down_R;
+						state = PlayerState::Aim_Down_R;
 					else
-						state = State::Aim_Down_L;
+						state = PlayerState::Aim_Down_L;
 				}	
 
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
 				{
-					state = State::Aim_Diagonal_Up_R;
+					state = PlayerState::Aim_Diagonal_Up_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
 				{
-					state = State::Aim_Diagonal_Up_L;
+					state = PlayerState::Aim_Diagonal_Up_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_DOWN))
 				{
-					state = State::Aim_Diagonal_Down_R;
+					state = PlayerState::Aim_Diagonal_Down_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_DOWN))
 				{
-					state = State::Aim_Diagonal_Down_L;
+					state = PlayerState::Aim_Diagonal_Down_L;
 					direction = Direction::L;
 				}
 			}
@@ -450,45 +450,45 @@ void Player::Update()
 			{
 				if (direction == Direction::R)
 				{
-					state = State::Shoot_R;
+					state = PlayerState::Shoot_R;
 				}
 
 				if (direction == Direction::L)
 				{
-					state = State::Shoot_L;
+					state = PlayerState::Shoot_L;
 				}
 
 				if (INPUT->Press(VK_RIGHT))
 				{
-					state = State::Run_Shoot_R;
+					state = PlayerState::Run_Shoot_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT))
 				{
-					state = State::Run_Shoot_L;
+					state = PlayerState::Run_Shoot_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_UP) && direction == Direction::R)
 				{
-					state = State::Aim_Shoot_Up_R;
+					state = PlayerState::Aim_Shoot_Up_R;
 				}
 
 				if (INPUT->Press(VK_UP) && direction == Direction::L)
 				{
-					state = State::Aim_Shoot_Up_L;
+					state = PlayerState::Aim_Shoot_Up_L;
 				}
 
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
 				{
-					state = State::Run_Shoot_Diagonal_Up_R;
+					state = PlayerState::Run_Shoot_Diagonal_Up_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
 				{
-					state = State::Run_Shoot_Diagonal_Up_L;
+					state = PlayerState::Run_Shoot_Diagonal_Up_L;
 					direction = Direction::L;
 				}
 
@@ -496,12 +496,12 @@ void Player::Update()
 				{
 					if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 					{
-						state = State::Shoot_Down_R;
+						state = PlayerState::Shoot_Down_R;
 						direction = Direction::R;
 					}
 					else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 					{
-						state = State::Shoot_Down_L;
+						state = PlayerState::Shoot_Down_L;
 						direction = Direction::L;
 					}
 				}
@@ -510,42 +510,42 @@ void Player::Update()
 			{
 				if (INPUT->Press(VK_RIGHT))
 				{
-					state = State::Run_R;
+					state = PlayerState::Run_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT))
 				{
-					state = State::Run_L;
+					state = PlayerState::Run_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_UP))
 				{
 					if (direction == Direction::R)
-						state = State::Aim_Up_R;
+						state = PlayerState::Aim_Up_R;
 					else
-						state = State::Aim_Up_L;
+						state = PlayerState::Aim_Up_L;
 				}
 
 				if (INPUT->Press(VK_RIGHT) && INPUT->Press(VK_UP))
 				{
-					state = State::Run_R;
+					state = PlayerState::Run_R;
 					direction = Direction::R;
 				}
 
 				if (INPUT->Press(VK_LEFT) && INPUT->Press(VK_UP))
 				{
-					state = State::Run_L;
+					state = PlayerState::Run_L;
 					direction = Direction::L;
 				}
 
 				if (INPUT->Press(VK_DOWN))
 				{
 					if (direction == Direction::R)
-						state = State::Down_R;
+						state = PlayerState::Down_R;
 					else
-						state = State::Down_L;
+						state = PlayerState::Down_L;
 				}
 			}
 		}
@@ -557,9 +557,9 @@ void Player::Update()
 		jumpSpeed = 0;
 		G = 0;
 		if (direction == Direction::R)
-			state = State::Dash_R;
+			state = PlayerState::Dash_R;
 		else
-			state = State::Dash_L;
+			state = PlayerState::Dash_L;
 	}
 
 	// Super Beam
@@ -571,13 +571,13 @@ void Player::Update()
 		if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 		{
 			direction = Direction::R;
-			state = State::Super_Beam_R;
+			state = PlayerState::Super_Beam_R;
 			SFXMANAGER->Init(L"SuperIntroR", 1, Vector2(animRect->GetPosition().x - 48 * totalSize, animRect->GetPosition().y + 35 * totalSize), Vector2(318, 217) * 7 * totalSize, 0.0f);
 		}
 		else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 		{
 			direction = Direction::L;
-			state = State::Super_Beam_L;
+			state = PlayerState::Super_Beam_L;
 			SFXMANAGER->Init(L"SuperIntroL", 1, Vector2(animRect->GetPosition().x + 16 * totalSize, animRect->GetPosition().y + 30 * totalSize), Vector2(318, 217) * 7 * totalSize, 0.0f);
 		}
 	}		// Special Attack
@@ -592,28 +592,28 @@ void Player::Update()
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
-				state = State::Air_Special_Attack_R;
+				state = PlayerState::Air_Special_Attack_R;
 			}
 			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 			{
 				direction = Direction::L;
-				state = State::Air_Special_Attack_L;
+				state = PlayerState::Air_Special_Attack_L;
 			}
 
 			if (INPUT->Press(VK_UP))
 			{
 				if (direction == Direction::R)
-					state = State::Air_Special_Attack_Up_R;
+					state = PlayerState::Air_Special_Attack_Up_R;
 				else
-					state = State::Air_Special_Attack_Up_L;
+					state = PlayerState::Air_Special_Attack_Up_L;
 			}
 
 			if (INPUT->Press(VK_DOWN))
 			{
 				if (direction == Direction::R)
-					state = State::Air_Special_Attack_Down_R;
+					state = PlayerState::Air_Special_Attack_Down_R;
 				else
-					state = State::Air_Special_Attack_Down_L;
+					state = PlayerState::Air_Special_Attack_Down_L;
 			}
 		}
 		else
@@ -622,20 +622,20 @@ void Player::Update()
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
-				state = State::Special_Attack_R;
+				state = PlayerState::Special_Attack_R;
 			}
 			else if (INPUT->Press(VK_LEFT) || direction == Direction::L)
 			{
 				direction = Direction::L;
-				state = State::Special_Attack_L;
+				state = PlayerState::Special_Attack_L;
 			}
 
 			if (INPUT->Press(VK_UP))
 			{
 				if (direction == Direction::R)
-					state = State::Special_Attack_Up_R;
+					state = PlayerState::Special_Attack_Up_R;
 				else
-					state = State::Special_Attack_Up_L;
+					state = PlayerState::Special_Attack_Up_L;
 			}
 		}
 	}
@@ -645,7 +645,7 @@ void Player::Update()
 	{
 		deltaTime += 1 * DELTA;
 
-		if (deltaTime >= 0.4f && (state == State::Special_Attack_R || state == State::Special_Attack_L || state == State::Air_Special_Attack_R || state == State::Air_Special_Attack_L))
+		if (deltaTime >= 0.4f && (state == PlayerState::Special_Attack_R || state == PlayerState::Special_Attack_L || state == PlayerState::Air_Special_Attack_R || state == PlayerState::Air_Special_Attack_L))
 		{
 			if (direction == Direction::R)
 				animRect->Move(Vector2(-150, 0));
@@ -695,9 +695,9 @@ void Player::Update()
 	if (hp < lastHp && !animRect->GET_COMP(Animator)->GetEnd())
 	{
 		if (direction == Direction::R)
-			state = State::Hit_R;
+			state = PlayerState::Hit_R;
 		else
-			state = State::Hit_L;
+			state = PlayerState::Hit_L;
 	}
 	else if (animRect->GET_COMP(Animator)->GetEnd())
 	{
@@ -707,7 +707,7 @@ void Player::Update()
 		lastHp = hp;
 
 	if (hp == 0)
-		state = State::Death;
+		state = PlayerState::Death;
 		
 	if (scale != animRect->GetScale())
 		animRect->SetScale(scale * totalSize);
@@ -1001,7 +1001,7 @@ void Player::Update()
 	}
 	
 	// 땅 충돌
-	if (!(state >= State::Special_Attack_R && state <= State::Super_Beam_L || state == State::Jump_R || state == State::Jump_L) && checkCollider)
+	if (!(state >= PlayerState::Special_Attack_R && state <= PlayerState::Super_Beam_L || state == PlayerState::Jump_R || state == PlayerState::Jump_L) && checkCollider)
 	{
 	//	cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
 	//	cout << "Ground : " << groundPos.y << '\n';
@@ -1012,7 +1012,7 @@ void Player::Update()
 
 	bullet->SetTotalSize(totalSize);
 	specialAttack->SetTotalSize(totalSize);
-	if (INPUT->Press('X') && state != State::Death && bSpecialAttack != 1 && bSuperBeam != 1)
+	if (INPUT->Press('X') && state != PlayerState::Death && bSpecialAttack != 1 && bSuperBeam != 1)
 	{
 		bullet->IndexManagement();
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-enum State
+enum PlayerState
 {
 	None = 0,
 	Idle_R,
@@ -91,8 +91,9 @@ public:
 
 public:
 	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
+	shared_ptr<PlayerBulletManager> GetBullet() { return bullet; }
 
-	State GetState() { return state; }
+	PlayerState GetState() { return state; }
 
 	UINT GetHp() { return hp; }
 	int GetSuperMeterCard() { return (int)superMeterCard; }
@@ -144,7 +145,7 @@ private:
 	
 	float totalSize = 1.0f;
 
-	State state = State::Idle_R;
+	PlayerState state = PlayerState::Idle_R;
 	Direction direction = Direction::R;
 	float speed;
 

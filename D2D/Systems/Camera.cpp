@@ -18,18 +18,18 @@ Camera::~Camera() {}
 
 void Camera::Update()
 {
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('I'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('I'))
 		Move(Vector2(0, speed));
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('K'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('K'))
 		Move(Vector2(0, -speed));
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('J'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('J'))
 		Move(Vector2(-speed, 0));
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('L'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('L'))
 		Move(Vector2(speed, 0));
 
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('U'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('U'))
 		ZoomIn();
-	if (INPUT->Press(VK_LSHIFT) && INPUT->Press('O'))
+	if (INPUT->Press(VK_CONTROL) && INPUT->Press('O'))
 		ZoomOut();
 
 	if (INPUT->Down(VK_F8))

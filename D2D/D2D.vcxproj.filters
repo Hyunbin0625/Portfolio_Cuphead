@@ -40,6 +40,9 @@
     <Filter Include="TutorialObject">
       <UniqueIdentifier>{1a9be92c-04ee-4e85-9218-095e7b1e1de0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Forest">
+      <UniqueIdentifier>{1b54bb7b-41d8-4b07-b366-e2d51c0a5f6b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -183,6 +186,10 @@
     <ClCompile Include="TutorialObject\TutoSet.cpp">
       <Filter>TutorialObject</Filter>
     </ClCompile>
+    <ClCompile Include="Forest\FlowerGrunt.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\ForestEnemySet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -338,15 +345,17 @@
     <ClInclude Include="TutorialObject\Tuto_Cube.h">
       <Filter>TutorialObject</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialObject\TutoObjectList.h">
-      <Filter>TutorialObject</Filter>
-    </ClInclude>
     <ClInclude Include="TutorialObject\TutoSet.h">
       <Filter>TutorialObject</Filter>
     </ClInclude>
     <ClInclude Include="TutorialObject\ITutoObjects.h">
       <Filter>TutorialObject</Filter>
     </ClInclude>
+    <ClInclude Include="Forest\FlowerGrunt.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\IForestEnemy.h" />
+    <ClInclude Include="Forest\ForestEnemySet.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

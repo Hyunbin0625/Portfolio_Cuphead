@@ -85,6 +85,19 @@ void Gui::TutoObjectsGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const c
 	ImGui::End();
 }
 
+void Gui::ForestEnemyGUIS(vector<shared_ptr<class IForestEnemy>>& AnVec, const char* name)
+{
+	if (AnVec.empty()) return;
+
+	bool temp = true;
+	if (ImGui::Begin(name), &temp)
+	{
+		for (UINT i = 0; i < AnVec.size(); ++i)
+			AnVec[i]->GUI(i);
+	}
+	ImGui::End();
+}
+
 void Gui::ApplyStyle()
 {
 }
