@@ -30,7 +30,7 @@ void Tuto_Cube::Update()
 void Tuto_Cube::Render()
 {
 	textureRect->Render();
-//	collision->Render();
+	collision->Render();
 }
 
 void Tuto_Cube::GUI(int ordinal)
@@ -62,5 +62,56 @@ void Tuto_Cube::GUI(int ordinal)
 
 void Tuto_Cube::Collision(shared_ptr<Player> player)
 {
+	if (collision->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= State::Special_Attack_R && player->GetState() <= State::Super_Beam_L))
+	{
+		// 충돌시 player가 object 위인 경우
+		if ( player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 + 5 > collision->GetPosition().y + collision->GetScale().y / 2
+			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
+			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
+		{
+			cout << "player up\n";
+			player->SetCheckCollider(true);
+			if (bPlatform)
+				player->SetPlatform(true);
+			player->SetGroundPos(Vector2(collision->GetPosition().x, collision->GetPosition().y + collision->GetScale().y / 2));
 
+			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collision->GetPosition().y + collision->GetScale().y / 2 - 1 && !bPlatform)
+			{
+				player->GetAnimRect()->Move(Vector2(0, 400));
+			}
+		}
+		
+		if (player->GetAnimRect()->GetPosition().y < collision->GetPosition().y - collision->GetScale().y / 2
+			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
+			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
+		{
+			cout << "player Down\n";
+			if (!bPlatform)
+			{
+				cout << "jumpSpeed 0 \n";
+				player->GetAnimRect()->Move(Vector2(0, player->GetJumpSpeed()));
+				player->SetJumpSpeed(0.0f);
+
+			}
+		}
+
+		if (!bPlatform)
+		{
+			// 충돌시 player가 object 옆인 경우
+			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collision->GetPosition().y + collision->GetScale().y / 2
+				|| player->GetAnimRect()->GetPosition().y + player->GetAnimRect()->GetScale().y / 2 < collision->GetPosition().y - collision->GetScale().y / 2)
+			{
+				if (player->GetAnimRect()->GetPosition().x + player->GetAnimRect()->GetScale().x / 2 > collision->GetPosition().x - collision->GetScale().x / 2
+					&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x)
+				{
+					player->GetAnimRect()->Move(Vector2(-player->GetSpeed(), 0));
+				}
+				if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x / 2 < collision->GetPosition().x + collision->GetScale().x / 2
+					&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x)
+				{
+					player->GetAnimRect()->Move(Vector2(player->GetSpeed(), 0));
+				}
+			}
+		}
+	}
 }

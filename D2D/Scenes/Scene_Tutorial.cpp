@@ -22,6 +22,12 @@ void SceneTutorial::Update()
 {
 	CheckGround();
 
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision())
+			object->Collision(player);
+	}
+
 	for (int i = 0; i < objectList.size(); ++i)
 	{
 		if (objectList[i]->GetDelete())
@@ -153,9 +159,6 @@ void SceneTutorial::LoadTutorialMap(const wstring& path)
 
 			objectList.clear();
 			objectList.resize(listSize);
-
-		//	for (auto& object : objectList)
-		//		object = make_shared<Tuto_Cube>();
 
 			TutoState tempState;
 			for (UINT i = 0; i < listSize; ++i)

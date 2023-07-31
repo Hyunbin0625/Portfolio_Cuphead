@@ -13,6 +13,7 @@ public:
 
 	virtual bool GetDelete() override { return bDelete; }
 	virtual TutoState GetState() override { return state; }
+	virtual bool GetCollision() override { return state.bCollision; }
 
 	virtual void SetState(TutoState state) override { this->state = state; }
 
@@ -28,7 +29,7 @@ private:
 
 	Vector2 colPos = Vector2(-10, -4);
 	Vector2 colScale = Vector2(-33, -54);
-
-
+	
+	bool bPlatform = false;
 	bool bDelete = 0;
 };

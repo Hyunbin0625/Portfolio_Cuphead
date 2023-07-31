@@ -100,6 +100,8 @@ public:
 	int GetMaxSuperMeterCard() { return (int)maxSuperMeterCard; }
 
 	float GetTotalSize() const { return totalSize; }
+	float GetSpeed() const { return speed; }
+	float GetJumpSpeed() const { return jumpSpeed; }
 
 	bool GetParry() { return bParry; }
 	bool GetPlatform() { return platform; }
@@ -108,11 +110,13 @@ public:
 	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
 	void SetMaxSuperMeterCard(float maxSuperMeterCard) { this->maxSuperMeterCard = maxSuperMeterCard; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
+
+	void SetJumpSpeed(float jumpSpeed) { this->jumpSpeed = jumpSpeed * totalSize; }
+
 	void SetHit(bool hit) { this->hit = hit; }
 	void SetGroundPos(Vector2 groundPos) { this->groundPos = groundPos; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
-	void SetJumpSpeed(float jumpSpeed) { this->jumpSpeed = jumpSpeed * totalSize; }
 	void SetG(float G) { this->G = G; }
 
 private:

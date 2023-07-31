@@ -32,6 +32,7 @@ public:
 	
 	virtual bool GetDelete() = 0;
 	virtual TutoState GetState() = 0;
+	virtual bool GetCollision() = 0;
 
 	virtual void SetState(TutoState state) = 0;
 };
