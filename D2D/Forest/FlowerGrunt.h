@@ -6,7 +6,7 @@ enum class FwGruntState
 	Run,
 	Float,
 	Jump,
-	Down,
+	Turn,
 	Death,
 };
 

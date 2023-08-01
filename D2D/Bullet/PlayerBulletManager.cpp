@@ -10,19 +10,15 @@ PlayerBulletManager::PlayerBulletManager(UINT totalBullet, float bulletSpeed, fl
 	totalSize = 1;
 
 	bullets.resize(totalBullet);
-	activation.assign(this->totalBullet, bool());
 
 	for (auto& bullet : bullets)
 		bullet = make_shared<PlayerBullet>(bulletSpeed);
-	for (auto active : activation)
-		active = 0;
 }
 
 void PlayerBulletManager::CreateBullet()
 {
 	totalBullet *= 2;
 	bullets.resize(totalBullet);
-	activation.resize(totalBullet, bool());
 
 	for (int i = totalBullet / 2; i < totalBullet; ++i)
 		bullets[i] = make_shared<PlayerBullet>(bulletSpeed);
@@ -54,7 +50,7 @@ void PlayerBulletManager::IndexManagement()
 	if ((int)time != lastIndex)
 	{
 		lastIndex = (int)time;
-		activation[time] = 1;
+		bullets[time]->SetActivation(true);
 		++nextIndex;
 	}
 }
@@ -65,24 +61,23 @@ void PlayerBulletManager::Update()
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
 		bullets[i]->SetTotalSize(totalSize);
-		if (activation[i] == true)
+		if (bullets[i]->GetActivation() == true)
 		{
-			bullets[i]->Update();
-
 			// End
 			if (bullets[i]->GetAnimRect()->GetPosition().y > CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT + 200 || bullets[i]->GetAnimRect()->GetPosition().y < CAMERA->GetPosition().y - 200
 				|| bullets[i]->GetAnimRect()->GetPosition().x > CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH + 200 || bullets[i]->GetAnimRect()->GetPosition().x < CAMERA->GetPosition().x - 200)
-			{
-				activation[i] = false;
-				bullets[i]->GetAnimRect()->SetPosition(Vector2(-500, -500));
-			}
+				bullets[i]->SetActivation(false);
 		}
+		else
+			bullets[i]->GetAnimRect()->SetPosition(Vector2(-500, -500));
+
+		bullets[i]->Update();
 	}
 
 	// Loop시 
 	if ((UINT)time >= totalBullet - 1)
 	{
-		if (activation[0] == 1)	// 0이 활성화 되어 있을 때
+		if (bullets[0]->GetActivation() == true)	// 0이 활성화 되어 있을 때
 			CreateBullet();
 		else
 		{
@@ -97,7 +92,7 @@ void PlayerBulletManager::Render()
 {
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
-		if (activation[i] == true)
+		if (bullets[i]->GetActivation() == true)
 			bullets[i]->Render();
 	}
 }

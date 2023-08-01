@@ -28,6 +28,9 @@
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Forest\ForestEnemySet.cpp" />
     <ClCompile Include="Forest\FlowerGrunt.cpp" />
+    <ClCompile Include="Forest\ForestObjectSet.cpp" />
+    <ClCompile Include="Forest\Forest_Ground.cpp" />
+    <ClCompile Include="Forest\Forest_Wall.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
@@ -89,7 +92,11 @@
     <ClInclude Include="Bullet\PlayerBullet.h" />
     <ClInclude Include="Forest\ForestEnemySet.h" />
     <ClInclude Include="Forest\FlowerGrunt.h" />
+    <ClInclude Include="Forest\ForestObjectSet.h" />
+    <ClInclude Include="Forest\Forest_Ground.h" />
+    <ClInclude Include="Forest\Forest_Wall.h" />
     <ClInclude Include="Forest\IForestEnemy.h" />
+    <ClInclude Include="Forest\IForestObjects.h" />
     <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />

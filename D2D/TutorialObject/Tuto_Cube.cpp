@@ -69,7 +69,6 @@ void Tuto_Cube::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
 		{
-			cout << "player up\n";
 			player->SetCheckCollider(true);
 			if (bPlatform)
 				player->SetPlatform(true);
@@ -85,13 +84,10 @@ void Tuto_Cube::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
 		{
-			cout << "player Down\n";
 			if (!bPlatform)
 			{
-				cout << "jumpSpeed 0 \n";
 				player->GetAnimRect()->Move(Vector2(0, player->GetJumpSpeed()));
 				player->SetJumpSpeed(0.0f);
-
 			}
 		}
 

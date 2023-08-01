@@ -72,7 +72,7 @@ void Gui::TextureRectGUIS(vector<shared_ptr<class TextureRect>>& trVec, const ch
 	ImGui::End();
 }
 
-void Gui::TutoObjectsGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const char* name)
+void Gui::TutoObjectGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const char* name)
 {
 	if (trVec.empty()) return;
 
@@ -86,6 +86,19 @@ void Gui::TutoObjectsGUIS(vector<shared_ptr<class ITutoObjects>>& trVec, const c
 }
 
 void Gui::ForestEnemyGUIS(vector<shared_ptr<class IForestEnemy>>& AnVec, const char* name)
+{
+	if (AnVec.empty()) return;
+
+	bool temp = true;
+	if (ImGui::Begin(name), &temp)
+	{
+		for (UINT i = 0; i < AnVec.size(); ++i)
+			AnVec[i]->GUI(i);
+	}
+	ImGui::End();
+}
+
+void Gui::ForestObjectGUIS(vector<shared_ptr<class IForestObjects>>& AnVec, const char* name)
 {
 	if (AnVec.empty()) return;
 

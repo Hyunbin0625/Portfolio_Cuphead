@@ -186,6 +186,14 @@ void Player::Jump()
 
 void Player::Update()
 {
+	if (bMod)
+	{
+		if (!(ImGui::IsAnyItemActive()) && animRect->GET_COMP(Collider)->Intersect(INPUT->GetMousePosition()) && INPUT->Press(VK_LBUTTON))
+			position = INPUT->GetMousePosition();
+		animRect->SetPosition(position);
+	}
+
+
 	// Hit
 	if (hit && hitCTime <= 0.0f)
 	{
@@ -205,7 +213,7 @@ void Player::Update()
 	SFXbullet->SetScale(Vector2(75, 69) * totalSize);
 
 	// Down Platform or Jump
-	if (state != PlayerState::Death && bSpecialAttack == 0 && bSuperBeam == 0)
+	if (state != PlayerState::Death && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod)
 	{
 		if (platform == 1 && INPUT->Press(VK_DOWN) && INPUT->Press('Z'))
 		{
@@ -224,7 +232,7 @@ void Player::Update()
 	}
 
 	// Air or Ground
-	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0)
+	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod)
 	{
 		G += 9.8 * 400 * DELTA;
 		jumpSpeed -= G * DELTA;
@@ -1003,10 +1011,6 @@ void Player::Update()
 	// ¶¥ Ãæµ¹
 	if (!(state >= PlayerState::Special_Attack_R && state <= PlayerState::Super_Beam_L || state == PlayerState::Jump_R || state == PlayerState::Jump_L) && checkCollider)
 	{
-	//	cout << "Player : " << (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
-	//	cout << "Ground : " << groundPos.y << '\n';
-	//	cout << groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2) << '\n';
-
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 	}
 
@@ -1051,6 +1055,7 @@ void Player::GUI()
 	static bool bOpen = true;
 	if (ImGui::Begin("Player", &bOpen))
 	{
+		ImGui::SliderFloat2("Position", (float*)&position, CAMERA->GetPosition().x, CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH);
 		ImGui::SliderFloat("Scale", &totalSize, 0.0f, 2.0f, "%.1f");
 		ImGui::SliderFloat("Speed", &speed, 100.0f, 2000.0f, "%.1f");
 

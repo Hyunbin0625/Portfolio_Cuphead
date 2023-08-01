@@ -24,11 +24,10 @@ private:
 	vector<shared_ptr<IForestEnemy>> enemyList;
 	unique_ptr<ForestEnemySet> forestEnemySet;
 
+	vector<shared_ptr<IForestObjects>> objectList;
+	unique_ptr<ForestObjectSet> forestObjectSet;
+
 	unique_ptr<TextureRect> skyLayer;
 
-	unique_ptr<ColorRect> ground;
-	unique_ptr<ColorRect> wall;
-	unique_ptr<ColorRect> wall1;
-
-	bool mod = 0;
+	bool mod = true;
 };

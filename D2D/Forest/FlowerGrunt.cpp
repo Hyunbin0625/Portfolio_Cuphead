@@ -19,7 +19,13 @@ FlowerGrunt::FlowerGrunt(const Vector2& position, float totailSize, float speed,
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"RunL", L"_Textures/Enemy/flowergrunt_run_L.png", 16, false, true, 0.1));
 
 	// Jump
-	// Down
+
+	// Turn
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"TurnR", L"_Textures/Enemy/flowergrunt_turn_R.png", 18, true, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"TurnL", L"_Textures/Enemy/flowergrunt_turn_L.png", 18, false, false, 0.1));
+	
+	// Death
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Death", L"_Textures/Enemy/generic_lg_explosion_a_star_b_40.png", 20, false, false, 0.1));
 
 	// AddAnimator
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
@@ -33,7 +39,7 @@ FlowerGrunt::FlowerGrunt(const Vector2& position, float totailSize, float speed,
 
 void FlowerGrunt::Collision(shared_ptr<Player> player)
 {
-	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && AnimState != FwGruntState::Death)
 		player->SetHit(true);
 }
 
@@ -42,6 +48,7 @@ void FlowerGrunt::Init()
 	animRect->SetPosition(state.position);
 	hp = state.maxHp;
 	direction = state.direction;
+	groundPos = Vector2(-1000, -1000);
 }
 
 void FlowerGrunt::Update()
@@ -49,24 +56,12 @@ void FlowerGrunt::Update()
 	if (hp <= 0 && state.bRegen && time < state.regenTime)
 	{
 		time += DELTA;
-
 	}
 	else if ( hp <= 0 && !(state.position.x > CAMERA->GetPosition().x - 100 && state.position.x < CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH + 100
 		&& state.position.y > CAMERA->GetPosition().y - 100 && state.position.y < CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT + 100))
 	{
 		Init();
 		time = 0;
-	}
-
-	if (bWall && direction == Direction::R)
-	{
-		direction = Direction::L;
-		bWall = false;
-	}
-	else if (bWall)
-	{
-		direction = Direction::R;
-		bWall = false;
 	}
 
 	if (groundPos.x < -500)
@@ -84,7 +79,9 @@ void FlowerGrunt::Update()
 	}
 
 //	cout << hp << '\n';
-	if (bGround)
+	if (bWall)
+		AnimState = FwGruntState::Turn;
+	else if (bGround)
 	{
 		AnimState = FwGruntState::Run;
 		if (!bMod && hp > 0)
@@ -97,6 +94,11 @@ void FlowerGrunt::Update()
 			animRect->Move(Vector2(0, -100));
 		AnimState = FwGruntState::Float;
 	}
+
+
+
+	if (hp <= 0)
+		AnimState = FwGruntState::Death;
 
 	switch (AnimState)
 	{
@@ -117,7 +119,38 @@ void FlowerGrunt::Update()
 		break;
 	case FwGruntState::Jump:
 		break;
-	case FwGruntState::Down:
+	case FwGruntState::Turn:
+		animRect->SetScale(Vector2(315, 218) * state.totalSize);
+	if(direction == Direction::R)
+	{
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnR");
+		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			direction = Direction::L;
+			bWall = false;
+			animRect->SetPosition(Vector2(animRect->GetPosition().x - 5 * state.totalSize, animRect->GetPosition().y));
+			animRect->SetScale(Vector2(179, 193) * state.totalSize);
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
+		}
+	}
+	else
+	{
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnL");
+		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			direction = Direction::R;
+			bWall = false;
+			animRect->SetPosition(Vector2(animRect->GetPosition().x + 10 * state.totalSize, animRect->GetPosition().y));
+			animRect->SetScale(Vector2(179, 193) * state.totalSize);
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunR");
+		}
+	}
+		break;
+	case FwGruntState::Death:
+		animRect->SetScale(Vector2(234, 261) * 1.5 * state.totalSize);
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
+		if (animRect->GET_COMP(Animator)->GetEnd())
+			animRect->SetPosition(Vector2(1000, -1000));
 		break;
 	}
 
@@ -142,7 +175,7 @@ void FlowerGrunt::GUI(int ordinal)
 		ImGui::SliderFloat2("Position", (float*)&state.position, CAMERA->GetPosition().x, CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH);
 		ImGui::SliderFloat("Size", &state.totalSize, 0.1f, 5.0f, "%.2f");
 		ImGui::SliderFloat("Speed", &state.speed, 100.0f, 700.0f, "%.2f");
-		ImGui::SliderInt("MaxHp", &state.maxHp, 1, 1000);
+		ImGui::InputInt("MaxHp", &state.maxHp);
 		
 		ImGui::Checkbox("Regen", &state.bRegen);
 		ImGui::SliderFloat("RegenTime", &state.regenTime, 0.0f, 60.0f, "%.2f");

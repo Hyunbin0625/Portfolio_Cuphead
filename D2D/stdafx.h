@@ -184,6 +184,7 @@ extern float gWinHeight;
 // Tuto
 #include "TutorialObject/ITutoObjects.h"
 #include "Forest/IForestEnemy.h"
+#include "Forest/IForestObjects.h"
 
 // Tuto
 #include "TutorialObject/TutoSet.h"
@@ -192,3 +193,7 @@ extern float gWinHeight;
 // Forest
 #include "Forest/ForestEnemySet.h"
 #include "Forest/FlowerGrunt.h"
+
+#include "Forest/ForestObjectSet.h"
+#include "Forest/Forest_Ground.h"
+#include "Forest/Forest_Wall.h"

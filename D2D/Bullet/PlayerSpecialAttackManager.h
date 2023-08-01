@@ -13,8 +13,11 @@ public:
 	void Update();
 	void Render();
 
-	int GetCurrentIndex() { return currentIndex; }
+public:
 	shared_ptr<PlayerSpecialAttack> GetBullet(int index) { return bullets[index]; }
+	vector<shared_ptr<PlayerSpecialAttack>> GetBullets() { return bullets; }
+
+	int GetCurrentIndex() { return currentIndex; }
 
 	void SetCurrentIndex(int currentIndex) { this->currentIndex = currentIndex; }
 	void SetPosition(Vector2 position) { this->position = position; }
@@ -23,7 +26,6 @@ public:
 
 private:
 	vector<shared_ptr<PlayerSpecialAttack>> bullets;
-	vector<bool> activation;
 
 	UINT totalBullet;
 	float bulletSpeed;

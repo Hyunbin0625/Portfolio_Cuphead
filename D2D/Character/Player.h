@@ -92,6 +92,9 @@ public:
 public:
 	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
 	shared_ptr<PlayerBulletManager> GetBullet() { return bullet; }
+	shared_ptr<PlayerSpecialAttackManager> GetSpecialAttack() { return specialAttack; }
+	shared_ptr<SuperBeam> GetSuperBeam() { return superBeam; }
+
 
 	PlayerState GetState() { return state; }
 
@@ -106,6 +109,7 @@ public:
 
 	bool GetParry() { return bParry; }
 	bool GetPlatform() { return platform; }
+	bool GetMod() { return bMod; }
 
 	void SetHp(int hp) { this->hp = hp; }
 	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
@@ -119,6 +123,7 @@ public:
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
 	void SetG(float G) { this->G = G; }
+	void SetMod(bool bMod) { this->bMod = bMod; }
 
 private:
 	UINT hp;
@@ -169,4 +174,6 @@ private:
 	bool platform = 0;
 
 	float tempTime = 0;
+
+	bool bMod = 0;
 };

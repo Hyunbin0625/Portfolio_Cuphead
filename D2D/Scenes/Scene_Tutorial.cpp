@@ -81,7 +81,7 @@ void SceneTutorial::PostRender()
 
 	tutoSet->GUI();
 	
-	IMGUI->TutoObjectsGUIS(objectList, "TutoObjects");
+	IMGUI->TutoObjectGUIS(objectList, "TutoObjects");
 
 	static bool bOpen = true;
 	if (ImGui::Begin("TutorialMap", &bOpen))

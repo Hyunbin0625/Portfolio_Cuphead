@@ -7,16 +7,8 @@ void SceneForestFollies::Init()
 
 	skyLayer = make_unique<TextureRect>(CENTER, Vector2(1898, 823) * 1.35, 0.0f, L"_Textures/Scene_ForestFollies/lv1-1_bg_sky_01.png");
 
-	ground = make_unique<ColorRect>(Vector2(5000, 0), Vector2(10000, 50), 0.0f, BLACK);
-	wall = make_unique<ColorRect>(Vector2(100, 150), Vector2(50, 300), 0.0f, BLACK);
-	wall1 = make_unique<ColorRect>(Vector2(500, 150), Vector2(50, 300), 0.0f, BLACK);
-
-	// юс╫ц
-	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
-	wall->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
-	wall1->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
-
 	forestEnemySet = make_unique<ForestEnemySet>();
+	forestObjectSet = make_unique<ForestObjectSet>();
 }
 
 void SceneForestFollies::Destroy()
@@ -34,16 +26,32 @@ void SceneForestFollies::Update()
 		{
 			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
 			{
-				cout << "true\n";
 				enemy->SetHit(true);
-				player->GetBullet()->SetActivation(i, false);
+				player->GetBullet()->GetBullets()[i]->SetActivation(false);
 			}
 		}
+
+		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
+		{
+			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+			{
+				enemy->SetHit(true);
+			}
+		}
+		
+		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+			enemy->SetHit(true);
 	}
 
 	// Player&Enemies Collision
 	for (auto& enemy : enemyList)
 		enemy->Collision(player);
+	// Player&Object Collision
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision())
+			object->Collision(player);
+	}
 
 	// Delete Enemy
 	for (int i = 0; i < enemyList.size(); ++i)
@@ -51,18 +59,29 @@ void SceneForestFollies::Update()
 		if (enemyList[i]->GetDelete())
 			enemyList.erase(enemyList.begin() + i);
 	}
+	// Delete Object
+	for (int i = 0; i < objectList.size(); ++i)
+	{
+		if (objectList[i]->GetDelete())
+			objectList.erase(objectList.begin() + i);
+	}
 
 	// Create Enemy
 	if (forestEnemySet->GetSelectedIndex() == 0)
-		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER, 1.0f, 300.0f, 1, 1, 1, Direction::R));
+		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, 1, 1, Direction::R));
+
+	// Create Object
+	if (forestObjectSet->GetSelectedIndex() == 0)
+		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	else if (forestObjectSet->GetSelectedIndex() == 1)
+		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 
 	// Enemies Update
 	for (const auto& enemy : enemyList)
 		enemy->Update();
-
-	ground->Update();
-	wall->Update();
-	wall1->Update();
+	// ObjectList Update
+	for (const auto& object : objectList)
+		object->Update();
 
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
@@ -88,9 +107,8 @@ void SceneForestFollies::Render()
 	CAMERA->Render();
 	skyLayer->Render();
 
-	ground->Render();
-	wall->Render();
-	wall1->Render();
+	for (const auto& object : objectList)
+		object->Render();
 
 	for (const auto& enemy : enemyList)
 		enemy->Render();
@@ -105,8 +123,10 @@ void SceneForestFollies::PostRender()
 	player->GUI();
 
 	forestEnemySet->GUI();
+	forestObjectSet->GUI();
 
 	IMGUI->ForestEnemyGUIS(enemyList, "ForestEmeny");
+	IMGUI->ForestObjectGUIS(objectList, "ForestObject");
 
 	static bool bOpen = true;
 	if (ImGui::Begin("ForestFolliesMap", &bOpen))
@@ -120,6 +140,7 @@ void SceneForestFollies::PostRender()
 		ImGui::Checkbox("CreateMod", &mod);
 		for (const auto& enemy : enemyList)
 			enemy->SetMod(mod);
+		player->SetMod(mod);
 	}
 	ImGui::End();
 }
@@ -204,29 +225,27 @@ void SceneForestFollies::CheckGround()
 {
 	player->SetCheckCollider(0);
 	player->SetPlatform(0);
-	if (ground->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
-	{
-		player->SetGroundPos(Vector2(ground->GetPosition().x, ground->GetPosition().y + ground->GetScale().y / 2));
-		player->SetCheckCollider(1);
-		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < ground->GetPosition().y + ground->GetScale().y / 2 - 1)
-			player->GetAnimRect()->Move(Vector2(0, 100));
-	}
 
 	for (auto& enemy : enemyList)
 	{
-		if (ground->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+		for (auto& object : objectList)
 		{
-			enemy->SetGroundPos(Vector2(ground->GetPosition().x, ground->GetPosition().y + ground->GetScale().y / 2));
-		}
-		else
-			enemy->SetGroundPos(Vector2(-1000, -1000));
-	}
-
-	for (auto& enemy : enemyList)
-	{
-		if (wall->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
-		{
-			enemy->SetWall(true);
-		}
+			if (object->GetState().type == ForestObjectType::Ground)
+			{
+				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+				{
+					enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
+				}
+				else
+					enemy->SetGroundPos(Vector2(-1000, -1000));
+			}
+			else if (object->GetState().type == ForestObjectType::Wall)
+			{
+				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+				{
+					enemy->SetWall(true);
+				}
+			}
+		}	
 	}
 }

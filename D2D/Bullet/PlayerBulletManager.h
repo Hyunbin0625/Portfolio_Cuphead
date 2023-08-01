@@ -13,7 +13,7 @@ public:
 	void Update();
 	void Render();
 
-
+public:
 	vector<shared_ptr<PlayerBullet>> GetBullets() { return bullets; }
 	int GetNextIndex() { return nextIndex; }
 	float GetTime() { return time; }
@@ -25,14 +25,12 @@ public:
 	void SetTime(float time) { this->time = time; }
 	void SetLastIndex(int lastIndex) { this->lastIndex = lastIndex; }
 	void SetSpeakerSpeed(float speakerSpeed) { this->speakerSpeed = speakerSpeed; }
-	void SetActivation(int index, bool value) { activation[index] = value; }
 	void SetPosition(Vector2 position) { this->position = position; }
 	void SetRotation(float rotation) { this->rotation = rotation; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 
 private:
 	vector<shared_ptr<PlayerBullet>> bullets;
-	vector<bool> activation;
 
 	UINT totalBullet;
 	float bulletSpeed;

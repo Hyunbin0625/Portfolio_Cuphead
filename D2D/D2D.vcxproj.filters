@@ -189,7 +189,18 @@
     <ClCompile Include="Forest\FlowerGrunt.cpp">
       <Filter>Forest</Filter>
     </ClCompile>
-    <ClCompile Include="Forest\ForestEnemySet.cpp" />
+    <ClCompile Include="Forest\Forest_Ground.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\ForestEnemySet.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\ForestObjectSet.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Forest_Wall.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -354,8 +365,24 @@
     <ClInclude Include="Forest\FlowerGrunt.h">
       <Filter>Forest</Filter>
     </ClInclude>
-    <ClInclude Include="Forest\IForestEnemy.h" />
-    <ClInclude Include="Forest\ForestEnemySet.h" />
+    <ClInclude Include="Forest\Forest_Ground.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\ForestEnemySet.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\ForestObjectSet.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\IForestEnemy.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\IForestObjects.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Forest_Wall.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">
