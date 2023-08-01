@@ -160,19 +160,32 @@ void SceneForestFollies::SaveForestFolliesMap(const wstring& path)
 
 		if (out.is_open())
 		{
+			// Player
 			Vector2 tempPos = player->GetAnimRect()->GetPosition();
 			out.write((char*)&tempPos, sizeof(tempPos));
 			float tempSize = player->GetTotalSize();
 			out.write((char*)&tempSize, sizeof(tempSize));
 
-			int listSize = enemyList.size();
+			// objectList
+			int listSize = objectList.size();
 			out.write((char*)&listSize, sizeof(listSize));
 
-			ForestEnemyState tempState;
+			ForestObjectState tempObjectState;
+			for (UINT i = 0; i < objectList.size(); ++i)
+			{
+				tempObjectState = objectList[i]->GetState();
+				out.write((char*)&tempObjectState, sizeof(tempObjectState));
+			}
+
+			// enemyList
+			listSize = enemyList.size();
+			out.write((char*)&listSize, sizeof(listSize));
+
+			ForestEnemyState tempEnemyState;
 			for (UINT i = 0; i < enemyList.size(); ++i)
 			{
-				tempState = enemyList[i]->GetState();
-				out.write((char*)&tempState, sizeof(tempState));
+				tempEnemyState = enemyList[i]->GetState();
+				out.write((char*)&tempEnemyState, sizeof(tempEnemyState));
 			}
 		}
 
@@ -193,6 +206,7 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 
 		if (in.is_open())
 		{
+			// Player
 			Vector2 tempPos;
 			in.read((char*)&tempPos, sizeof(tempPos));
 			player->GetAnimRect()->SetPosition(tempPos);
@@ -200,19 +214,38 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 			in.read((char*)&tempSize, sizeof(tempSize));
 			player->SetTotalSize(tempSize);
 
+			// ObjectList
 			int listSize;
+			in.read((char*)&listSize, sizeof(listSize));
+
+			objectList.clear();
+			objectList.resize(listSize);
+
+			ForestObjectState tempObjectState;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in.read((char*)&tempObjectState, sizeof(tempObjectState));
+
+				if (tempObjectState.type == ForestObjectType::Ground)
+					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type == ForestObjectType::Wall)
+					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+			}
+
+			// EnemyList
+			listSize;
 			in.read((char*)&listSize, sizeof(listSize));
 
 			enemyList.clear();
 			enemyList.resize(listSize);
 
-			ForestEnemyState tempState;
+			ForestEnemyState tempEnemyState;
 			for (UINT i = 0; i < listSize; ++i)
 			{
-				in.read((char*)&tempState, sizeof(tempState));
+				in.read((char*)&tempEnemyState, sizeof(tempEnemyState));
 
-				if (tempState.type == ForestEnemyType::FlowerGrunt)
-					enemyList[i] = make_shared<FlowerGrunt>(tempState.position, tempState.totalSize, tempState.speed, tempState.maxHp, tempState.bRegen, tempState.regenTime, tempState.direction);
+				if (tempEnemyState.type == ForestEnemyType::FlowerGrunt)
+					enemyList[i] = make_shared<FlowerGrunt>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 			}
 		}
 
