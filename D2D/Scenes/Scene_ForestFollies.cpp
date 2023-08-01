@@ -256,9 +256,6 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 // 각 플렛폼에서 검사할 예정
 void SceneForestFollies::CheckGround()
 {
-	player->SetCheckCollider(0);
-	player->SetPlatform(0);
-
 	for (auto& enemy : enemyList)
 	{
 		for (auto& object : objectList)
