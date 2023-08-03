@@ -96,6 +96,7 @@ public:
 	shared_ptr<SuperBeam> GetSuperBeam() { return superBeam; }
 
 	PlayerState GetState() { return state; }
+	Direction GetDirection() { return direction; }
 
 	UINT GetHp() { return hp; }
 	int GetSuperMeterCard() { return (int)superMeterCard; }

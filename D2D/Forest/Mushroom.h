@@ -39,8 +39,11 @@ private:
 	shared_ptr<class MRPoisonManager> bullet;
 
 	ForestEnemyState state;
+	bool playerDirection = 0;
 
 	MushroomState animState = MushroomState::Idle;
+
+	float theta = 0.0f;
 
 	// currentState
 	int hp;

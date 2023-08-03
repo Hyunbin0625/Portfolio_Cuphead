@@ -54,6 +54,19 @@ void Mushroom::Collision(shared_ptr<Player> player)
 	else
 		direction = Direction::R;
 
+	playerDirection = player->GetDirection();
+	
+	Vector2 reference = animRect->GetPosition();
+	Vector2 point;
+	if (direction == Direction::R)
+		point = Vector2(player->GetAnimRect()->GetPosition().x + 60 * state.totalSize, player->GetAnimRect()->GetPosition().y + 20 * state.totalSize);
+	else
+		point = Vector2(player->GetAnimRect()->GetPosition().x - 60 * state.totalSize, player->GetAnimRect()->GetPosition().y + 20 * state.totalSize);
+
+	float R = sqrt(pow((point.x - reference.x), 2) + pow((point.y - reference.y), 2));
+	theta = acos((point.x - reference.x) / R);
+	theta = (theta * 180) / acos(-1);
+
 	for (int i = 0; i < bullet->GetBullets().size(); ++i)
 	{
 		if (bullet->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
@@ -115,7 +128,7 @@ void Mushroom::Update()
 	{
 		time += DELTA;
 
-		if (checkState == 0 && time > 4.0f)	// || 플레이어와 같은 방향일때
+		if (checkState == 0 && (time > 4.0f || (playerDirection && time > 2.0f)))	// || 플레이어와 같은 방향일때
 			animState = MushroomState::PopOut;
 
 		if (checkState == 2)
@@ -154,11 +167,11 @@ void Mushroom::Update()
 		if (direction == Direction::R)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AttackR");
-			bullet->Init(Vector2(state.position.x, state.position.y), 0.0f);
+			bullet->Init(Vector2(state.position.x + 60 * state.totalSize, state.position.y + 20 * state.totalSize), -theta);
 		}
 		else
 		{
-			bullet->Init(Vector2(state.position.x, state.position.y), 180.0f);
+			bullet->Init(Vector2(state.position.x - 60 * state.totalSize, state.position.y + 20 * state.totalSize), -theta);
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AttackL");
 		}
 		if (time > 0.4f && shoot)
@@ -170,7 +183,6 @@ void Mushroom::Update()
 		{
 			checkState = 2;
 			time = 1.0f;
-			
 		}
 		break;
 	case MushroomState::PopOut:
@@ -203,6 +215,7 @@ void Mushroom::Update()
 		break;
 	}
 
+	bullet->SetTotalSize(state.totalSize);
 	animRect->Update();
 	bullet->Update();
 }
