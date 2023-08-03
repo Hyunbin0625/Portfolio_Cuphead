@@ -26,11 +26,14 @@
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
+    <ClCompile Include="Forest\Blob.cpp" />
     <ClCompile Include="Forest\ForestEnemySet.cpp" />
     <ClCompile Include="Forest\FlowerGrunt.cpp" />
     <ClCompile Include="Forest\ForestObjectSet.cpp" />
     <ClCompile Include="Forest\Forest_Ground.cpp" />
     <ClCompile Include="Forest\Forest_Wall.cpp" />
+    <ClCompile Include="Forest\Mushroom.cpp" />
+    <ClCompile Include="Forest\MRPoisonManager.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
@@ -90,6 +93,7 @@
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />
+    <ClInclude Include="Forest\Blob.h" />
     <ClInclude Include="Forest\ForestEnemySet.h" />
     <ClInclude Include="Forest\FlowerGrunt.h" />
     <ClInclude Include="Forest\ForestObjectSet.h" />
@@ -97,6 +101,8 @@
     <ClInclude Include="Forest\Forest_Wall.h" />
     <ClInclude Include="Forest\IForestEnemy.h" />
     <ClInclude Include="Forest\IForestObjects.h" />
+    <ClInclude Include="Forest\Mushroom.h" />
+    <ClInclude Include="Forest\MRPoisonManager.h" />
     <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />

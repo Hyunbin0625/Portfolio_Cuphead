@@ -11,14 +11,15 @@ public:
 	virtual void Render() override;
 	virtual void GUI(int ordinal) override;
 
+	virtual bool Collision(shared_ptr<Player> player) override;
+	
 	virtual shared_ptr<TextureRect> GetTextureRect() override { return textureRect; }
 	virtual bool GetDelete() override { return bDelete; }
 	virtual ForestObjectState GetState() override { return state; }
 	virtual bool GetCollision() override { return state.bCollision; }
 
 	virtual void SetState(ForestObjectState state) override { this->state = state; }
-
-	virtual void Collision(shared_ptr<Player> player) override;
+	virtual void SetMod(bool mod) override { this->bMod = mod; }
 
 private:
 	shared_ptr<TextureRect> textureRect;
@@ -28,4 +29,5 @@ private:
 	Vector2 scale = Vector2(61, 240);
 
 	bool bDelete = 0;
+	bool bMod = false;
 };

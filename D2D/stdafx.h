@@ -27,6 +27,7 @@
 #include <map>
 #include <fstream>
 #include <unordered_map>
+#include <random>
 
 using namespace std;
 
@@ -193,6 +194,9 @@ extern float gWinHeight;
 // Forest
 #include "Forest/ForestEnemySet.h"
 #include "Forest/FlowerGrunt.h"
+#include "Forest/Blob.h"
+#include "Forest/Mushroom.h"
+#include "Forest/MRPoisonManager.h"
 
 #include "Forest/ForestObjectSet.h"
 #include "Forest/Forest_Ground.h"

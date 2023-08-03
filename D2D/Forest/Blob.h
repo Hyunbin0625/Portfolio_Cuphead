@@ -1,19 +1,18 @@
 #pragma once
 
 // run, Float, Down, jump
-enum class FwGruntState
+enum class BlobState
 {
 	Run,
-	Float,
-	Jump,
 	Turn,
-	Death,
+	Melt,
+	UnMelt
 };
 
-class FlowerGrunt : public IForestEnemy
+class ForestBlob : public IForestEnemy
 {
 public:	
-	FlowerGrunt(const Vector2& position, float totailSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction);
+	ForestBlob(const Vector2& position, float totailSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction);
 
 public:
 	virtual void Collision(shared_ptr<Player> player) override;
@@ -42,7 +41,7 @@ private:
 
 	ForestEnemyState state;
 
-	FwGruntState animState = FwGruntState::Run;
+	BlobState animState = BlobState::Run;
 
 	// currentState
 	int hp;

@@ -95,13 +95,14 @@ public:
 	shared_ptr<PlayerSpecialAttackManager> GetSpecialAttack() { return specialAttack; }
 	shared_ptr<SuperBeam> GetSuperBeam() { return superBeam; }
 
-
 	PlayerState GetState() { return state; }
 
 	UINT GetHp() { return hp; }
 	int GetSuperMeterCard() { return (int)superMeterCard; }
 	int GetPercentSuperMeterCard() { return (int)(superMeterCard / maxSuperMeterCard * 100); }
 	int GetMaxSuperMeterCard() { return (int)maxSuperMeterCard; }
+
+	Vector2 GetPosition() { return position; }
 
 	float GetTotalSize() const { return totalSize; }
 	float GetSpeed() const { return speed; }
@@ -114,11 +115,13 @@ public:
 	void SetHp(int hp) { this->hp = hp; }
 	void SetSuperMeterCard(float superMeterCard) { this->superMeterCard = superMeterCard; }
 	void SetMaxSuperMeterCard(float maxSuperMeterCard) { this->maxSuperMeterCard = maxSuperMeterCard; }
-	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 
+	void SetPosition(Vector2 position) { this->position = position; }
+
+	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 	void SetJumpSpeed(float jumpSpeed) { this->jumpSpeed = jumpSpeed * totalSize; }
 
-	void SetHit(bool hit) { this->hit = hit; }
+	void SetHit(bool hit) { if (!(state >= PlayerState::Special_Attack_R && state <= PlayerState::Death))this->hit = hit; }
 	void SetGroundPos(Vector2 groundPos) { this->groundPos = groundPos; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }

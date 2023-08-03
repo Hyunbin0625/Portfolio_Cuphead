@@ -25,7 +25,7 @@ public:
 	virtual ~IForestObjects() = default;
 
 public:
-	virtual void Collision(shared_ptr<Player> player) = 0;
+	virtual bool Collision(shared_ptr<Player> player) = 0;
 
 	virtual void Update() = 0;
 	virtual void Render() = 0;
@@ -37,4 +37,5 @@ public:
 	virtual bool GetCollision() = 0;
 
 	virtual void SetState(ForestObjectState state) = 0;
+	virtual void SetMod(bool mod) = 0;
 };

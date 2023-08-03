@@ -19,6 +19,8 @@ FlowerGrunt::FlowerGrunt(const Vector2& position, float totailSize, float speed,
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"RunL", L"_Textures/Enemy/flowergrunt_run_L.png", 16, false, true, 0.1));
 
 	// Jump
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"JumpR", L"_Textures/Enemy/flowergrunt_jump_R.png", 39, true, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"JumpL", L"_Textures/Enemy/flowergrunt_jump_L.png", 39, false, true, 0.1));
 
 	// Turn
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"TurnR", L"_Textures/Enemy/flowergrunt_turn_R.png", 18, true, false, 0.1));
@@ -39,7 +41,7 @@ FlowerGrunt::FlowerGrunt(const Vector2& position, float totailSize, float speed,
 
 void FlowerGrunt::Collision(shared_ptr<Player> player)
 {
-	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && AnimState != FwGruntState::Death)
+	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && animState != FwGruntState::Death)
 		player->SetHit(true);
 }
 
@@ -78,12 +80,11 @@ void FlowerGrunt::Update()
 		hp = state.maxHp;
 	}
 
-//	cout << hp << '\n';
 	if (bWall)
-		AnimState = FwGruntState::Turn;
+		animState = FwGruntState::Turn;
 	else if (bGround)
 	{
-		AnimState = FwGruntState::Run;
+		animState = FwGruntState::Run;
 		if (!bMod && hp > 0)
 			Move();
 	}
@@ -92,15 +93,13 @@ void FlowerGrunt::Update()
 		// Float
 		if (!bMod && hp > 0)
 			animRect->Move(Vector2(0, -100));
-		AnimState = FwGruntState::Float;
+		animState = FwGruntState::Float;
 	}
 
-
-
 	if (hp <= 0)
-		AnimState = FwGruntState::Death;
+		animState = FwGruntState::Death;
 
-	switch (AnimState)
+	switch (animState)
 	{
 	case FwGruntState::Run:
 		animRect->SetScale(Vector2(179, 193) * state.totalSize);
@@ -121,38 +120,38 @@ void FlowerGrunt::Update()
 		break;
 	case FwGruntState::Turn:
 		animRect->SetScale(Vector2(315, 218) * state.totalSize);
-	if(direction == Direction::R)
-	{
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnR");
-		if (animRect->GET_COMP(Animator)->GetEnd())
+		if(direction == Direction::R)
 		{
-			direction = Direction::L;
-			bWall = false;
-			animRect->SetPosition(Vector2(animRect->GetPosition().x - 5 * state.totalSize, animRect->GetPosition().y));
-			animRect->SetScale(Vector2(179, 193) * state.totalSize);
-			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnR");
+			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				direction = Direction::L;
+				bWall = false;
+				animRect->SetPosition(Vector2(animRect->GetPosition().x - 5 * state.totalSize, animRect->GetPosition().y));
+				animRect->SetScale(Vector2(179, 193) * state.totalSize);
+				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
+			}
 		}
-	}
-	else
-	{
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnL");
-		if (animRect->GET_COMP(Animator)->GetEnd())
+		else
 		{
-			direction = Direction::R;
-			bWall = false;
-			animRect->SetPosition(Vector2(animRect->GetPosition().x + 10 * state.totalSize, animRect->GetPosition().y));
-			animRect->SetScale(Vector2(179, 193) * state.totalSize);
-			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunR");
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnL");
+			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				direction = Direction::R;
+				bWall = false;
+				animRect->SetPosition(Vector2(animRect->GetPosition().x + 10 * state.totalSize, animRect->GetPosition().y));
+				animRect->SetScale(Vector2(179, 193) * state.totalSize);
+				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunR");
+			}
 		}
-	}
-		break;
-	case FwGruntState::Death:
-		animRect->SetScale(Vector2(234, 261) * 1.5 * state.totalSize);
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
-		if (animRect->GET_COMP(Animator)->GetEnd())
-			animRect->SetPosition(Vector2(1000, -1000));
-		break;
-	}
+			break;
+		case FwGruntState::Death:
+			animRect->SetScale(Vector2(234, 261) * 1.5 * state.totalSize);
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
+			if (animRect->GET_COMP(Animator)->GetEnd())
+				animRect->SetPosition(Vector2(1000, -1000));
+			break;
+		}
 
 	animRect->Update();
 }
@@ -164,7 +163,7 @@ void FlowerGrunt::Render()
 
 void FlowerGrunt::GUI(int ordinal)
 {
-	string objName = animRect->GetName() + to_string(ordinal);
+	string objName = to_string(ordinal) + ". FlowerGrunt";
 
 	if (ImGui::BeginMenu(objName.c_str()))
 	{

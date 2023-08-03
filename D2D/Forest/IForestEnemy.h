@@ -3,7 +3,9 @@
 enum class ForestEnemyType
 {
 	None = -1,
-	FlowerGrunt
+	FlowerGrunt,
+	Blob,
+	Mushroom,
 };
 
 struct ForestEnemyState
@@ -37,6 +39,7 @@ public:
 	virtual void GUI(int ordinal) = 0;
 
 	virtual shared_ptr<AnimationRect> GetAnimRect() = 0;
+	virtual int GetHp() = 0;
 	virtual bool GetDelete() = 0;
 	virtual ForestEnemyState GetState() = 0;
 

@@ -193,7 +193,6 @@ void Player::Update()
 		animRect->SetPosition(position);
 	}
 
-
 	// Hit
 	if (hit && hitCTime <= 0.0f)
 	{
@@ -724,21 +723,17 @@ void Player::Update()
 	{
 	case Idle_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleR");
-	//	animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 		break;
 	case Idle_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
-	//	animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 		break;
 	case Run_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunR");
 		animRect->SetScale(Vector2(137, 169)* totalSize);
-	//	animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 		break;
 	case Run_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
 		animRect->SetScale(Vector2(137, 169)* totalSize);
-	//	animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 		break;
 	case Jump_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpR");

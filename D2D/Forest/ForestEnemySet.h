@@ -12,9 +12,9 @@ public:
 
 private:
 	ScratchImage tileSprite;
-	ComPtr<ID3D11ShaderResourceView> srv;
-
-	vector<ImTextureID> textID;
+	vector<ComPtr<ID3D11ShaderResourceView>> srvs;
+	
+	ImTextureID textID;
 
 	int selectedIndex = -1;
 };

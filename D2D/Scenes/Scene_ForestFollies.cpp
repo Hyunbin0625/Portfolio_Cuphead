@@ -24,7 +24,7 @@ void SceneForestFollies::Update()
 	{
 		for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
 		{
-			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0 )
 			{
 				enemy->SetHit(true);
 				player->GetBullet()->GetBullets()[i]->SetActivation(false);
@@ -33,13 +33,13 @@ void SceneForestFollies::Update()
 
 		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
 		{
-			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0)
 			{
 				enemy->SetHit(true);
 			}
 		}
 		
-		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0)
 			enemy->SetHit(true);
 	}
 
@@ -47,10 +47,14 @@ void SceneForestFollies::Update()
 	for (auto& enemy : enemyList)
 		enemy->Collision(player);
 	// Player&Object Collision
+	player->SetCheckCollider(false);
 	for (auto& object : objectList)
 	{
 		if (object->GetCollision())
-			object->Collision(player);
+		{
+			if (object->Collision(player))
+				player->SetCheckCollider(true);
+		}
 	}
 
 	// Delete Enemy
@@ -68,7 +72,11 @@ void SceneForestFollies::Update()
 
 	// Create Enemy
 	if (forestEnemySet->GetSelectedIndex() == 0)
-		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, 1, 1, Direction::R));
+		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, true, 1.0f, Direction::R));
+	else if (forestEnemySet->GetSelectedIndex() == 1)
+		enemyList.push_back(make_shared<ForestBlob>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, true, 5.0f, Direction::R));
+	else if (forestEnemySet->GetSelectedIndex() == 2)
+		enemyList.push_back(make_shared<Mushroom>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 2, false, 0.0f, Direction::R));
 
 	// Create Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
@@ -140,6 +148,8 @@ void SceneForestFollies::PostRender()
 		ImGui::Checkbox("CreateMod", &mod);
 		for (const auto& enemy : enemyList)
 			enemy->SetMod(mod);
+		for (const auto& object : objectList)
+			object->SetMod(mod);
 		player->SetMod(mod);
 	}
 	ImGui::End();
@@ -209,7 +219,7 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 			// Player
 			Vector2 tempPos;
 			in.read((char*)&tempPos, sizeof(tempPos));
-			player->GetAnimRect()->SetPosition(tempPos);
+			player->SetPosition(tempPos);
 			float tempSize;
 			in.read((char*)&tempSize, sizeof(tempSize));
 			player->SetTotalSize(tempSize);
@@ -246,6 +256,10 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 
 				if (tempEnemyState.type == ForestEnemyType::FlowerGrunt)
 					enemyList[i] = make_shared<FlowerGrunt>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Blob)
+					enemyList[i] = make_shared<ForestBlob>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Mushroom)
+					enemyList[i] = make_shared<Mushroom>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 			}
 		}
 
