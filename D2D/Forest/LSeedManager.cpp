@@ -22,7 +22,10 @@ void LobberSeed::Init(Vector2 position, float rotation, float playerX)
 {
 	G = 0;
 	jumpSpeed = 500.0f;
-	space = playerX - (animRect->GetPosition().x + 170);
+	cout << playerX << '\n';
+	cout << position.x << '\n';
+
+	space = playerX - position.x;
 	bGround = false;
 
 	this->playerX = playerX;
@@ -54,10 +57,10 @@ void LobberSeed::Update()
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Seed");
 		this->position = animRect->GetPosition();
 		// Move
-		cout << space << '\n';
-		cout << jumpSpeed << '\n';
+	//	cout << space << '\n';
+	//	cout << jumpSpeed << '\n';
 
-		animRect->Move(Vector2(space / 1, jumpSpeed));
+		animRect->Move(Vector2(space, jumpSpeed));
 	}
 	animRect->Update();
 }

@@ -72,13 +72,13 @@ void SceneForestFollies::Update()
 
 	// Create Enemy
 	if (forestEnemySet->GetSelectedIndex() == 0)
-		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, true, 1.0f, Direction::R));
+		enemyList.push_back(make_shared<FlowerGrunt>(CAMERA->GetPosition() + CENTER * 1.5, 0.72f, 300.0f, 1, true, 1.0f, Direction::R));
 	else if (forestEnemySet->GetSelectedIndex() == 1)
-		enemyList.push_back(make_shared<ForestBlob>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, true, 5.0f, Direction::R));
+		enemyList.push_back(make_shared<ForestBlob>(CAMERA->GetPosition() + CENTER * 1.5, 0.8f, 300.0f, 1, true, 5.0f, Direction::R));
 	else if (forestEnemySet->GetSelectedIndex() == 2)
-		enemyList.push_back(make_shared<Mushroom>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 550.0f, 2, false, 0.0f, Direction::R));
+		enemyList.push_back(make_shared<Mushroom>(CAMERA->GetPosition() + CENTER * 1.5, 0.8f, 550.0f, 2, false, 0.0f, Direction::R));
 	else if (forestEnemySet->GetSelectedIndex() == 3)
-		enemyList.push_back(make_shared<Lobber>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 2.0f, 5, false, 0.0f, Direction::R));
+		enemyList.push_back(make_shared<Lobber>(CAMERA->GetPosition() + CENTER * 1.5, 0.72f, 2.0f, 5, false, 0.0f, Direction::R));
 
 	// Create Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
@@ -274,17 +274,15 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 void SceneForestFollies::CheckGround()
 {
 	for (auto& enemy : enemyList)
+		enemy->SetGroundPos(Vector2(-1000, -1000));
+	for (auto& object : objectList)
 	{
-		for (auto& object : objectList)
+		for (auto& enemy : enemyList)
 		{
 			if (object->GetState().type == ForestObjectType::Ground)
 			{
 				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
-				{
 					enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
-				}
-				else
-					enemy->SetGroundPos(Vector2(-1000, -1000));
 
 				if (enemy->GetState().type == ForestEnemyType::Lobber)
 				{
@@ -294,7 +292,6 @@ void SceneForestFollies::CheckGround()
 							enemy->GetBullet()->GetBullets()[i]->SetGround(true);
 					}
 				}
-
 			}
 			else if (object->GetState().type == ForestObjectType::Wall)
 			{
@@ -305,4 +302,37 @@ void SceneForestFollies::CheckGround()
 			}
 		}
 	}
+
+//	for (auto& enemy : enemyList)
+//	{
+//		for (auto& object : objectList)
+//		{
+//			if (object->GetState().type == ForestObjectType::Ground)
+//			{
+//				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+//				{
+//					enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
+//				}
+//				else
+//					enemy->SetGroundPos(Vector2(-1000, -1000));
+//
+//				if (enemy->GetState().type == ForestEnemyType::Lobber)
+//				{
+//					for (int i = 0; i < enemy->GetBullet()->GetBullets().size(); ++i)
+//					{
+//						if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)))
+//							enemy->GetBullet()->GetBullets()[i]->SetGround(true);
+//					}
+//				}
+//
+//			}
+//			else if (object->GetState().type == ForestObjectType::Wall)
+//			{
+//				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+//				{
+//					enemy->SetWall(true);
+//				}
+//			}
+//		}
+//	}
 }
