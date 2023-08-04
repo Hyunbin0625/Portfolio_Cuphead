@@ -6,11 +6,12 @@ enum class ForestEnemyType
 	FlowerGrunt,
 	Blob,
 	Mushroom,
+	Lobber,
 };
 
 struct ForestEnemyState
 {
-	ForestEnemyType type = ForestEnemyType::FlowerGrunt;
+	ForestEnemyType type = ForestEnemyType::None;
 
 	Vector2 position;
 	float totalSize = 1;
@@ -39,6 +40,7 @@ public:
 	virtual void GUI(int ordinal) = 0;
 
 	virtual shared_ptr<AnimationRect> GetAnimRect() = 0;
+	virtual shared_ptr<class LSeedManager> GetBullet() = 0;
 	virtual int GetHp() = 0;
 	virtual bool GetDelete() = 0;
 	virtual ForestEnemyState GetState() = 0;

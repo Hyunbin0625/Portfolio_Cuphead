@@ -197,6 +197,8 @@ extern float gWinHeight;
 #include "Forest/Blob.h"
 #include "Forest/Mushroom.h"
 #include "Forest/MRPoisonManager.h"
+#include "Forest/Lobber.h"
+#include "Forest/LSeedManager.h"
 
 #include "Forest/ForestObjectSet.h"
 #include "Forest/Forest_Ground.h"

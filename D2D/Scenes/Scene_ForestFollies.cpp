@@ -76,7 +76,9 @@ void SceneForestFollies::Update()
 	else if (forestEnemySet->GetSelectedIndex() == 1)
 		enemyList.push_back(make_shared<ForestBlob>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 1, true, 5.0f, Direction::R));
 	else if (forestEnemySet->GetSelectedIndex() == 2)
-		enemyList.push_back(make_shared<Mushroom>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 300.0f, 2, false, 0.0f, Direction::R));
+		enemyList.push_back(make_shared<Mushroom>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 550.0f, 2, false, 0.0f, Direction::R));
+	else if (forestEnemySet->GetSelectedIndex() == 3)
+		enemyList.push_back(make_shared<Lobber>(CAMERA->GetPosition() + CENTER * 1.5, 1.0f, 2.0f, 5, false, 0.0f, Direction::R));
 
 	// Create Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
@@ -260,6 +262,8 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 					enemyList[i] = make_shared<ForestBlob>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 				else if (tempEnemyState.type == ForestEnemyType::Mushroom)
 					enemyList[i] = make_shared<Mushroom>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Lobber)
+					enemyList[i] = make_shared<Lobber>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 			}
 		}
 
@@ -267,7 +271,6 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 	}
 }
 
-// 각 플렛폼에서 검사할 예정
 void SceneForestFollies::CheckGround()
 {
 	for (auto& enemy : enemyList)
@@ -282,6 +285,16 @@ void SceneForestFollies::CheckGround()
 				}
 				else
 					enemy->SetGroundPos(Vector2(-1000, -1000));
+
+				if (enemy->GetState().type == ForestEnemyType::Lobber)
+				{
+					for (int i = 0; i < enemy->GetBullet()->GetBullets().size(); ++i)
+					{
+						if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)))
+							enemy->GetBullet()->GetBullets()[i]->SetGround(true);
+					}
+				}
+
 			}
 			else if (object->GetState().type == ForestObjectType::Wall)
 			{
@@ -290,6 +303,6 @@ void SceneForestFollies::CheckGround()
 					enemy->SetWall(true);
 				}
 			}
-		}	
+		}
 	}
 }

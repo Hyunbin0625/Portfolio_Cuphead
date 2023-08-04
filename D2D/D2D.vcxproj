@@ -32,6 +32,8 @@
     <ClCompile Include="Forest\ForestObjectSet.cpp" />
     <ClCompile Include="Forest\Forest_Ground.cpp" />
     <ClCompile Include="Forest\Forest_Wall.cpp" />
+    <ClCompile Include="Forest\Lobber.cpp" />
+    <ClCompile Include="Forest\LSeedManager.cpp" />
     <ClCompile Include="Forest\Mushroom.cpp" />
     <ClCompile Include="Forest\MRPoisonManager.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
@@ -101,6 +103,8 @@
     <ClInclude Include="Forest\Forest_Wall.h" />
     <ClInclude Include="Forest\IForestEnemy.h" />
     <ClInclude Include="Forest\IForestObjects.h" />
+    <ClInclude Include="Forest\Lobber.h" />
+    <ClInclude Include="Forest\LSeedManager.h" />
     <ClInclude Include="Forest\Mushroom.h" />
     <ClInclude Include="Forest\MRPoisonManager.h" />
     <ClInclude Include="Objects\SFX.h" />

@@ -207,7 +207,13 @@
     <ClCompile Include="Forest\Mushroom.cpp">
       <Filter>Forest</Filter>
     </ClCompile>
-    <ClCompile Include="Forest\MRPoisonManager.cpp" />
+    <ClCompile Include="Forest\MRPoisonManager.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Lobber.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\LSeedManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -396,7 +402,13 @@
     <ClInclude Include="Forest\Mushroom.h">
       <Filter>Forest</Filter>
     </ClInclude>
-    <ClInclude Include="Forest\MRPoisonManager.h" />
+    <ClInclude Include="Forest\MRPoisonManager.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Lobber.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\LSeedManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

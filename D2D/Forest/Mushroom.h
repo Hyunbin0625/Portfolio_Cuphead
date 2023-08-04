@@ -24,6 +24,8 @@ public:
 	virtual void GUI(int ordinal) override;
 
 	virtual shared_ptr<AnimationRect> GetAnimRect() override { return animRect; }
+	virtual shared_ptr<class LSeedManager> GetBullet() override { return nullptr; }
+
 	virtual int GetHp()  override { return hp; }
 	virtual bool GetDelete() override { return bDelete; }
 	virtual ForestEnemyState GetState() override { return state; }
