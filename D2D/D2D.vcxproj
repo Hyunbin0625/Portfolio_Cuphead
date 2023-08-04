@@ -27,6 +27,7 @@
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
     <ClCompile Include="Forest\Blob.cpp" />
+    <ClCompile Include="Forest\Chomper.cpp" />
     <ClCompile Include="Forest\ForestEnemySet.cpp" />
     <ClCompile Include="Forest\FlowerGrunt.cpp" />
     <ClCompile Include="Forest\ForestObjectSet.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="Forest\LSeedManager.cpp" />
     <ClCompile Include="Forest\Mushroom.cpp" />
     <ClCompile Include="Forest\MRPoisonManager.cpp" />
+    <ClCompile Include="Forest\Spiker.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
@@ -96,6 +98,7 @@
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />
     <ClInclude Include="Forest\Blob.h" />
+    <ClInclude Include="Forest\Chomper.h" />
     <ClInclude Include="Forest\ForestEnemySet.h" />
     <ClInclude Include="Forest\FlowerGrunt.h" />
     <ClInclude Include="Forest\ForestObjectSet.h" />
@@ -107,6 +110,7 @@
     <ClInclude Include="Forest\LSeedManager.h" />
     <ClInclude Include="Forest\Mushroom.h" />
     <ClInclude Include="Forest\MRPoisonManager.h" />
+    <ClInclude Include="Forest\Spiker.h" />
     <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />

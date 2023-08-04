@@ -18,13 +18,13 @@ Camera::~Camera() {}
 
 void Camera::Update()
 {
-	if (INPUT->Press(VK_CONTROL) && INPUT->Press('I'))
+	if (INPUT->Press('W'))
 		Move(Vector2(0, speed));
-	if (INPUT->Press(VK_CONTROL) && INPUT->Press('K'))
+	if (INPUT->Press('S'))
 		Move(Vector2(0, -speed));
-	if (INPUT->Press(VK_CONTROL) && INPUT->Press('J'))
+	if (INPUT->Press('A'))
 		Move(Vector2(-speed, 0));
-	if (INPUT->Press(VK_CONTROL) && INPUT->Press('L'))
+	if (INPUT->Press('D'))
 		Move(Vector2(speed, 0));
 
 	if (INPUT->Press(VK_CONTROL) && INPUT->Press('U'))

@@ -23,7 +23,6 @@ public:
 private:
 	void ChangeImageFunc(const wstring& path = L"");
 	void ChangeShaderFunc(const wstring& path = L"");
-	void SaveTextAsFile(const string& text, const wstring& path = L"");
 
 protected:
 	vector<VertexTexture> vertices;
@@ -39,8 +38,6 @@ protected:
 	UINT slot = 0;
 
 	ComPtr<ID3D11BlendState> blendState;
-
-	char text[50] = "";
 
 	unique_ptr<OutlineBuffer> OB;
 };

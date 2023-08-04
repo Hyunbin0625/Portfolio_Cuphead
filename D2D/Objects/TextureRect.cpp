@@ -103,8 +103,6 @@ void TextureRect::GUI(int ordinal)
 			ChangeImageFunc();
 		if (ImGui::Button("ChangShader", ImVec2(100, 30)))
 			ChangeShaderFunc();
-		if (ImGui::InputText("InputText", text, sizeof(text), ImGuiInputTextFlags_EnterReturnsTrue))
-			SaveTextAsFile(text);
 
 		ImGui::EndMenu();
 	}
@@ -130,23 +128,4 @@ void TextureRect::ChangeShaderFunc(const wstring& path)
 	}
 	else
 		SetShader(path);
-}
-
-void TextureRect::SaveTextAsFile(const string& text, const wstring& path)
-{
-	if (path.empty())
-	{
-		function<void(wstring)> func = bind(&TextureRect::SaveTextAsFile, this, text, placeholders::_1);
-		Path::SaveFileDialog(L"", Path::TextFilter, L"./", func, gHandle);
-	}
-	else
-	{
-		ofstream writeFile(path.c_str());
-		if (writeFile.is_open())
-		{
-			writeFile << text << '\n';
-			writeFile.clear();
-		}
-		writeFile.close();
-	}
 }

@@ -213,7 +213,15 @@
     <ClCompile Include="Forest\Lobber.cpp">
       <Filter>Forest</Filter>
     </ClCompile>
-    <ClCompile Include="Forest\LSeedManager.cpp" />
+    <ClCompile Include="Forest\Chomper.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Spiker.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\LSeedManager.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -408,7 +416,15 @@
     <ClInclude Include="Forest\Lobber.h">
       <Filter>Forest</Filter>
     </ClInclude>
-    <ClInclude Include="Forest\LSeedManager.h" />
+    <ClInclude Include="Forest\Chomper.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Spiker.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\LSeedManager.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

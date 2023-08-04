@@ -7,6 +7,8 @@ ForestEnemySet::ForestEnemySet()
 	SetTextID(L"_Textures/Enemy/blob_Icon.png");
 	SetTextID(L"_Textures/Enemy/mushroom_Icon.png");
 	SetTextID(L"_Textures/Enemy/lobber_Icon.png");
+	SetTextID(L"_Textures/Enemy/chomper_Icon.png");
+	SetTextID(L"_Textures/Enemy/pink_spiker_Icon.png");
 }
 
 void ForestEnemySet::SetTextID(const wstring& texturePath)

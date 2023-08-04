@@ -7,6 +7,8 @@ enum class ForestEnemyType
 	Blob,
 	Mushroom,
 	Lobber,
+	Chomper,
+	Spiker,
 };
 
 struct ForestEnemyState
