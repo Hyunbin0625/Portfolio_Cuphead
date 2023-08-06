@@ -44,8 +44,8 @@ enum PlayerState
 	Aim_Shoot_Down_R,
 	Aim_Shoot_Down_L,
 
-	Dash_R,
-	Dash_L,
+	Dash,
+	DashLoop,
 
 	Special_Attack_R,
 	Special_Attack_L,
@@ -81,7 +81,7 @@ public:
 
 public:
 	void Move();
-	void Jump();
+	void FDash();
 
 public:
 	void Update();
@@ -169,6 +169,7 @@ private:
 
 	float deltaTime = 0;
 	int dash = 0;
+	bool jumpDash = 0;
 
 	int bSpecialAttack = 0;
 	int bSuperBeam = 0;

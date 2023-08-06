@@ -21,6 +21,8 @@ public:
 	virtual void SetState(ForestObjectState state) override { this->state = state; }
 	virtual void SetMod(bool mod) override { this->bMod = mod; }
 
+	Vector2 RotateCoordinate(Vector2 p, float theta, Vector2 base);
+
 private:
 	shared_ptr<TextureRect> textureRect;
 

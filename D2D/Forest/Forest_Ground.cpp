@@ -66,8 +66,24 @@ bool Forest_Ground::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x - textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x + textureRect->GetScale().x / 2)
 		{
-			player->SetGroundPos(Vector2(textureRect->GetPosition().x, textureRect->GetPosition().y + textureRect->GetScale().y / 2));
-	
+			if (textureRect->GetRotationDegree() != 0.0f)
+			{
+				// 두점
+				Vector2 MaxPoint = RotateCoordinate(Vector2(textureRect->GetPosition().x + textureRect->GetScale().x / 2, textureRect->GetPosition().y + textureRect->GetScale().y / 2), textureRect->GetRotationDegree(), textureRect->GetPosition());
+				Vector2 minPoint = RotateCoordinate(Vector2(textureRect->GetPosition().x - textureRect->GetScale().x / 2, textureRect->GetPosition().y + textureRect->GetScale().y / 2), textureRect->GetRotationDegree(), textureRect->GetPosition());
+				// 기울기
+				float m = (MaxPoint.y - minPoint.y) / (MaxPoint.x - minPoint.x);
+
+				// x값에 따른 y값
+				float b = MaxPoint.y - m * MaxPoint.x;
+				float y = m * (player->GetAnimRect()->GetPosition().x + player->GetAnimRect()->GetScale().x / 2) + b;
+
+				player->SetGroundPos(Vector2(textureRect->GetPosition().x, y));
+			}
+			else
+			{
+				player->SetGroundPos(Vector2(textureRect->GetPosition().x, textureRect->GetPosition().y + textureRect->GetScale().y / 2));
+			}
 			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < textureRect->GetPosition().y + textureRect->GetScale().y / 2 - 1)
 			{
 				player->GetAnimRect()->Move(Vector2(0, 400));
@@ -98,4 +114,14 @@ bool Forest_Ground::Collision(shared_ptr<Player> player)
 		}
 	}
 	return false;
+}
+
+Vector2 Forest_Ground::RotateCoordinate(Vector2 p, float theta, Vector2 base)
+{
+	Vector2 ret;
+
+	ret.x = (p.x - base.x) * cos(theta * acos(-1) / 180) - (p.y - base.y) * sin(theta * acos(-1) / 180) + base.x;
+	ret.y = (p.x - base.x) * sin(-theta * acos(-1) / 180) + (p.y - base.y) * cos(-theta * acos(-1) / 180) + base.y;
+
+	return ret;
 }

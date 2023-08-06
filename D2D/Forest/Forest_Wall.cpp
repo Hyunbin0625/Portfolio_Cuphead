@@ -86,14 +86,14 @@ bool Forest_Wall::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
 		{
-			player->GetAnimRect()->Move(Vector2(player->GetSpeed(), 0));
+			player->GetAnimRect()->Move(Vector2(1000, 0));
 			return false;
 		}
 		else if (player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x - textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
 		{
-			player->GetAnimRect()->Move(Vector2(-player->GetSpeed(), 0));
+			player->GetAnimRect()->Move(Vector2(-1000, 0));
 			return false;
 		}
 	}

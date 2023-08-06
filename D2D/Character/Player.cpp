@@ -80,8 +80,12 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"AimShootDownL", L"_Textures/Player/cuphead_shoot_down_L.png", 6, true, true, 0.1));
 
 	// Dash
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashR", L"_Textures/Player/cuphead_dash_R.png", 8, false, true, 0.1));
-	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashL", L"_Textures/Player/cuphead_dash_L.png", 8, true, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashR", L"_Textures/Player/cuphead_dash_pre_R.png", 2, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashL", L"_Textures/Player/cuphead_dash_pre_L.png", 2, true, false, 0.1));
+
+	// DashLoop
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashLoopR", L"_Textures/Player/cuphead_dash_R.png", 6, false, true, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"DashLoopL", L"_Textures/Player/cuphead_dash_L.png", 6, true, true, 0.1));
 
 	// Ground_Special_Attack
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"SpecialAttackR", L"_Textures/Player/cuphead_ex_straight_R.png", 15, false, false, 0.11));
@@ -143,49 +147,40 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 
 void Player::Move()
 {
-	if (!INPUT->Press('C') && !INPUT->Press(VK_DOWN) && !(deltaTime > 0.0f && deltaTime < 0.4f))
+	if (!INPUT->Press('C') && !INPUT->Press(VK_DOWN) && (dash == 0 || dash == 3))
 	{
 		if (INPUT->Press(VK_LEFT))
 			animRect->Move(Vector2(-speed, 0) * totalSize);
 		if (INPUT->Press(VK_RIGHT))
 			animRect->Move(Vector2(speed, 0) * totalSize);
 	}
+}
 
-	if (INPUT->Down(VK_SHIFT) && deltaTime == 0.0f)
+void Player::FDash()
+{
+	if (INPUT->Down(VK_SHIFT) && dash == 0 && deltaTime == 0.0f && jumpDash)
 	{
-		if (direction == Direction::L)
-			animRect->Move(Vector2(-300 * 150, 0) * totalSize);
-		else
-			animRect->Move(Vector2(300 * 150, 0) * totalSize);
 		dash = 1;
+		jumpDash = false;
 	}
 
-	if (dash == 1)
+	if (dash >= 2)
 		deltaTime += 1 * DELTA;
 
-	if (deltaTime > 0.35f && dash == 1)
-	{
-		++dash;
-		if (direction == Direction::L)
-			animRect->Move(Vector2(-speed * 150, 0) * totalSize);
-		else
-			animRect->Move(Vector2(speed * 150, 0) * totalSize);
-	}
+	if (deltaTime > 0.4f && dash == 2)
+		dash = 3;
 
-	if (!INPUT->Press(VK_SHIFT) && deltaTime > 0.35f && dash == 2)
+	if (!INPUT->Press(VK_SHIFT) && deltaTime > 0.6f && dash == 3)
 	{
 		dash = 0;
 		deltaTime = 0.0f;
 	}
 }
 
-void Player::Jump()
-{
-
-}
-
 void Player::Update()
 {
+	cout << jumpDash << '\n';
+
 	if (bMod)
 	{
 		if (!(ImGui::IsAnyItemActive()) && animRect->GET_COMP(Collider)->Intersect(INPUT->GetMousePosition()) && INPUT->Press(VK_LBUTTON))
@@ -228,6 +223,7 @@ void Player::Update()
 		}
 
 		Move();
+		FDash();
 	}
 
 	// Air or Ground
@@ -327,6 +323,7 @@ void Player::Update()
 	}
 	else if(bSpecialAttack == 0 && bSuperBeam == 0)
 	{
+		jumpDash = true;
 		jumpSpeed = 0;
 		jumpCount = 0;
 		G = 0;
@@ -559,14 +556,17 @@ void Player::Update()
 	}
 
 	// Dash
-	if (dash >= 1 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
+	if (dash == 1 && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
 		G = 0;
-		if (direction == Direction::R)
-			state = PlayerState::Dash_R;
-		else
-			state = PlayerState::Dash_L;
+		state = PlayerState::Dash;
+	}
+	else if (dash == 2 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
+	{
+		jumpSpeed = 0;
+		G = 0;
+		state = PlayerState::DashLoop;
 	}
 
 	// Super Beam
@@ -895,13 +895,27 @@ void Player::Update()
 		bullet->Init(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 110 * totalSize), 90.0f, 0.0f);
 		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 85 * totalSize));
 		break;
-	case Dash_R:
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashR");
-		animRect->SetScale(Vector2(326, 163) * totalSize);
+	case Dash:
+		animRect->SetScale(Vector2(158, 132) * totalSize);
+		if (direction == Direction::R)
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashR");
+		else
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashL");
+		if (animRect->GET_COMP(Animator)->GetEnd())
+			dash = 2;
 		break;
-	case Dash_L:
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashL");
-		animRect->SetScale(Vector2(326, 163) * totalSize);
+	case DashLoop:
+		animRect->SetScale(Vector2(347, 165) * totalSize);
+		if (direction == Direction::R)
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashLoopR");
+			animRect->Move(Vector2(1000, 0) * totalSize);
+		}
+		else
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashLoopL");
+			animRect->Move(Vector2(-1000, 0) * totalSize);
+		}
 		break;
 	case Special_Attack_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SpecialAttackR");
@@ -1008,6 +1022,7 @@ void Player::Update()
 	{
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 	}
+	
 
 	bullet->SetTotalSize(totalSize);
 	specialAttack->SetTotalSize(totalSize);
