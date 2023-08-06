@@ -20,7 +20,7 @@ void Forest_Ground::Update()
 
 	textureRect->SetPosition(state.position);
 	textureRect->SetScale(Vector2(scale.x * state.totalSize, scale.y));
-	textureRect->SetRotation(state.rotation * 57.2);
+	textureRect->SetRotation((float)(state.rotation * 57.2));
 
 	textureRect->Update();
 }

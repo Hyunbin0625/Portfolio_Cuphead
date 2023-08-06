@@ -20,7 +20,7 @@ void Forest_Wall::Update()
 
 	textureRect->SetPosition(state.position);
 	textureRect->SetScale(Vector2(scale.x, scale.y * state.totalSize));
-	textureRect->SetRotation(state.rotation * 57.2);
+	textureRect->SetRotation((float)(state.rotation * 57.2));
 
 	textureRect->Update();
 }

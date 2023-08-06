@@ -20,8 +20,8 @@ void Tuto_Cube::Update()
 	collision->SetPosition(state.position + colPos);
 	textureRect->SetScale(scale * state.totalSize);
 	collision->SetScale((scale + colScale) * state.totalSize);
-	textureRect->SetRotation(state.rotation * 57.2);
-	collision->SetRotation(state.rotation * 57.2);
+	textureRect->SetRotation((float)(state.rotation * 57.2));
+	collision->SetRotation((float)(state.rotation * 57.2));
 
 	textureRect->Update();
 	collision->Update();

@@ -21,8 +21,7 @@ public:
 	void SetActivation(bool bActivation) { this->bActivation = bActivation; }
 	void SetSpeed(float speed) { this->speed = speed; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
-	void SetParrySlap(float bParrySlap) { this->bParrySlap = bParrySlap; }
-
+	void SetParrySlap(bool bParrySlap) { this->bParrySlap = bParrySlap; }
 
 private:
 	shared_ptr<AnimationRect> animRect;

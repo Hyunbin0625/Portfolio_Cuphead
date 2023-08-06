@@ -92,7 +92,7 @@ class OutlineBuffer : public ConstantBuffer
 		bool bOutline = false;	// 16 배수로 해야한다. 바이트 패딩
 		char dumy;
 		short dumy1;
-		Vector3 dummy2;
+		Vector3 dummy2 = Vector3();
 	};
 
 public:

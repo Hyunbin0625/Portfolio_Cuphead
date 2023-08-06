@@ -9,6 +9,8 @@ ForestEnemySet::ForestEnemySet()
 	SetTextID(L"_Textures/Enemy/lobber_Icon.png");
 	SetTextID(L"_Textures/Enemy/chomper_Icon.png");
 	SetTextID(L"_Textures/Enemy/pink_spiker_Icon.png");
+	SetTextID(L"_Textures/Enemy/Acorn_Icon.png");
+	SetTextID(L"_Textures/Enemy/acorn_machine_Icon.png");
 }
 
 void ForestEnemySet::SetTextID(const wstring& texturePath)
@@ -34,7 +36,7 @@ void ForestEnemySet::GUI()
 			ImGui::PushID(index++);	// ﻿ImGui가 버튼들에 대해서 자체적으로 구별하기 위한 ID 생성
 
 			textID = srvs[i].Get();
-			if (ImGui::ImageButton(textID, ImVec2(40, 40)))
+			if (ImGui::ImageButton(textID, ImVec2(40, 50)))
 			{
 				selectedIndex = i;
 			}

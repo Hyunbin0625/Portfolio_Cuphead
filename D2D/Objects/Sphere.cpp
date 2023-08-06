@@ -25,7 +25,7 @@ void Sphere::CheckCollision(shared_ptr<Player> player)
 		{
 			player->SetJumpSpeed(400.0f);
 			player->SetG(0.0f);
-			player->SetSuperMeterCard(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard());	// 20 퍼센트 추가
+			player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
 			bParrySlap = 0;
 		}
 		else if (bObstacle)	// 충돌 object인 경우

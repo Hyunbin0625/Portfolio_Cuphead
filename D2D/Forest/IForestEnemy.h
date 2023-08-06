@@ -9,17 +9,19 @@ enum class ForestEnemyType
 	Lobber,
 	Chomper,
 	Spiker,
+	Acorn,
+	AcornMachine,
 };
 
 struct ForestEnemyState
 {
 	ForestEnemyType type = ForestEnemyType::None;
 
-	Vector2 position;
+	Vector2 position = Vector2();
 	float totalSize = 1;
-	float speed;
+	float speed = 0.0f;
 
-	int maxHp;
+	int maxHp = 0;
 
 	bool bRegen = 0;
 	float regenTime = 0;

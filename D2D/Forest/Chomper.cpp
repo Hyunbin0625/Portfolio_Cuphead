@@ -5,7 +5,7 @@ Chomper::Chomper(const Vector2& position, float totailSize, float speed, int max
 	: state({ ForestEnemyType::Chomper, position, totailSize, speed, maxHp, bRegen, regenTime, direction })
 {
 	// 초기화
-	time = maxHp;	// maxHp를 재활용해, time 추가
+	time = (float)maxHp;	// maxHp를 재활용해, time 추가
 	G = 0.0f;
 	jumpSpeed = speed;
 
@@ -52,7 +52,7 @@ void Chomper::Update()
 
 	if (time >= state.regenTime)
 	{
-		G += 9.8 * DELTA;
+		G += (float)(9.8 * DELTA);
 		jumpSpeed -= G;
 
 		if (bAttackLoop)

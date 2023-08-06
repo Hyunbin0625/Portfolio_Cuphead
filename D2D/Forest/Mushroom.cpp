@@ -47,7 +47,7 @@ void Mushroom::Collision(shared_ptr<Player> player)
 	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && animState != MushroomState::Death)
 		player->SetHit(true);
 
-	distance = sqrt(pow(player->GetAnimRect()->GetPosition().x - animRect->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - animRect->GetPosition().y, 2));
+	distance = (float)sqrt(pow(player->GetAnimRect()->GetPosition().x - animRect->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - animRect->GetPosition().y, 2));
 	
 	if (player->GetAnimRect()->GetPosition().x < animRect->GetPosition().x)
 		direction = Direction::L;
@@ -63,9 +63,9 @@ void Mushroom::Collision(shared_ptr<Player> player)
 	else
 		point = Vector2(player->GetAnimRect()->GetPosition().x - 60 * state.totalSize, player->GetAnimRect()->GetPosition().y + 20 * state.totalSize);
 
-	float R = sqrt(pow((point.x - reference.x), 2) + pow((point.y - reference.y), 2));
+	float R = (float)sqrt(pow((point.x - reference.x), 2) + pow((point.y - reference.y), 2));
 	theta = acos((point.x - reference.x) / R);
-	theta = (theta * 180) / acos(-1);
+	theta = (theta * 180) / (float)acos(-1);
 
 	for (int i = 0; i < bullet->GetBullets().size(); ++i)
 	{
@@ -78,7 +78,7 @@ void Mushroom::Collision(shared_ptr<Player> player)
 				{
 					player->SetJumpSpeed(400.0f);
 					player->SetG(0.0f);
-					player->SetSuperMeterCard(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard());	// 20 퍼센트 추가
+					player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
 					bullet->GetBullets()[i]->SetActivation(false);
 					parryTime = 0.0f;
 				}
@@ -208,7 +208,7 @@ void Mushroom::Update()
 			checkState = 0;
 		break;
 	case MushroomState::Death:
-		animRect->SetScale(Vector2(234, 261) * 0.6 *state.totalSize);
+		animRect->SetScale(Vector2(234, 261) * (float)(0.6 * state.totalSize));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())
 			animRect->SetPosition(Vector2(1000, -1000));

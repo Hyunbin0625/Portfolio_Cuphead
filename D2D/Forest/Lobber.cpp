@@ -38,7 +38,7 @@ void Lobber::Collision(shared_ptr<Player> player)
 	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && animState != LobberState::Death)
 		player->SetHit(true);
 
-	distance = sqrt(pow(player->GetAnimRect()->GetPosition().x - animRect->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - animRect->GetPosition().y, 2));
+	distance = (float)sqrt(pow(player->GetAnimRect()->GetPosition().x - animRect->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - animRect->GetPosition().y, 2));
 	playerX = player->GetAnimRect()->GetPosition().x;
 	
 	for (int i = 0; i < bullet->GetBullets().size(); ++i)

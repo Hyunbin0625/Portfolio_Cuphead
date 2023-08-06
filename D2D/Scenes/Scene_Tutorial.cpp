@@ -115,7 +115,7 @@ void SceneTutorial::SaveTutorialMap(const wstring& path)
 			float tempSize = player->GetTotalSize();
 			out.write((char*)&tempSize, sizeof(tempSize));
 
-			int listSize = objectList.size();
+			int listSize = (int)objectList.size();
 			out.write((char*)&listSize, sizeof(listSize));
 
 			TutoState tempState;

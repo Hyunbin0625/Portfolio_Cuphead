@@ -26,6 +26,8 @@
     <ClCompile Include="Components\AnimatorComponent.cpp" />
     <ClCompile Include="Character\Player.cpp" />
     <ClCompile Include="Bullet\PlayerBullet.cpp" />
+    <ClCompile Include="Forest\Acorn.cpp" />
+    <ClCompile Include="Forest\AcornMachine.cpp" />
     <ClCompile Include="Forest\Blob.cpp" />
     <ClCompile Include="Forest\Chomper.cpp" />
     <ClCompile Include="Forest\ForestEnemySet.cpp" />
@@ -97,6 +99,8 @@
     <ClInclude Include="Components\AnimatorComponent.h" />
     <ClInclude Include="Character\Player.h" />
     <ClInclude Include="Bullet\PlayerBullet.h" />
+    <ClInclude Include="Forest\Acorn.h" />
+    <ClInclude Include="Forest\AcornMachine.h" />
     <ClInclude Include="Forest\Blob.h" />
     <ClInclude Include="Forest\Chomper.h" />
     <ClInclude Include="Forest\ForestEnemySet.h" />

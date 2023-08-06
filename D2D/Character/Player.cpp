@@ -233,7 +233,7 @@ void Player::Update()
 	// Air or Ground
 	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod)
 	{
-		G += 9.8 * 400 * DELTA;
+		G += (float)(9.8 * 400 * DELTA);
 		jumpSpeed -= G * DELTA;
 
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
@@ -666,7 +666,7 @@ void Player::Update()
 
 	if (animRect->GET_COMP(Animator)->GetEnd() && bSpecialAttack == 1)
 	{
-		superMeterCard = superMeterCard - 0.2 * maxSuperMeterCard;
+		superMeterCard = (float)(superMeterCard - 0.2 * maxSuperMeterCard);
 		bSpecialAttack = 2;
 	}
 
@@ -1016,7 +1016,7 @@ void Player::Update()
 		bullet->IndexManagement();
 	}
 	else
-		bullet->SetTime(bullet->GetLastIndex() + 1);
+		bullet->SetTime((float)(bullet->GetLastIndex() + 1));
 
 	if (bSpecialAttack >= 1 && check == 1 && deltaTime >= 0.4f)
 	{
@@ -1026,6 +1026,14 @@ void Player::Update()
 
 	if (superMeterCard > maxSuperMeterCard)
 		superMeterCard = maxSuperMeterCard;
+
+	if (!bMod)
+	{
+		Vector2 temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (groundPos.y - 140) - CAMERA->GetPosition().y);
+		if (animRect->GetPosition().y <= CAMERA->GetPosition().y + 140)
+			temp.y = (animRect->GetPosition().y - CENTER.y) - CAMERA->GetPosition().y;
+		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));
+	}
 
 	SFXbullet->Update();
 	animRect->Update();
@@ -1062,7 +1070,7 @@ void Player::GUI()
 		if (ImGui::Button("Up", ImVec2(50, 30)))
 			++hp;
 
-		int percent = superMeterCard / maxSuperMeterCard * 100;
+		int percent = (int)(superMeterCard / maxSuperMeterCard * 100);
 		string textSuperMeterCared = "Player super meter card : " + to_string(percent) + "%%";
 		ImGui::Text(textSuperMeterCared.c_str());
 		if (ImGui::Button("Down(-10)", ImVec2(70, 30)))

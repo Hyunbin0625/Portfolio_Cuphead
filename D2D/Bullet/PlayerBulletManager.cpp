@@ -50,7 +50,7 @@ void PlayerBulletManager::IndexManagement()
 	if ((int)time != lastIndex)
 	{
 		lastIndex = (int)time;
-		bullets[time]->SetActivation(true);
+		bullets[(int)time]->SetActivation(true);
 		++nextIndex;
 	}
 }

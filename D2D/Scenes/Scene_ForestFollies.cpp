@@ -83,6 +83,10 @@ void SceneForestFollies::Update()
 		enemyList.push_back(make_shared<Chomper>(CAMERA->GetPosition() + CENTER * 1.5, 0.72f, 1200.0f, 0, true, 5.0f, Direction::R));
 	else if (forestEnemySet->GetSelectedIndex() == 5)
 		enemyList.push_back(make_shared<Spiker>(CAMERA->GetPosition() + CENTER * 1.5, 0.72f, 1.2f, 0, false, 150.0f, Direction::R));
+	else if (forestEnemySet->GetSelectedIndex() == 6)
+		enemyList.push_back(make_shared<Acorn>(CAMERA->GetPosition() + CENTER * 1.5, 0.8f, 650.0f, 3, true, 3.0f, Direction::L));
+	else if (forestEnemySet->GetSelectedIndex() == 7)
+		enemyList.push_back(make_shared<AcornMachine>(CAMERA->GetPosition() + CENTER * 1.5, 0.8f, 650.0f, 600, false, 1.0f, Direction::L));
 
 	// Create Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
@@ -100,12 +104,6 @@ void SceneForestFollies::Update()
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
-
-	if (!mod)
-	{
-		Vector2 temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
-		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, temp.y - 90));
-	}
 
 	CAMERA->Update();
 	skyLayer->SetPosition(CAMERA->GetPosition() + CENTER + Vector2(0, 50));
@@ -183,7 +181,7 @@ void SceneForestFollies::SaveForestFolliesMap(const wstring& path)
 			out.write((char*)&tempSize, sizeof(tempSize));
 
 			// objectList
-			int listSize = objectList.size();
+			int listSize = (int)objectList.size();
 			out.write((char*)&listSize, sizeof(listSize));
 
 			ForestObjectState tempObjectState;
@@ -194,7 +192,7 @@ void SceneForestFollies::SaveForestFolliesMap(const wstring& path)
 			}
 
 			// enemyList
-			listSize = enemyList.size();
+			listSize = (int)enemyList.size();
 			out.write((char*)&listSize, sizeof(listSize));
 
 			ForestEnemyState tempEnemyState;
@@ -272,6 +270,10 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 					enemyList[i] = make_shared<Chomper>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 				else if (tempEnemyState.type == ForestEnemyType::Spiker)
 					enemyList[i] = make_shared<Spiker>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Acorn)
+					enemyList[i] = make_shared<Acorn>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::AcornMachine)
+					enemyList[i] = make_shared<AcornMachine>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
 			}
 		}
 

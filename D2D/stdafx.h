@@ -201,6 +201,8 @@ extern float gWinHeight;
 #include "Forest/LSeedManager.h"
 #include "Forest/Chomper.h"
 #include "Forest/Spiker.h"
+#include "Forest/Acorn.h"
+#include "Forest/AcornMachine.h"
 
 #include "Forest/ForestObjectSet.h"
 #include "Forest/Forest_Ground.h"
