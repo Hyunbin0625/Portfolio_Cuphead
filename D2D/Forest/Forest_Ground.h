@@ -13,6 +13,7 @@ public:
 
 	virtual bool Collision(shared_ptr<Player> player) override;
 	
+	virtual shared_ptr<AnimationRect> GetAnimRect() override { return nullptr; }
 	virtual shared_ptr<TextureRect> GetTextureRect() override { return textureRect; }
 	virtual bool GetDelete() override { return bDelete; }
 	virtual ForestObjectState GetState() override { return state; }

@@ -207,3 +207,4 @@ extern float gWinHeight;
 #include "Forest/ForestObjectSet.h"
 #include "Forest/Forest_Ground.h"
 #include "Forest/Forest_Wall.h"
+#include "Forest/FloatingPlatform.h"

@@ -48,6 +48,7 @@ void SceneForestFollies::Update()
 		enemy->Collision(player);
 	// Player&Object Collision
 	player->SetCheckCollider(false);
+	player->SetPlatform(false);
 	for (auto& object : objectList)
 	{
 		if (object->GetCollision())
@@ -93,6 +94,8 @@ void SceneForestFollies::Update()
 		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 	else if (forestObjectSet->GetSelectedIndex() == 1)
 		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	else if (forestObjectSet->GetSelectedIndex() == 2)
+		objectList.push_back(make_shared<FloatingPlatform>(ForestObjectType::FPlatform_a, CAMERA->GetPosition() + CENTER, 0.72f, 0.0f, true, 1, 100.0f));
 
 	// Enemies Update
 	for (const auto& enemy : enemyList)
@@ -244,6 +247,8 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
 				else if (tempObjectState.type == ForestObjectType::Wall)
 					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type >= ForestObjectType::FPlatform_a && tempObjectState.type <= ForestObjectType::FPlatform_c)
+					objectList[i] = make_shared<FloatingPlatform>(tempObjectState.type, tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction, tempObjectState.moveScale);
 			}
 
 			// EnemyList

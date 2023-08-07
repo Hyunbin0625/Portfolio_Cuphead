@@ -5,17 +5,23 @@ enum class ForestObjectType
 	None = -1,
 	Ground,
 	Wall,
+	FPlatform_a,
+	FPlatform_b,
+	FPlatform_c,
 };
 
 struct ForestObjectState
 {
 	ForestObjectType type = ForestObjectType::None;
 
-	Vector2 position;
+	Vector2 position = Vector2();
 	float totalSize = 1;
-	float rotation;
+	float rotation = 0.0f;
 
 	bool bCollision = 0;
+
+	bool direction = 0;	// 0 : »óÇÏ, 1 : ÁÂ¿ì
+	float moveScale = 0.0f;
 };
 
 class IForestObjects
@@ -31,6 +37,7 @@ public:
 	virtual void Render() = 0;
 	virtual void GUI(int ordinal) = 0;
 	
+	virtual shared_ptr<AnimationRect> GetAnimRect() = 0;
 	virtual shared_ptr<TextureRect> GetTextureRect() = 0;
 	virtual bool GetDelete() = 0;
 	virtual ForestObjectState GetState() = 0;

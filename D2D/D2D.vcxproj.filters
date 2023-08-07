@@ -225,7 +225,12 @@
     <ClCompile Include="Forest\Acorn.cpp">
       <Filter>Forest</Filter>
     </ClCompile>
-    <ClCompile Include="Forest\AcornMachine.cpp" />
+    <ClCompile Include="Forest\AcornMachine.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\FloatingPlatform.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -432,7 +437,12 @@
     <ClInclude Include="Forest\Acorn.h">
       <Filter>Forest</Filter>
     </ClInclude>
-    <ClInclude Include="Forest\AcornMachine.h" />
+    <ClInclude Include="Forest\AcornMachine.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\FloatingPlatform.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

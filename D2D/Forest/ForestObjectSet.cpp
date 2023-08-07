@@ -1,11 +1,11 @@
 ﻿#include "stdafx.h"
 #include "ForestObjectSet.h"
 
-
 ForestObjectSet::ForestObjectSet()
 {
 	SetTextID(L"_Textures/ground.png");
 	SetTextID(L"_Textures/wall.png");
+	SetTextID(L"_Textures/Scene_ForestFollies/lv1-1_mg_floating-platform-double.png");
 }
 
 void ForestObjectSet::SetTextID(const wstring& texturePath)

@@ -179,8 +179,6 @@ void Player::FDash()
 
 void Player::Update()
 {
-	cout << jumpDash << '\n';
-
 	if (bMod)
 	{
 		if (!(ImGui::IsAnyItemActive()) && animRect->GET_COMP(Collider)->Intersect(INPUT->GetMousePosition()) && INPUT->Press(VK_LBUTTON))
@@ -244,10 +242,15 @@ void Player::Update()
 		}
 
 		// Parry Slap
-		bParry = 0;
-		if (INPUT->Press('Z') && keyCheck == 1 && G > 4.0f)
+		if (!INPUT->Press('Z') && !INPUT->Down('Z') && INPUT->Up('Z') && jumpCount == 1 && animRect->GetPosition().y >= groundPos.y + 200)
 		{
-			bParry = 1;
+			keyCheck = true;
+		}
+
+		bParry = 0;
+		if (INPUT->Press('Z') && keyCheck)
+		{
+			bParry = true;
 			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 			{
 				direction = Direction::R;
@@ -258,15 +261,7 @@ void Player::Update()
 				direction = Direction::L;
 				state = PlayerState::Parry_L;
 			}
-
-			if (animRect->GET_COMP(Animator)->GetEnd())
-			{
-				keyCheck = 0;
-			}
 		}
-		
-		if (!INPUT->Press('Z') && !INPUT->Down('Z') && jumpCount == 1)
-			keyCheck = 1;
 
 		if (INPUT->Press('X') && state != PlayerState::Death && bSpecialAttack != 1 && bSuperBeam != 1)
 		{
@@ -746,10 +741,14 @@ void Player::Update()
 	case Parry_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ParryR");
 		animRect->SetScale(Vector2(137, 146) * totalSize);
+		if (animRect->GET_COMP(Animator)->GetEnd())
+			keyCheck = 0;
 		break;
 	case Parry_L:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ParryL");
 		animRect->SetScale(Vector2(137, 146) * totalSize);
+		if (animRect->GET_COMP(Animator)->GetEnd())
+			keyCheck = 0;
 		break;
 	case Down_R:
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DuckR");
@@ -1022,7 +1021,6 @@ void Player::Update()
 	{
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 	}
-	
 
 	bullet->SetTotalSize(totalSize);
 	specialAttack->SetTotalSize(totalSize);
@@ -1042,9 +1040,14 @@ void Player::Update()
 	if (superMeterCard > maxSuperMeterCard)
 		superMeterCard = maxSuperMeterCard;
 
+	// CAMERA
 	if (!bMod)
 	{
-		Vector2 temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (groundPos.y - 140) - CAMERA->GetPosition().y);
+		Vector2 temp = Vector2();
+		if (!platform)
+			temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (groundPos.y - 140) - CAMERA->GetPosition().y);
+		else
+			temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
 		if (animRect->GetPosition().y <= CAMERA->GetPosition().y + 140)
 			temp.y = (animRect->GetPosition().y - CENTER.y) - CAMERA->GetPosition().y;
 		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));

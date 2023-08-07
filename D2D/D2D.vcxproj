@@ -30,6 +30,7 @@
     <ClCompile Include="Forest\AcornMachine.cpp" />
     <ClCompile Include="Forest\Blob.cpp" />
     <ClCompile Include="Forest\Chomper.cpp" />
+    <ClCompile Include="Forest\FloatingPlatform.cpp" />
     <ClCompile Include="Forest\ForestEnemySet.cpp" />
     <ClCompile Include="Forest\FlowerGrunt.cpp" />
     <ClCompile Include="Forest\ForestObjectSet.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="Forest\AcornMachine.h" />
     <ClInclude Include="Forest\Blob.h" />
     <ClInclude Include="Forest\Chomper.h" />
+    <ClInclude Include="Forest\FloatingPlatform.h" />
     <ClInclude Include="Forest\ForestEnemySet.h" />
     <ClInclude Include="Forest\FlowerGrunt.h" />
     <ClInclude Include="Forest\ForestObjectSet.h" />
