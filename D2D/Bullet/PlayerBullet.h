@@ -8,6 +8,7 @@ public:
 
 public:
 	void Init(Vector2 position, float rotation);
+	void Hit();
 
 public:
 	void Update();
@@ -16,6 +17,8 @@ public:
 public:
 	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
 	bool GetActivation() { return bActivation; }
+	bool GetHit() { return bHit; }
+
 
 	void SetActivation(bool bActivation) { this->bActivation = bActivation; }
 	void SetRunTime(float runTime) { this->runTime = runTime; }
@@ -24,6 +27,8 @@ public:
 private:
 	shared_ptr<AnimationRect> animRect;
 	bool bActivation;
+	bool bHit = true;
+	float time = 0.0f;
 
 	float speed;
 	float runTime = 0.0f;

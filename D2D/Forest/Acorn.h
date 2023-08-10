@@ -12,7 +12,7 @@ enum class AcornState
 class Acorn : public IForestEnemy
 {
 public:	
-	Acorn(const Vector2& position, float totailSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction);
+	Acorn(const Vector2& position, float totalSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction);
 
 public:
 	virtual void Collision(shared_ptr<Player> player) override;

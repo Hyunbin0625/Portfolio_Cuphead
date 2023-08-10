@@ -47,6 +47,19 @@ void PlayerBulletManager::Init(Vector2 position, float rotation, float rebound)
 void PlayerBulletManager::IndexManagement()
 {
 	time += speakerSpeed * DELTA;
+
+	// Loop시 
+	if (time >= totalBullet - 1)
+	{
+		if (bullets[0]->GetActivation() == true)	// 0이 활성화 되어 있을 때
+			CreateBullet();
+		else
+		{
+			nextIndex = 0;
+			time = 0.0f;
+			lastIndex = -1;
+		}
+	}
 	if ((int)time != lastIndex)
 	{
 		lastIndex = (int)time;
@@ -57,34 +70,10 @@ void PlayerBulletManager::IndexManagement()
 
 void PlayerBulletManager::Update()
 {
-//	cout << time << '\n';
 	for (int i = 0; i < (int)totalBullet; ++i)
 	{
 		bullets[i]->SetTotalSize(totalSize);
-		if (bullets[i]->GetActivation() == true)
-		{
-			// End
-			if (bullets[i]->GetAnimRect()->GetPosition().y > CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT + 200 || bullets[i]->GetAnimRect()->GetPosition().y < CAMERA->GetPosition().y - 200
-				|| bullets[i]->GetAnimRect()->GetPosition().x > CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH + 200 || bullets[i]->GetAnimRect()->GetPosition().x < CAMERA->GetPosition().x - 200)
-				bullets[i]->SetActivation(false);
-		}
-		else
-			bullets[i]->GetAnimRect()->SetPosition(Vector2(-500, -500));
-
 		bullets[i]->Update();
-	}
-
-	// Loop시 
-	if ((UINT)time >= totalBullet - 1)
-	{
-		if (bullets[0]->GetActivation() == true)	// 0이 활성화 되어 있을 때
-			CreateBullet();
-		else
-		{
-			nextIndex = 0;
-			time = 0.0f;
-			lastIndex = -1;
-		}
 	}
 }
 

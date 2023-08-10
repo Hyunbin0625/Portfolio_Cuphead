@@ -120,13 +120,16 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 	// Death
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"Death", L"_Textures/Player/cuphead_death_body.png", 16, false, false, 0.1));
 
+	// Intro
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Intro", L"_Textures/Player/cuphead_intro_a.png", 28, false, false, 0.1));
+
 	// AddAnimator
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
 	// animRect SetAnimator
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 
 	// Create Player Bullet
-	bullet = make_shared<PlayerBulletManager>(2, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
+	bullet = make_shared<PlayerBulletManager>(10, 1500, 7);	// totalBullet, bulletSpeed, speakerSpeed
 
 	// Create Special Attack
 	specialAttack = make_shared<PlayerSpecialAttackManager>(1, 800);	// totalBullet, bulletSpeed, speakerSpeed
@@ -149,9 +152,9 @@ void Player::Move()
 {
 	if (!INPUT->Press('C') && !INPUT->Press(VK_DOWN) && (dash == 0 || dash == 3))
 	{
-		if (INPUT->Press(VK_LEFT))
+		if (INPUT->Press(VK_LEFT) && (animRect->GetPosition().x - animRect->GetScale().x * 0.5f) > CAMERA->GetPosition().x)
 			animRect->Move(Vector2(-speed, 0) * totalSize);
-		if (INPUT->Press(VK_RIGHT))
+		if (INPUT->Press(VK_RIGHT) && (animRect->GetPosition().x + animRect->GetScale().x * 0.5f) < CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH)
 			animRect->Move(Vector2(speed, 0) * totalSize);
 	}
 }
@@ -184,12 +187,13 @@ void Player::Update()
 		if (!(ImGui::IsAnyItemActive()) && animRect->GET_COMP(Collider)->Intersect(INPUT->GetMousePosition()) && INPUT->Press(VK_LBUTTON))
 			position = INPUT->GetMousePosition();
 		animRect->SetPosition(position);
+		bIntro = true;
 	}
 
 	// Hit
 	if (hit && hitCTime <= 0.0f)
 	{
-		hitCTime = 5.0f;
+		hitCTime = 2.0f;
 		hp -= hit;
 		hit = 0;
 	}
@@ -225,9 +229,9 @@ void Player::Update()
 	}
 
 	// Air or Ground
-	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod)
+	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod && !bIntro)
 	{
-		G += (float)(9.8 * 400 * DELTA);
+		G += (float)(9.8 * 700 * DELTA);
 		jumpSpeed -= G * DELTA;
 
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
@@ -714,12 +718,17 @@ void Player::Update()
 	if (scale != animRect->GetScale())
 		animRect->SetScale(scale * totalSize);
 
+	if (bIntro)
+		state = PlayerState::Intro;
+	
 	switch (state)
 	{
 	case Idle_R:
+		position = animRect->GetPosition();
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleR");
 		break;
 	case Idle_L:
+		position = animRect->GetPosition();
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
 		break;
 	case Run_R:
@@ -908,12 +917,14 @@ void Player::Update()
 		if (direction == Direction::R)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashLoopR");
-			animRect->Move(Vector2(1000, 0) * totalSize);
+			if ((animRect->GetPosition().x + animRect->GetScale().x * 0.5f) < CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH)
+				animRect->Move(Vector2(1000, 0) * totalSize);
 		}
 		else
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashLoopL");
-			animRect->Move(Vector2(-1000, 0) * totalSize);
+			if ((animRect->GetPosition().x - animRect->GetScale().x * 0.5f) > CAMERA->GetPosition().x)
+				animRect->Move(Vector2(-1000, 0) * totalSize);
 		}
 		break;
 	case Special_Attack_R:
@@ -1014,6 +1025,16 @@ void Player::Update()
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		animRect->SetScale(Vector2(172, 106) * totalSize);
 		break;
+	case Intro:
+		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
+		animRect->SetScale(Vector2(152, 169) * totalSize);
+		animRect->SetPosition(Vector2(position.x + 7 * totalSize, position.y + 5 * totalSize));
+		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			bIntro = false;
+			animRect->SetPosition(position);
+		}
+		break;
 	}
 	
 	// ¶¥ Ãæµ¹
@@ -1039,19 +1060,6 @@ void Player::Update()
 
 	if (superMeterCard > maxSuperMeterCard)
 		superMeterCard = maxSuperMeterCard;
-
-	// CAMERA
-	if (!bMod)
-	{
-		Vector2 temp = Vector2();
-		if (!platform)
-			temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (groundPos.y - 140) - CAMERA->GetPosition().y);
-		else
-			temp = Vector2((animRect->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
-		if (animRect->GetPosition().y <= CAMERA->GetPosition().y + 140)
-			temp.y = (animRect->GetPosition().y - CENTER.y) - CAMERA->GetPosition().y;
-		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));
-	}
 
 	SFXbullet->Update();
 	animRect->Update();

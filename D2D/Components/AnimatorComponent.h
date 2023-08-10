@@ -11,6 +11,8 @@ public:
 	void AddAnimClip(const shared_ptr<AnimationClip>& animClip);
 	void ResetFrame();
 
+	shared_ptr<AnimationClip> GetCurrentAnimClip() { return currentAnimClip; }
+	UINT GetCurrentFrameIndex() { return currentFrameIndex; }
 	Vector2 GetCurrentFrame() const { return currentFrame; }
 	Vector2 GetTexelFrameSize() const { return currentAnimClip->GetTexelFrameSize(); }
 	bool GetEnd() { return end; }

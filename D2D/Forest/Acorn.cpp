@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Acorn.h"
 
-Acorn::Acorn(const Vector2& position, float totailSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction)
-	: state({ ForestEnemyType::Acorn, position, totailSize, speed, maxHp, bRegen, regenTime, direction })
+Acorn::Acorn(const Vector2& position, float totalSize, float speed, int maxHp, bool bRegen, float regenTime, Direction direction)
+	: state({ ForestEnemyType::Acorn, position, totalSize, speed, maxHp, bRegen, regenTime, direction })
 {
 	// ÃÊ±âÈ­
 	this->hp = state.maxHp;

@@ -11,9 +11,10 @@ void Program::Init()
 	sceneList.push_back(make_shared<SceneMain>());
 	sceneList.push_back(make_shared<SceneTutorial>());
 	sceneList.push_back(make_shared<SceneForestFollies>());
+	sceneList.push_back(make_shared<SceneRibbyCroaks>());
 	sceneList.push_back(make_shared<Scene>());
 
-	currentScene = sceneList[2];
+	currentScene = sceneList[3];
 	currentScene->Init();
 }
 

@@ -1,0 +1,215 @@
+#include "stdafx.h"
+#include "Scene_RibbyCroaks.h"
+
+void SceneRibbyCroaks::Init()
+{
+	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
+	player->SetTotalSize(1.1f);
+
+	ribbyCroaks = make_shared<RibbyCroaks>(RibbyCroaksInfo{ Vector2(1028, 191), 1.2 }, RibbyCroaksInfo{ Vector2(1080, 322), 1.0 }, 10000, 0.0f);
+
+	// backGround
+	tempBackGround = make_unique<TextureRect>(CENTER, Vector2(1280, 720) * 1.4, 0.0f, L"_Textures/RibbyCroaks/FrogsBackGround.png");
+
+	forestObjectSet = make_unique<ForestObjectSet>();
+
+	player->SetIntro(true);
+	ribbyCroaks->SetCIntro(true);
+}
+
+void SceneRibbyCroaks::Destroy()
+{
+}
+
+void SceneRibbyCroaks::Update()
+{
+	CheckGround();
+
+	// Player&Enemies Collision
+	ribbyCroaks->Collision(player);
+
+	// Player&Object Collision
+	player->SetCheckCollider(false);
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision())
+		{
+			if (object->Collision(player))
+				player->SetCheckCollider(true);
+		}
+	}
+
+	// Delete Object
+	for (int i = 0; i < objectList.size(); ++i)
+	{
+		if (objectList[i]->GetDelete())
+			objectList.erase(objectList.begin() + i);
+	}
+
+	// Create Object
+	if (forestObjectSet->GetSelectedIndex() == 0)
+		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	else if (forestObjectSet->GetSelectedIndex() == 1)
+		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	else if (forestObjectSet->GetSelectedIndex() == 2)
+		objectList.push_back(make_shared<FloatingPlatform>(ForestObjectType::FPlatform_a, CAMERA->GetPosition() + CENTER, 0.72f, 0.0f, true, 1, 100.0f));
+
+
+	tempBackGround->Update();
+
+	// ObjectList Update
+	for (const auto& object : objectList)
+		object->Update();
+
+	ribbyCroaks->Update();
+
+	CAMERA->SetPosition(Vector2(tempBackGround->GetPosition().x - (CENTER_X + 37), tempBackGround->GetPosition().y - (CENTER_Y + 40)));
+	
+	player->Update();
+	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
+	UI->Update();
+
+	CAMERA->Update();
+}
+
+void SceneRibbyCroaks::PreRender()
+{
+}
+
+void SceneRibbyCroaks::Render()
+{
+	CAMERA->Render();
+	tempBackGround->Render();
+
+	for (const auto& object : objectList)
+		object->Render();
+
+	ribbyCroaks->Render();
+
+	player->Render();
+
+	UI->Render();
+}
+
+void SceneRibbyCroaks::PostRender()
+{
+	player->GUI();
+	ribbyCroaks->GUI();
+	forestObjectSet->GUI();
+	IMGUI->ForestObjectGUIS(objectList, "Object");
+
+	static bool bOpen = true;
+	if (ImGui::Begin("RibbyCroaksScene", &bOpen))
+	{
+		if (ImGui::Button("Save", ImVec2(50, 30)))
+			SaveRibbyCroaks();
+		ImGui::SameLine();
+		if (ImGui::Button("Load", ImVec2(50, 30)))
+			LoadRibbyCroaks();
+
+		ImGui::Checkbox("CreateMod", &mod);
+		for (const auto& object : objectList)
+			object->SetMod(mod);
+		player->SetMod(mod);
+		ribbyCroaks->SetMod(mod);
+	}
+	ImGui::End();
+}
+
+void SceneRibbyCroaks::SaveRibbyCroaks(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneRibbyCroaks::SaveRibbyCroaks, this, placeholders::_1);
+		Path::SaveFileDialog(L"", Path::RibbyCroaksFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		ofstream out(path.c_str());
+
+		if (out.is_open())
+		{
+			// Player
+			Vector2 tempPos = player->GetAnimRect()->GetPosition();
+			out.write((char*)&tempPos, sizeof(tempPos));
+			float tempSize = player->GetTotalSize();
+			out.write((char*)&tempSize, sizeof(tempSize));
+			
+			// Boss
+			int tempMaxHp = ribbyCroaks->GetMaxHp();
+			out.write((char*)&tempMaxHp, sizeof(tempMaxHp));
+			float tempDelay = ribbyCroaks->GetDelay();
+			out.write((char*)&tempDelay, sizeof(tempDelay));
+
+			// objectList
+			int listSize = (int)objectList.size();
+			out.write((char*)&listSize, sizeof(listSize));
+
+			ForestObjectState tempObjectState;
+			for (UINT i = 0; i < objectList.size(); ++i)
+			{
+				tempObjectState = objectList[i]->GetState();
+				out.write((char*)&tempObjectState, sizeof(tempObjectState));
+			}
+		}
+		out.close();
+	}
+}
+
+void SceneRibbyCroaks::LoadRibbyCroaks(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneRibbyCroaks::LoadRibbyCroaks, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::RibbyCroaksFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		ifstream in(path.c_str());
+
+		if (in.is_open())
+		{
+			// Player
+			Vector2 tempPos;
+			in.read((char*)&tempPos, sizeof(tempPos));
+			player->SetPosition(tempPos);
+			float tempSize;
+			in.read((char*)&tempSize, sizeof(tempSize));
+			player->SetTotalSize(tempSize);
+
+			// Boss
+			int tempMaxHp;
+			in.read((char*)&tempMaxHp, sizeof(tempMaxHp));
+			ribbyCroaks->SetMaxHp(tempMaxHp);
+			float tempDelay;
+			in.read((char*)&tempDelay, sizeof(tempDelay));
+			ribbyCroaks->SetDelay(tempDelay);
+
+			// ObjectList
+			int listSize;
+			in.read((char*)&listSize, sizeof(listSize));
+
+			objectList.clear();
+			objectList.resize(listSize);
+
+			ForestObjectState tempObjectState;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in.read((char*)&tempObjectState, sizeof(tempObjectState));
+
+				if (tempObjectState.type == ForestObjectType::Ground)
+					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type == ForestObjectType::Wall)
+					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type >= ForestObjectType::FPlatform_a && tempObjectState.type <= ForestObjectType::FPlatform_c)
+					objectList[i] = make_shared<FloatingPlatform>(tempObjectState.type, tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction, tempObjectState.moveScale);
+			}
+		}
+		in.close();
+	}
+}
+
+void SceneRibbyCroaks::CheckGround()
+{
+
+}

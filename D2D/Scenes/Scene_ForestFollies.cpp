@@ -4,6 +4,7 @@
 void SceneForestFollies::Init()
 {
 	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
+	player->SetTotalSize(0.9f);
 
 	skyLayer = make_unique<TextureRect>(CENTER, Vector2(1898, 823) * 1.35, 0.0f, L"_Textures/Scene_ForestFollies/lv1-1_bg_sky_01.png");
 
@@ -104,6 +105,19 @@ void SceneForestFollies::Update()
 	for (const auto& object : objectList)
 		object->Update();
 
+	// CAMERA
+	if (!mod)
+	{
+		Vector2 temp = Vector2();
+		if (!player->GetPlatform())
+			temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (player->GetGroundPos().y - 140) - CAMERA->GetPosition().y);
+		else
+			temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
+		if (player->GetAnimRect()->GetPosition().y <= CAMERA->GetPosition().y + 140)
+			temp.y = (player->GetAnimRect()->GetPosition().y - CENTER.y) - CAMERA->GetPosition().y;
+		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));
+	}
+
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
@@ -171,7 +185,7 @@ void SceneForestFollies::SaveForestFolliesMap(const wstring& path)
 	}
 	else
 	{
-		if (enemyList.empty()) return;
+		if (enemyList.empty() && objectList.empty()) return;
 
 		ofstream out(path.c_str());
 

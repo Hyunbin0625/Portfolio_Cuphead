@@ -19,13 +19,27 @@ PlayerBullet::PlayerBullet(float bulletSpeed)
 
 void PlayerBullet::Init(Vector2 position, float rotation)
 {
+	bHit = true;
 	runTime = 0.0f;
 	animRect->SetPosition(position);
 	animRect->SetRotation(rotation);
 }
 
+void PlayerBullet::Hit()
+{
+	bHit = false;
+	time = runTime;
+}
+
 void PlayerBullet::Update()
 {
+	if (!bHit)
+	{
+		time += DELTA;
+		if (time > 0.3f)
+			bActivation = false;
+	}
+
 	runTime += 1 * DELTA;
 
 	if (runTime < 0.1f)
@@ -39,7 +53,17 @@ void PlayerBullet::Update()
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Main");
 	}
 	animRect->Move(animRect->GetRightVector() * speed);
-//	cout << speed << '\n';
+	
+	if (bActivation == true)
+	{
+		// End
+		if (animRect->GetPosition().y > CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT + 200 || animRect->GetPosition().y < CAMERA->GetPosition().y - 200
+			|| animRect->GetPosition().x > CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH + 200 || animRect->GetPosition().x < CAMERA->GetPosition().x - 200)
+			bActivation = false;
+	}
+	else
+		animRect->SetPosition(Vector2(-500, -500));
+
 	animRect->Update();
 }
 

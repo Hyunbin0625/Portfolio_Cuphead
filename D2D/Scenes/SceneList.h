@@ -4,3 +4,4 @@
 #include "Scene_Main.h"
 #include "Scene_Tutorial.h"
 #include "Scene_ForestFollies.h"
+#include "Scene_RibbyCroaks.h"

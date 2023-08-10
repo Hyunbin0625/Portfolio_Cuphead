@@ -65,7 +65,9 @@ enum PlayerState
 	Hit_R,
 	Hit_L,
 
-	Death
+	Death,
+
+	Intro
 };
 
 enum Direction
@@ -104,6 +106,7 @@ public:
 	int GetMaxSuperMeterCard() { return (int)maxSuperMeterCard; }
 
 	Vector2 GetPosition() { return position; }
+	Vector2 GetGroundPos() { return groundPos; }
 
 	float GetTotalSize() const { return totalSize; }
 	float GetSpeed() const { return speed; }
@@ -127,7 +130,9 @@ public:
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
 	void SetG(float G) { this->G = G; }
+	void SetIntro(bool bIntro) { this->bIntro = bIntro; }
 	void SetMod(bool bMod) { this->bMod = bMod; }
+
 
 private:
 	UINT hp;
@@ -160,7 +165,7 @@ private:
 
 	float G = 0;
 	float jumpSpeed = 0;
-	float jumpMaxSpeed = 600;
+	float jumpMaxSpeed = 700;
 	bool checkCollider = 0;
 	UINT jumpCount = 2;
 
@@ -179,6 +184,8 @@ private:
 	bool platform = 0;
 
 	float tempTime = 0;
+
+	bool bIntro = false;
 
 	bool bMod = 0;
 };
