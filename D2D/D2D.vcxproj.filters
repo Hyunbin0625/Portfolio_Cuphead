@@ -237,9 +237,12 @@
     <ClCompile Include="Scenes\Scene_RibbyCroaks.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Boss\RibbyFistManager.cpp" />
+    <ClCompile Include="Boss\RibbyAttackManager.cpp" />
     <ClCompile Include="Boss\CroaksFirefly.cpp" />
     <ClCompile Include="Boss\CroaksAttackManager.cpp" />
+    <ClCompile Include="Boss\RibbyFist.cpp" />
+    <ClCompile Include="Boss\RibbyClapBall.cpp" />
+    <ClCompile Include="Boss\CroaksWind.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -458,9 +461,12 @@
     <ClInclude Include="Scenes\Scene_RibbyCroaks.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Boss\RibbyFistManager.h" />
+    <ClInclude Include="Boss\RibbyAttackManager.h" />
     <ClInclude Include="Boss\CroaksFirefly.h" />
     <ClInclude Include="Boss\CroaksAttackManager.h" />
+    <ClInclude Include="Boss\RibbyFist.h" />
+    <ClInclude Include="Boss\RibbyClapBall.h" />
+    <ClInclude Include="Boss\CroaksWind.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

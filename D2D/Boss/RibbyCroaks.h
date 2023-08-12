@@ -17,6 +17,10 @@ struct RibbyCroaksInfo
 
 	bool bIntro = false;
 	bool bAttack = false;
+	bool bFrame = false;
+
+	float time = 0.0f;
+	int animCount = 0;
 };
 
 class RibbyCroaks
@@ -52,8 +56,10 @@ public:
 private:
 	shared_ptr<AnimationRect> ribby;
 	shared_ptr<AnimationRect> croaks;
-	shared_ptr<RibbyFistManager> fistList;
+	shared_ptr<RibbyAttackManager> ribbyAttack;
 	shared_ptr<CroaksAttackManager> fireFlyList;
+	unique_ptr<CroaksWind> croaksWind;
+	unique_ptr<ColorRect> collisionRect;
 
 	RibbyCroaksInfo ribbyInfo;
 	RibbyCroaksInfo croaksInfo;
@@ -61,18 +67,20 @@ private:
 	RibbyCroaksState rState = RibbyCroaksState::None;
 	RibbyCroaksState cState = RibbyCroaksState::None;
 
-	UINT phase = 0;
+	UINT currentPhase = 1;
+	float SecPhase = 80.0f;
+	float thrPhase = 50.0f;
+	bool phaseIntro = false;
 
 	UINT maxHp = 0;
 	UINT hp = 0;
 
 	mt19937 mt;
 
-	int check = 0;
-	bool bFrame = false;
+//	bool bFrame = false;
 	int count = 0;
-	float time = 0.0f;
 	float delay = 0.0f;
+	float deltaTime = 0.0f;
 	float parryTime = 0.0f;
 	bool bMod = false;
 };

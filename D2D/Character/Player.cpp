@@ -561,7 +561,7 @@ void Player::Update()
 		G = 0;
 		state = PlayerState::Dash;
 	}
-	else if (dash == 2 && deltaTime > 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
+	else if (dash == 2 && deltaTime >= 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
 		G = 0;
@@ -1026,13 +1026,19 @@ void Player::Update()
 		animRect->SetScale(Vector2(172, 106) * totalSize);
 		break;
 	case Intro:
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
-		animRect->SetScale(Vector2(152, 169) * totalSize);
-		animRect->SetPosition(Vector2(position.x + 7 * totalSize, position.y + 5 * totalSize));
-		if (animRect->GET_COMP(Animator)->GetEnd())
+		deltaTime += DELTA;
+		if (deltaTime > 2.0f)
 		{
-			bIntro = false;
-			animRect->SetPosition(position);
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
+			animRect->SetScale(Vector2(152, 169) * totalSize);
+			animRect->SetPosition(Vector2(position.x + 7 * totalSize, position.y + 5 * totalSize));
+			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				bIntro = false;
+				deltaTime = 0.0f;
+				animRect->SetPosition(position);
+				state = PlayerState::Idle_R;
+			}
 		}
 		break;
 	}

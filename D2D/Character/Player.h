@@ -165,7 +165,7 @@ private:
 
 	float G = 0;
 	float jumpSpeed = 0;
-	float jumpMaxSpeed = 700;
+	float jumpMaxSpeed = 800;
 	bool checkCollider = 0;
 	UINT jumpCount = 2;
 

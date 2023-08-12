@@ -6,7 +6,7 @@ void SceneRibbyCroaks::Init()
 	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
 	player->SetTotalSize(1.1f);
 
-	ribbyCroaks = make_shared<RibbyCroaks>(RibbyCroaksInfo{ Vector2(1028, 191), 1.2 }, RibbyCroaksInfo{ Vector2(1080, 322), 1.0 }, 10000, 0.0f);
+	ribbyCroaks = make_shared<RibbyCroaks>(RibbyCroaksInfo{ Vector2(1028, 191), 1.2 }, RibbyCroaksInfo{ Vector2(1080, 322), 1.0 }, 1000, 5.0f);
 
 	// backGround
 	tempBackGround = make_unique<TextureRect>(CENTER, Vector2(1280, 720) * 1.4, 0.0f, L"_Textures/RibbyCroaks/FrogsBackGround.png");
@@ -63,7 +63,12 @@ void SceneRibbyCroaks::Update()
 
 	ribbyCroaks->Update();
 
-	CAMERA->SetPosition(Vector2(tempBackGround->GetPosition().x - (CENTER_X + 37), tempBackGround->GetPosition().y - (CENTER_Y + 40)));
+	// CAMERA
+	CAMERA->SetEdges(Vector2(tempBackGround->GetPosition().x - tempBackGround->GetScale().x * 0.5f + 210, tempBackGround->GetPosition().y - tempBackGround->GetScale().y * 0.5f),
+		Vector2(tempBackGround->GetPosition().x + tempBackGround->GetScale().x * 0.5f - 243, tempBackGround->GetPosition().y + tempBackGround->GetScale().y * 0.5f));
+	Vector2 temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
+	CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, tempBackGround->GetPosition().y - (CENTER_Y + 40)));
+
 	
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());

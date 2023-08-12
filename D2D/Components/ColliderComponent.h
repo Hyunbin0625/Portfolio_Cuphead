@@ -16,6 +16,8 @@ public:
 	bool Intersect(const Vector2& coord);
 	bool Intersect(const shared_ptr<ColliderComponent>& other);
 
+	void SetType(ColliderType type) { this->type = type; }
+
 private:
 	ColliderType type = ColliderType::NONE;
 };

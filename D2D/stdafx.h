@@ -210,7 +210,10 @@ extern float gWinHeight;
 #include "Forest/FloatingPlatform.h"
 
 // Boss
-#include "Boss/RibbyFistManager.h"
+#include "Boss/RibbyFist.h"
+#include "Boss/RibbyClapBall.h"
+#include "Boss/RibbyAttackManager.h"
 #include "Boss/CroaksFirefly.h"
+#include "Boss/CroaksWind.h"
 #include "Boss/CroaksAttackManager.h"
 #include "Boss/RibbyCroaks.h"
