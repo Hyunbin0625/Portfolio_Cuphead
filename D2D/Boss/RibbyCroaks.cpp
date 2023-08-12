@@ -5,7 +5,7 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	: ribbyInfo(ribbyInfo), croaksInfo(croaksInfo), maxHp(maxHp), delay(delay)
 {
 	// 초기화
-	hp = 850;
+	hp = 510;
 	random_device random;
 	mt = mt19937(random());
 
@@ -30,10 +30,14 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"ClapL", L"_Textures/RibbyCroaks/shortFrog_clap_loop.png", 15, true, false, 0.12));
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"ClapE", L"_Textures/RibbyCroaks/shortFrog_clap_end.png", 4, true, false, 0.1));
 
-	// Roll
-	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollS", L"_Textures/RibbyCroaks/shortFrog_roll_start.png", 14, false, false, 0.1));
-	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollL", L"_Textures/RibbyCroaks/shortFrog_roll_loop.png", 8, false, true, 0.1));
-	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollE", L"_Textures/RibbyCroaks/shortFrog_roll_end.png", 16, false, false, 0.1));
+	// Roll_L
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollSL", L"_Textures/RibbyCroaks/shortFrog_roll_start_L.png", 14, false, false, 0.1));
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollLL", L"_Textures/RibbyCroaks/shortFrog_roll_loop_L.png", 8, false, true, 0.1));
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollEL", L"_Textures/RibbyCroaks/shortFrog_roll_end_L.png", 16, false, false, 0.1));
+
+	// Roll_R
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollSR", L"_Textures/RibbyCroaks/shortFrog_roll_start_R.png", 14, true, false, 0.1));
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollLR", L"_Textures/RibbyCroaks/shortFrog_roll_loop_R.png", 8, true, true, 0.1));
 
 	// AddAnimator
 	ribby->AddComponent(make_shared<AnimatorComponent>(ribby->GetAnimClips()));
@@ -63,10 +67,15 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"Spit", L"_Textures/RibbyCroaks/tallfrog_spit_shoot.png", 8, false, false, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"SpitE", L"_Textures/RibbyCroaks/tallfrog_spit_end.png", 14, false, false, 0.12));
 
-	// Roll
+	// fan
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"FanS", L"_Textures/RibbyCroaks/tallfrog_fan_start.png", 29, false, false, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"FanL", L"_Textures/RibbyCroaks/tallfrog_fan_loop.png", 4, false, true, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"FanE", L"_Textures/RibbyCroaks/tallfrog_fan_end.png", 14, false, false, 0.1));
+
+	// morph
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphS", L"_Textures/RibbyCroaks/tallfrog_morph_start.png", 4, false, false, 0.1));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphL", L"_Textures/RibbyCroaks/tallfrog_morph_loop.png", 3, false, true, 0.1));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphE", L"_Textures/RibbyCroaks/tallfrog_morph_end.png", 25, false, false, 0.1));
 
 	// AddAnimator
 	croaks->AddComponent(make_shared<AnimatorComponent>(croaks->GetAnimClips()));
@@ -199,7 +208,7 @@ void RibbyCroaks::Update()
 
 		ribby->SetPosition(ribbyInfo.position);
 		croaks->SetPosition(croaksInfo.position);
-		hp = 810;
+		hp = 510;
 		phaseIntro = false;
 		croaksInfo.bIntro = true;
 		ribbyInfo.bIntro = false;
@@ -227,6 +236,7 @@ void RibbyCroaks::Update()
 			cState = RibbyCroaksState::Attack;
 	}
 
+
 	// nextPhase Intro
 	if (currentPhase == 2 && phaseIntro && rState == RibbyCroaksState::Idle && cState == RibbyCroaksState::Idle)
 	{
@@ -234,16 +244,26 @@ void RibbyCroaks::Update()
 		croaksInfo.bAttack = false;
 		ribbyInfo.bAttack = false;
 	}
-	else if (currentPhase == 3 && phaseIntro && rState == RibbyCroaksState::Idle && cState == RibbyCroaksState::Idle)
+	else if (currentPhase == 3 && phaseIntro && (rState == RibbyCroaksState::Idle || rState == RibbyCroaksState::None) && cState == RibbyCroaksState::Idle)
 	{
 		rState = RibbyCroaksState::Start3P;
+		cState = RibbyCroaksState::Start3P;
 		croaksInfo.bAttack = false;
 		ribbyInfo.bAttack = false;
 	}
 
+	if (bNone)
+		rState = RibbyCroaksState::None;
+
 	// Ribby
 	switch (rState)
 	{
+	case  RibbyCroaksState::None:
+		ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
+		ribby->SetScale(Vector2(370, 350) * ribbyInfo.totalSize);
+		ribbyInfo.position = Vector2(1000, -1000);
+		ribby->SetPosition(ribbyInfo.position);
+		break;
 	case RibbyCroaksState::Idle:
 		if (currentPhase == 1)
 		{
@@ -388,7 +408,7 @@ void RibbyCroaks::Update()
 	case RibbyCroaksState::Start2P:
 		if (ribbyInfo.animCount == 0)
 		{
-			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollS");
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollSL");
 			ribby->SetScale(Vector2(420, 335) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x - 20 * ribbyInfo.totalSize, ribbyInfo.position.y - 47 * ribbyInfo.totalSize));
 			if (ribby->GET_COMP(Animator)->GetEnd())
@@ -400,11 +420,11 @@ void RibbyCroaks::Update()
 		}
 		else if (ribbyInfo.animCount == 1)
 		{
-			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollL");
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollLL");
 			ribby->SetScale(Vector2(610, 260) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x + 65 * ribbyInfo.totalSize, ribbyInfo.position.y - 55 * ribbyInfo.totalSize));
-			collisionRect->SetPosition(Vector2(ribby->GetPosition().x - 160 * ribbyInfo.totalSize, ribby->GetPosition().y));
-			collisionRect->SetScale(Vector2(ribby->GetScale().y - 37, ribby->GetScale().y - 37));
+			collisionRect->SetPosition(Vector2(ribby->GetPosition().x - 153 * ribbyInfo.totalSize, ribby->GetPosition().y));
+			collisionRect->SetScale(Vector2(ribby->GetScale().y - 48, ribby->GetScale().y - 48));
 			collisionRect->GET_COMP(Collider)->SetType(ColliderType::CIRCLE);
 			if (ribbyInfo.time > 1.0f)
 				ribbyInfo.position.x -= ribbyInfo.time * 2;
@@ -417,7 +437,7 @@ void RibbyCroaks::Update()
 		}
 		else
 		{
-			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollE");
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollEL");
 			ribby->SetScale(Vector2(480, 300) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x - 68 * ribbyInfo.totalSize, ribbyInfo.position.y - 31 * ribbyInfo.totalSize));
 			if (ribby->GET_COMP(Animator)->GetEnd())
@@ -432,6 +452,38 @@ void RibbyCroaks::Update()
 		}
 		break;
 	case RibbyCroaksState::Start3P:
+		if (ribbyInfo.animCount == 0)
+		{
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollSR");
+			ribby->SetScale(Vector2(420, 335) * ribbyInfo.totalSize);
+			ribby->SetPosition(Vector2(ribbyInfo.position.x - 10 * ribbyInfo.totalSize, ribbyInfo.position.y - 47 * ribbyInfo.totalSize));
+			if (ribby->GET_COMP(Animator)->GetEnd())
+			{
+				ribby->GET_COMP(Animator)->ResetFrame();
+				++ribbyInfo.animCount;
+				ribbyInfo.time = 1.0f;
+			}
+		}
+		else if (ribbyInfo.animCount == 1)
+		{
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollLR");
+			ribby->SetScale(Vector2(610, 260) * ribbyInfo.totalSize);
+			ribby->SetPosition(Vector2(ribbyInfo.position.x - 95 * ribbyInfo.totalSize, ribbyInfo.position.y - 55 * ribbyInfo.totalSize));
+			// CollisionRect
+			collisionRect->SetPosition(Vector2(ribby->GetPosition().x + 153 * ribbyInfo.totalSize, ribby->GetPosition().y));
+			collisionRect->SetScale(Vector2(ribby->GetScale().y - 48, ribby->GetScale().y - 48));
+			collisionRect->GET_COMP(Collider)->SetType(ColliderType::CIRCLE);
+			ribbyInfo.position.x += ribbyInfo.time * 2;
+			ribbyInfo.position.y += ribbyInfo.time / 8;
+		}
+		else
+		{
+			ribbyInfo.time = 0.0f;
+			ribbyInfo.animCount = 0;
+			collisionRect->SetPosition(Vector2(1000, -1000));
+			bNone = true;
+		}
+
 		break;
 	}
 
@@ -439,9 +491,18 @@ void RibbyCroaks::Update()
 	switch (cState)
 	{
 	case RibbyCroaksState::Idle:
-		croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
-		croaks->SetScale(Vector2(450, 583) * croaksInfo.totalSize);
-		croaks->SetPosition(croaksInfo.position);
+		if (currentPhase == 3)
+		{
+		//	croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"SIdle");
+		//	croaks->SetScale(Vector2(450, 583)* croaksInfo.totalSize);
+		//	croaks->SetPosition(croaksInfo.position);
+		}
+		else
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
+			croaks->SetScale(Vector2(450, 583)* croaksInfo.totalSize);
+			croaks->SetPosition(croaksInfo.position);
+		}
 		break;
 	case RibbyCroaksState::Attack:
 		if (currentPhase == 1)
@@ -570,7 +631,6 @@ void RibbyCroaks::Update()
 				}
 			}
 		}
-	
 		break;
 	case RibbyCroaksState::Intro:
 		if (croaksInfo.bIntro && croaksInfo.time >= 2.0f)
@@ -589,6 +649,42 @@ void RibbyCroaks::Update()
 		}
 		break;
 	case RibbyCroaksState::Start3P:
+		if (croaksInfo.animCount == 0)
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MorphS");
+			croaks->SetScale(Vector2(505, 425) * 1.22 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 74 * croaksInfo.totalSize, croaksInfo.position.y - 57 * croaksInfo.totalSize));
+			if (croaks->GET_COMP(Animator)->GetEnd())
+			{
+				++croaksInfo.animCount;
+			}
+		}
+		else if (croaksInfo.animCount == 1)
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MorphL");
+			croaks->SetScale(Vector2(513, 289) * 1.22 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 60 * croaksInfo.totalSize, croaksInfo.position.y - 140 * croaksInfo.totalSize));
+
+			// ribby가 해당 위치에 도착했을 때 end
+			if (ribby->GetPosition().x >= croaks->GetPosition().x - croaks->GetScale().x * 0.5 - 100)
+			{
+				// ribby 초기화 및 비활성화
+				++ribbyInfo.animCount;
+
+				++croaksInfo.animCount;
+			}
+		}
+		else
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MorphE");
+			croaks->SetScale(Vector2(800, 735) * 1.2 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 90 * croaksInfo.totalSize, croaksInfo.position.y + 75 * croaksInfo.totalSize));
+			if (croaks->GET_COMP(Animator)->GetEnd())
+			{
+				croaksInfo.animCount = 0;
+				phaseIntro = false;
+			}
+		}
 		break;
 	}
 
@@ -611,7 +707,8 @@ void RibbyCroaks::Render()
 	ribbyAttack->Render();
 //	if (collisionRect->GetPosition().y != -1000)
 //		collisionRect->Render();
-	ribby->Render();
+	if (!bNone)
+		ribby->Render();
 }
 
 void RibbyCroaks::GUI()

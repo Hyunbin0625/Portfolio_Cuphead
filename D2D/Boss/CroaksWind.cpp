@@ -50,6 +50,7 @@ void CroaksWind::Update()
 			if (speed > maxSpeed)
 				speed = maxSpeed;
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
+			animRect->GET_COMP(Animator)->ResetFrame();
 		}
 		else if (count == 2)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Loop");

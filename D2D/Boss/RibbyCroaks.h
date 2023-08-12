@@ -77,7 +77,7 @@ private:
 
 	mt19937 mt;
 
-//	bool bFrame = false;
+	bool bNone = false;
 	int count = 0;
 	float delay = 0.0f;
 	float deltaTime = 0.0f;
