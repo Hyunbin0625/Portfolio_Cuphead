@@ -36,7 +36,7 @@ void PlayerBullet::Update()
 	if (!bHit)
 	{
 		time += DELTA;
-		if (time > 0.3f)
+		if (time > 0.2f)
 			bActivation = false;
 	}
 

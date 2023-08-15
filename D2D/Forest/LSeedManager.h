@@ -32,7 +32,7 @@ private:
 	Vector2 position;
 	float totalSize;
 
-	float G = 0;
+	float vel = 0;
 	float jumpSpeed = 0.0f;
 	float playerX = 0.0f;
 

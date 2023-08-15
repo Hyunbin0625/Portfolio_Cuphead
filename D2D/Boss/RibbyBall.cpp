@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "RibbyClapBall.h"
+#include "RibbyBall.h"
 
-RibbyClapBall::RibbyClapBall(float bulletSpeed)
+RibbyBall::RibbyBall(float bulletSpeed)
 	: speed(bulletSpeed)
 {
 	animRect = make_shared<AnimationRect>(Vector2(), Vector2(118, 164) * totalSize, 0.0f, L"_Textures/RibbyCroaks/shorfrog_clap_ball.png");
@@ -18,10 +18,10 @@ RibbyClapBall::RibbyClapBall(float bulletSpeed)
 	sfx->SetAnimator(sfx->GET_COMP(Animator));
 
 	// AddComponent
-	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
 }
 
-void RibbyClapBall::Init(Vector2 position, float rotation)
+void RibbyBall::Init(Vector2 position, float rotation)
 {
 	runTime = 0.0f;
 	animRect->SetPosition(position);
@@ -29,7 +29,7 @@ void RibbyClapBall::Init(Vector2 position, float rotation)
 	bActivation = true;
 }
 
-void RibbyClapBall::Update()
+void RibbyBall::Update()
 {
 	if (bActivation == true)
 	{
@@ -67,7 +67,7 @@ void RibbyClapBall::Update()
 	sfx->Update();
 }
 
-void RibbyClapBall::Render()
+void RibbyBall::Render()
 {
 	animRect->Render();
 	sfx->Render();

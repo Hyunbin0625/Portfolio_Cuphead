@@ -106,6 +106,7 @@ public:
 	int GetMaxSuperMeterCard() { return (int)maxSuperMeterCard; }
 
 	Vector2 GetPosition() { return position; }
+	bool GetCheckCollider() { return checkCollider; }
 	Vector2 GetGroundPos() { return groundPos; }
 
 	float GetTotalSize() const { return totalSize; }
@@ -129,7 +130,7 @@ public:
 	void SetGroundPos(Vector2 groundPos) { this->groundPos = groundPos; }
 	void SetCheckCollider(bool checkCollider) { this->checkCollider = checkCollider; }
 	void SetPlatform(bool platform) { this->platform = platform; }
-	void SetG(float G) { this->G = G; }
+	void SetVel(float vel) { this->vel = vel; }
 	void SetIntro(bool bIntro) { this->bIntro = bIntro; }
 	void SetMod(bool bMod) { this->bMod = bMod; }
 
@@ -163,7 +164,7 @@ private:
 	Direction direction = Direction::R;
 	float speed;
 
-	float G = 0;
+	float vel = 0;
 	float jumpSpeed = 0;
 	float jumpMaxSpeed = 800;
 	bool checkCollider = 0;

@@ -20,7 +20,7 @@ LobberSeed::LobberSeed(float bulletSpeed)
 
 void LobberSeed::Init(Vector2 position, float rotation, float playerX)
 {
-	G = 0;
+	vel = 0;
 	jumpSpeed = 500.0f;
 
 	space = playerX - position.x;
@@ -48,8 +48,8 @@ void LobberSeed::Update()
 	else
 	{
 		// time, G
-		G += (float)(9.8 * DELTA);
-		jumpSpeed -= G;
+		vel += (float)(G * DELTA);
+		jumpSpeed -= vel;
 
 		animRect->SetScale(Vector2(70, 73) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Seed");

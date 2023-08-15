@@ -35,7 +35,7 @@ private:
 
 	float time = 0.0f;
 
-	float G = 0.0f;
+	float vel = 0.0f;
 	float jumpSpeed = 0.0f;
 
 	bool bAttackLoop = false;

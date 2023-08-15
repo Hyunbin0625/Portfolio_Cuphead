@@ -8,13 +8,15 @@ public:
 public:
 	void Init(UINT totalBullet, float bulletSpeed, Vector2 position, float rotation, int currentPhase);
 	void InitBall();
+	void InitCoin(float rotation);
 
 	void Update();
 	void Render();
 
 public:
 	vector<shared_ptr<RibbyFist>> GetBullets() { return bullets; }
-	vector<shared_ptr<RibbyClapBall>> GetBalls() { return balls; }
+	vector<shared_ptr<RibbyBall>> GetBalls() { return balls; }
+	vector<shared_ptr<RibbyCoin>> GetCoins() { return coins; }
 
 	int GetCurrentIndex() { return currentIndex; }
 	bool GetEnd() { return bEnd; }
@@ -27,7 +29,8 @@ public:
 
 private:
 	vector<shared_ptr<RibbyFist>> bullets;
-	vector<shared_ptr<RibbyClapBall>> balls;
+	vector<shared_ptr<RibbyBall>> balls;
+	vector<shared_ptr<RibbyCoin>> coins;
 	mt19937 mt;
 
 	UINT totalBullet = 0;

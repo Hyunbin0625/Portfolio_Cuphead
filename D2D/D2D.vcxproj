@@ -20,11 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Boss\CroaksFirefly.cpp" />
+    <ClCompile Include="Boss\CroaksPBison.cpp" />
+    <ClCompile Include="Boss\CroaksPSnake.cpp" />
+    <ClCompile Include="Boss\CroaksPTiger.cpp" />
     <ClCompile Include="Boss\CroaksWind.cpp" />
-    <ClCompile Include="Boss\RibbyClapBall.cpp" />
+    <ClCompile Include="Boss\RibbyBall.cpp" />
+    <ClCompile Include="Boss\RibbyCoin.cpp" />
     <ClCompile Include="Boss\RibbyCroaks.cpp" />
     <ClCompile Include="Boss\RibbyFist.cpp" />
     <ClCompile Include="Boss\RibbyAttackManager.cpp" />
+    <ClCompile Include="Boss\Slot.cpp" />
+    <ClCompile Include="Boss\SlotManager.cpp" />
     <ClCompile Include="Bullet\PlayerBulletManager.cpp" />
     <ClCompile Include="Bullet\PlayerSpecialAttack.cpp" />
     <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp" />
@@ -102,11 +108,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Boss\CroaksFirefly.h" />
+    <ClInclude Include="Boss\CroaksPBison.h" />
+    <ClInclude Include="Boss\CroaksPSnake.h" />
+    <ClInclude Include="Boss\CroaksPTiger.h" />
     <ClInclude Include="Boss\CroaksWind.h" />
-    <ClInclude Include="Boss\RibbyClapBall.h" />
+    <ClInclude Include="Boss\RibbyBall.h" />
+    <ClInclude Include="Boss\RibbyCoin.h" />
     <ClInclude Include="Boss\RibbyCroaks.h" />
     <ClInclude Include="Boss\RibbyFist.h" />
     <ClInclude Include="Boss\RibbyAttackManager.h" />
+    <ClInclude Include="Boss\Slot.h" />
+    <ClInclude Include="Boss\SlotManager.h" />
     <ClInclude Include="Bullet\PlayerBulletManager.h" />
     <ClInclude Include="Bullet\PlayerSpecialAttack.h" />
     <ClInclude Include="Bullet\PlayerSpecialAttackManager.h" />

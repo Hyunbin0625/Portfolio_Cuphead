@@ -29,7 +29,13 @@ void RibbyAttackManager::Init(UINT totalBullet, float bulletSpeed, Vector2 posit
 	{
 		balls.resize(totalBullet);
 		for (auto& ball : balls)
-			ball = make_shared<RibbyClapBall>(bulletSpeed);
+			ball = make_shared<RibbyBall>(bulletSpeed);
+	}
+	else if (currentPhase == 3)
+	{
+		coins.resize(totalBullet);
+		for (auto& coin : coins)
+			coin = make_shared<RibbyCoin>(bulletSpeed);
 	}
 }
 
@@ -43,6 +49,18 @@ void RibbyAttackManager::InitBall()
 
 	if (!balls[currentIndex]->GetActivation())
 		balls[currentIndex++]->Init(Vector2(position.x, position.y + rebound * count), rotation);
+
+	if (currentIndex >= totalBullet)
+	{
+		currentIndex = 0;
+		bEnd = true;
+	}
+}
+
+void RibbyAttackManager::InitCoin(float rotation)
+{
+	if (!coins[currentIndex]->GetActivation())
+		coins[currentIndex++]->Init(Vector2(position.x, position.y + rebound * count), rotation);
 
 	if (currentIndex >= totalBullet)
 	{
@@ -119,6 +137,14 @@ void RibbyAttackManager::Update()
 
 		ball->Update();
 	}
+
+	for (auto& coin : coins)
+	{
+		coin->SetTotalSize(totalSize);
+		coin->SetSpeed(bulletSpeed);
+
+		coin->Update();
+	}
 }
 
 void RibbyAttackManager::Render()
@@ -132,5 +158,10 @@ void RibbyAttackManager::Render()
 	{
 		if (ball->GetActivation())
 			ball->Render();
+	}
+	for (auto& coin : coins)
+	{
+		if (coin->GetActivation())
+			coin->Render();
 	}
 }

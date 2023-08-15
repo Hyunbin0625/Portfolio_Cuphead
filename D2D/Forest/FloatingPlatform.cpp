@@ -30,7 +30,7 @@ bool FloatingPlatform::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
 		{
-			player->SetCheckCollider(true);
+		//	player->SetCheckCollider(true);
 			if (bPlatform)
 			{
 				player->SetPlatform(true);
@@ -52,11 +52,11 @@ bool FloatingPlatform::Collision(shared_ptr<Player> player)
 			player->SetGroundPos(Vector2(collision->GetPosition().x, collision->GetPosition().y + collision->GetScale().y / 2));
 
 			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collision->GetPosition().y + collision->GetScale().y / 2 - 1 && !bPlatform)
-			{
 				player->GetAnimRect()->Move(Vector2(0, 400));
-			}
+			return true;
 		}
 
+		// 충돌시 player가 object 아래인 경우
 		if (player->GetAnimRect()->GetPosition().y < collision->GetPosition().y - collision->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().x > collision->GetPosition().x - collision->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collision->GetPosition().x + collision->GetScale().x / 2)
@@ -87,8 +87,7 @@ bool FloatingPlatform::Collision(shared_ptr<Player> player)
 			}
 		}
 	}
-
-	return 0;
+	return false;
 }
 
 void FloatingPlatform::Update()

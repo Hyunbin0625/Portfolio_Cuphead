@@ -31,7 +31,7 @@ void Spiker::Collision(shared_ptr<Player> player)
 		if (parryTime < 0.5f && player->GetParry())
 		{
 			player->SetJumpSpeed(400.0f);
-			player->SetG(0.0f);
+			player->SetVel(0.0f);
 			player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
 			bActivation = false;
 			parryTime = 0.0f;

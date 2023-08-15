@@ -219,7 +219,7 @@ void Player::Update()
 		else if (INPUT->Down('Z') && checkCollider == 1)
 		{
 			++jumpCount;
-			G = 0;
+			vel = 0;
 			jumpSpeed = jumpMaxSpeed;
 			checkCollider = 0;
 		}
@@ -231,18 +231,24 @@ void Player::Update()
 	// Air or Ground
 	if (checkCollider == 0 && bSpecialAttack == 0 && bSuperBeam == 0 && !bMod && !bIntro)
 	{
-		G += (float)(9.8 * 700 * DELTA);
-		jumpSpeed -= G * DELTA;
+		vel += (float)(G * 700 * DELTA);
+		jumpSpeed -= vel * DELTA;
 
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
 
 		// Jump state
 		if (jumpCount == 1 || (jumpCount == 0 && jumpSpeed < -5.0f))	// º¸·ù
 		{
-			if (direction == Direction::R)
+			if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
+			{
+				direction = Direction::R;
 				state = PlayerState::Jump_R;
-			else
+			}
+			if (INPUT->Press(VK_LEFT) || direction == Direction::L)
+			{
+				direction = Direction::L;
 				state = PlayerState::Jump_L;
+			}
 		}
 
 		// Parry Slap
@@ -325,7 +331,7 @@ void Player::Update()
 		jumpDash = true;
 		jumpSpeed = 0;
 		jumpCount = 0;
-		G = 0;
+		vel = 0;
 
 		// Idle
 		if (direction == Direction::R)
@@ -558,13 +564,13 @@ void Player::Update()
 	if (dash == 1 && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
-		G = 0;
+		vel = 0;
 		state = PlayerState::Dash;
 	}
 	else if (dash == 2 && deltaTime >= 0.0f && deltaTime < 0.4f && bSpecialAttack == 0 && bSuperBeam == 0)
 	{
 		jumpSpeed = 0;
-		G = 0;
+		vel = 0;
 		state = PlayerState::DashLoop;
 	}
 

@@ -19,13 +19,18 @@ public:
 	void Collision(shared_ptr<Player> player);
 	void Init(Vector2 position, Vector2 startPos);
 
-	void Update() ;
-	void Render() ;
+	void Update();
+	void Render();
 
 	shared_ptr<AnimationRect> GetAnimRect()  { return animRect; }
 	bool GetActivation() { return bActivation; }
 
+	int GetHp() { return hp; }
+	float GetSpeed() { return speed; }
+
 	void SetActivation(bool bActivation) { this->bActivation = bActivation; }
+
+	void SetHp(int hp) { this->hp = hp; }
 	void SetSpeed(float speed) { this->speed = speed; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 

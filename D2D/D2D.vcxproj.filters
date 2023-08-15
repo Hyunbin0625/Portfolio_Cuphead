@@ -43,6 +43,9 @@
     <Filter Include="Forest">
       <UniqueIdentifier>{1b54bb7b-41d8-4b07-b366-e2d51c0a5f6b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Boss">
+      <UniqueIdentifier>{89496c11-3c91-46c0-a95e-0fc9ab8abfdf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -237,12 +240,34 @@
     <ClCompile Include="Scenes\Scene_RibbyCroaks.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Boss\RibbyAttackManager.cpp" />
-    <ClCompile Include="Boss\CroaksFirefly.cpp" />
-    <ClCompile Include="Boss\CroaksAttackManager.cpp" />
-    <ClCompile Include="Boss\RibbyFist.cpp" />
-    <ClCompile Include="Boss\RibbyClapBall.cpp" />
-    <ClCompile Include="Boss\CroaksWind.cpp" />
+    <ClCompile Include="Boss\CroaksAttackManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksFirefly.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksWind.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyAttackManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyBall.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyCoin.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyFist.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\Slot.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\SlotManager.cpp" />
+    <ClCompile Include="Boss\CroaksPSnake.cpp" />
+    <ClCompile Include="Boss\CroaksPTiger.cpp" />
+    <ClCompile Include="Boss\CroaksPBison.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -461,12 +486,34 @@
     <ClInclude Include="Scenes\Scene_RibbyCroaks.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Boss\RibbyAttackManager.h" />
-    <ClInclude Include="Boss\CroaksFirefly.h" />
-    <ClInclude Include="Boss\CroaksAttackManager.h" />
-    <ClInclude Include="Boss\RibbyFist.h" />
-    <ClInclude Include="Boss\RibbyClapBall.h" />
-    <ClInclude Include="Boss\CroaksWind.h" />
+    <ClInclude Include="Boss\CroaksAttackManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksFirefly.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksWind.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyAttackManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyBall.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyCoin.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyFist.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\Slot.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\SlotManager.h" />
+    <ClInclude Include="Boss\CroaksPSnake.h" />
+    <ClInclude Include="Boss\CroaksPTiger.h" />
+    <ClInclude Include="Boss\CroaksPBison.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

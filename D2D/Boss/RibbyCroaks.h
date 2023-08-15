@@ -6,8 +6,11 @@ enum class RibbyCroaksState
 	Idle,
 	Attack,
 	Intro,
+	Init,
+	Arm,
 	Start2P,
 	Start3P,
+	Death
 };
 
 struct RibbyCroaksInfo
@@ -39,10 +42,11 @@ public:
 public:
 	shared_ptr<AnimationRect> GetRibby() { return ribby; }
 	shared_ptr<AnimationRect> GetCroaks() { return croaks; }
+
 	int GetMaxHp() { return (int)maxHp; }
 	float GetDelay() { return delay; }
 
-	UINT GetHp() { return hp; }
+	int GetHp() { return hp; }
 
 	bool GetMod() { return bMod; }
 
@@ -57,9 +61,9 @@ private:
 	shared_ptr<AnimationRect> ribby;
 	shared_ptr<AnimationRect> croaks;
 	shared_ptr<RibbyAttackManager> ribbyAttack;
-	shared_ptr<CroaksAttackManager> fireFlyList;
 	unique_ptr<CroaksWind> croaksWind;
 	unique_ptr<ColorRect> collisionRect;
+	unique_ptr<ColorRect> collisionParry;
 
 	RibbyCroaksInfo ribbyInfo;
 	RibbyCroaksInfo croaksInfo;
@@ -73,14 +77,20 @@ private:
 	bool phaseIntro = false;
 
 	UINT maxHp = 0;
-	UINT hp = 0;
+	int hp = 0;
 
 	mt19937 mt;
 
 	bool bNone = false;
+	bool bInit = false;
 	int count = 0;
 	float delay = 0.0f;
 	float deltaTime = 0.0f;
 	float parryTime = 0.0f;
+	float bulletRotate = 0.0f;
+
+	bool check = false;
+	bool bArm = false;
+	bool bParrySlap = false;
 	bool bMod = false;
 };

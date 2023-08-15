@@ -12,6 +12,7 @@ void SceneRibbyCroaks::Init()
 	tempBackGround = make_unique<TextureRect>(CENTER, Vector2(1280, 720) * 1.4, 0.0f, L"_Textures/RibbyCroaks/FrogsBackGround.png");
 
 	forestObjectSet = make_unique<ForestObjectSet>();
+	objectList.push_back(make_shared<Forest_Ground>(Vector2(CAMERA->GetPosition().x + CENTER.x, -1.348), 6.0f, 0.0f, true));
 
 	player->SetIntro(true);
 	ribbyCroaks->SetCIntro(true);
@@ -23,13 +24,22 @@ void SceneRibbyCroaks::Destroy()
 
 void SceneRibbyCroaks::Update()
 {
-	CheckGround();
+	player->SetCheckCollider(false);
+	player->SetPlatform(false);
 
 	// Player&Enemies Collision
 	ribbyCroaks->Collision(player);
 
+	// EnemieBullet&Object Collision
+	float groundY = 0.0f;
+	for (auto& object : objectList)
+	{
+		if (object->GetState().type == ForestObjectType::Ground)
+			groundY = object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y * 0.5f;
+	}
+	CATTACKMANAGER->SetGroundY(groundY - 0.152f);
+
 	// Player&Object Collision
-	player->SetCheckCollider(false);
 	for (auto& object : objectList)
 	{
 		if (object->GetCollision())
@@ -53,7 +63,6 @@ void SceneRibbyCroaks::Update()
 		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 	else if (forestObjectSet->GetSelectedIndex() == 2)
 		objectList.push_back(make_shared<FloatingPlatform>(ForestObjectType::FPlatform_a, CAMERA->GetPosition() + CENTER, 0.72f, 0.0f, true, 1, 100.0f));
-
 
 	tempBackGround->Update();
 
@@ -212,9 +221,4 @@ void SceneRibbyCroaks::LoadRibbyCroaks(const wstring& path)
 		}
 		in.close();
 	}
-}
-
-void SceneRibbyCroaks::CheckGround()
-{
-
 }

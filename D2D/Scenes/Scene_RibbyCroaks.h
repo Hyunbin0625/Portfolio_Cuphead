@@ -15,9 +15,6 @@ public:
 	void SaveRibbyCroaks(const wstring& path = L"");
 	void LoadRibbyCroaks(const wstring& path = L"");
 
-	// 임시 함수
-	void CheckGround();
-
 private:
 	// Character
 	shared_ptr<Player> player;

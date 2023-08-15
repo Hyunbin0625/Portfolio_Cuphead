@@ -1,10 +1,10 @@
 #pragma once
 
-class RibbyClapBall
+class RibbyCoin
 {
 public:
-	RibbyClapBall() : RibbyClapBall(0.0f) {}
-	RibbyClapBall(float bulletSpeed);
+	RibbyCoin() : RibbyCoin(0.0f) {}
+	RibbyCoin(float bulletSpeed);
 
 public:
 	void Init(Vector2 position, float rotation);
@@ -19,16 +19,12 @@ public:
 
 	void SetActivation(bool bActivation) { this->bActivation = bActivation; }
 	void SetSpeed(float speed) { this->speed = speed; }
-	void SetRunTime(float runTime) { this->runTime = runTime; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 
 private:
 	shared_ptr<AnimationRect> animRect;
-	shared_ptr<AnimationRect> sfx;
 	bool bActivation = false;
 
 	float speed;
-	float runTime = 0.0f;
-
 	float totalSize = 1.0f;
 };

@@ -30,6 +30,12 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"ClapL", L"_Textures/RibbyCroaks/shortFrog_clap_loop.png", 15, true, false, 0.12));
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"ClapE", L"_Textures/RibbyCroaks/shortFrog_clap_end.png", 4, true, false, 0.1));
 
+	// Attack Spit
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"SpitC", L"_Textures/RibbyCroaks/tallfrog_slotman_spit.png", 6, false, false, 0.13));
+
+	// Croaks Attack Top
+	ribby->AddAnimClip(make_shared<AnimationClip>(L"MTop", L"_Textures/RibbyCroaks/tallfrog_slotman_attack_top.png", 6, false, true, 0.13));
+
 	// Roll_L
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollSL", L"_Textures/RibbyCroaks/shortFrog_roll_start_L.png", 14, false, false, 0.1));
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"RollLL", L"_Textures/RibbyCroaks/shortFrog_roll_loop_L.png", 8, false, true, 0.1));
@@ -64,7 +70,7 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	// Attack
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"SpitS", L"_Textures/RibbyCroaks/tallfrog_spit_start.png", 15, false, false, 0.12));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"SpitR", L"_Textures/RibbyCroaks/tallfrog_spit_rCharge.png", 15, false, false, 0.12));
-	croaks->AddAnimClip(make_shared<AnimationClip>(L"Spit", L"_Textures/RibbyCroaks/tallfrog_spit_shoot.png", 8, false, false, 0.1));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"SpitL", L"_Textures/RibbyCroaks/tallfrog_spit_shoot.png", 8, false, false, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"SpitE", L"_Textures/RibbyCroaks/tallfrog_spit_end.png", 14, false, false, 0.12));
 
 	// fan
@@ -72,10 +78,30 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"FanL", L"_Textures/RibbyCroaks/tallfrog_fan_loop.png", 4, false, true, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"FanE", L"_Textures/RibbyCroaks/tallfrog_fan_end.png", 14, false, false, 0.1));
 
+	// slotman
 	// morph
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphS", L"_Textures/RibbyCroaks/tallfrog_morph_start.png", 4, false, false, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphL", L"_Textures/RibbyCroaks/tallfrog_morph_loop.png", 3, false, true, 0.1));
 	croaks->AddAnimClip(make_shared<AnimationClip>(L"MorphE", L"_Textures/RibbyCroaks/tallfrog_morph_end.png", 25, false, false, 0.1));
+
+	// Initial Open
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MOpen", L"_Textures/RibbyCroaks/tallfrog_slotman_initial_open.png", 5, false, false, 0.13));
+
+	// Idle
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MIdle", L"_Textures/RibbyCroaks/tallfrog_slotman_idle.png", 3, false, true, 0.1));
+
+	// Arm
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MArmS", L"_Textures/RibbyCroaks/tallfrog_slotman_arm_down.png", 11, false, false, 0.13));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MArmL", L"_Textures/RibbyCroaks/tallfrog_slotman_arm_loop.png", 3, false, true, 0.13));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MArmE", L"_Textures/RibbyCroaks/tallfrog_slotman_arm_up.png", 13, false, false, 0.13));
+
+	// Attack
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MAttackS", L"_Textures/RibbyCroaks/tallfrog_slotman_attack_transition.png", 7, false, false, 0.13));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MAttackL", L"_Textures/RibbyCroaks/tallfrog_slotman_attack.png", 6, false, true, 0.13));
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"MAttackE", L"_Textures/RibbyCroaks/tallfrog_slotman_attack_transition.png", 7, true, false, 0.13));
+
+	// Death
+	croaks->AddAnimClip(make_shared<AnimationClip>(L"Death", L"_Textures/RibbyCroaks/tallfrog_slotman_death.png", 5, false, true, 0.1));
 
 	// AddAnimator
 	croaks->AddComponent(make_shared<AnimatorComponent>(croaks->GetAnimClips()));
@@ -85,15 +111,19 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	// Components
 	croaks->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 
-	// CroaksBullet
-	fireFlyList = make_shared<CroaksAttackManager>(7, 700.0f);
+	// CroaksAttack
+	CATTACKMANAGER->InitBullet(7, 700.0f);
 
 	// CroaksWind
 	croaksWind = make_unique<CroaksWind>(300.0f);
 
 	// Sub Collision Rect
-	collisionRect = make_unique<ColorRect>(Vector2(1000, -1000), Vector2(1, 1), 0.0f, BLACK);
-	collisionRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
+	collisionRect = make_unique<ColorRect>(Vector2(1000, -1000), Vector2(1, 1), 0.0f, GREEN);
+	collisionRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));	
+	
+	// Collision ParrySlap Rect
+	collisionParry = make_unique<ColorRect>(Vector2(1000, -1000), Vector2(1, 1), 0.0f, BLACK);
+	collisionParry->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
 }
 
 void RibbyCroaks::Collision(shared_ptr<Player> player)
@@ -106,7 +136,12 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 	}
 	else if (ribby->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
 		player->SetHit(true);
-	if (croaks->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+	if(currentPhase == 3 && !phaseIntro)
+	{
+		if (collisionRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && croaksInfo.bAttack)
+			player->SetHit(true);
+	}
+	else if (croaks->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
 		player->SetHit(true);
 
 	// RibbyFist&player
@@ -120,7 +155,7 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 				if (parryTime < 0.5f && player->GetParry())
 				{
 					player->SetJumpSpeed(400.0f);
-					player->SetG(0.0f);
+					player->SetVel(0.0f);
 					player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
 					ribbyAttack->GetBullets()[i]->SetActivation(false);
 					parryTime = 0.0f;
@@ -145,8 +180,15 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 				player->SetHit(true);
 	}
 
+	// RibbyCoin&player
+	for (int i = 0; i < ribbyAttack->GetCoins().size(); ++i)
+	{
+		if (ribbyAttack->GetCoins()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+			player->SetHit(true);
+	}
+
 	// CroaksFirefly&player
-	for (auto& firefly : fireFlyList->GetBullets())
+	for (auto& firefly : CATTACKMANAGER->GetBullets())
 	{
 		if (firefly->GetActivation())
 			firefly->Collision(player);
@@ -155,10 +197,43 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 	// CroaksWind&player
 	croaksWind->Collision(player);
 
+	// CroakspSnake&player
+	for (auto& pSnake : CATTACKMANAGER->GetPSnakeList())
+	{
+		if (pSnake->GetActivation())
+			pSnake->Collision(player);
+	}
+
+	// CroakspTiger&player
+	for (auto& pTiger : CATTACKMANAGER->GetPTigerList())
+	{
+		if (pTiger->GetActivation())
+			pTiger->Collision(player);
+	}
+
+	// CroakspBison&player
+	for (auto& pBison : CATTACKMANAGER->GetPBisonList())
+	{
+		if (pBison->GetActivation())
+			pBison->Collision(player);
+	}
+
 	// playerBullts&enemies
 	for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
 	{
-		if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
+		if (currentPhase == 3)
+		{
+			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
+			{
+				if (player->GetBullet()->GetBullets()[i]->GetHit())
+				{
+					player->GetBullet()->GetBullets()[i]->Hit();
+					if (croaksInfo.bAttack)
+						--hp;
+				}
+			}
+		}
+		else if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
 			|| player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
 		{
 			if (player->GetBullet()->GetBullets()[i]->GetHit())
@@ -172,20 +247,54 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 
 	for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
 	{
-		if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
-			|| player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
+		if (currentPhase == 3)
 		{
-			--hp;
+			if (croaksInfo.bAttack && player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
+				--hp;
 		}
+		else if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
+			|| player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
+			--hp;
 	}
 
-	if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
+	if (currentPhase == 3)
+	{
+		if (croaksInfo.bAttack && player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
+			--hp;
+	}
+	else if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(ribby->GET_COMP(Collider))
 		|| player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
 		--hp;
+
+	// playerPos, Bullet Rotation
+	if (currentPhase == 3 && rState == RibbyCroaksState::Attack)
+	{
+		float distance = (float)sqrt(pow(player->GetAnimRect()->GetPosition().x - ribby->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - ribby->GetPosition().y, 2));
+
+		Vector2 reference = ribby->GetPosition();
+		Vector2 point = Vector2(player->GetAnimRect()->GetPosition().x, player->GetAnimRect()->GetPosition().y);
+
+		float R = (float)sqrt(pow((point.x - reference.x), 2) + pow((point.y - reference.y), 2));
+		bulletRotate = acos((point.x - reference.x) / R);
+		bulletRotate = (bulletRotate * 180) / (float)acos(-1);
+	}
+
+	// Arm
+	if (collisionParry->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+	{
+		if (player->GetParry())
+		{
+			player->SetJumpSpeed(400.0f);
+			player->SetVel(0.0f);
+			player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
+			bParrySlap = true;
+		}
+	}
 }
 
 void RibbyCroaks::Update()
 {
+	cout << hp << '\n';
 	if((int)((float)hp / (float)maxHp * 100) <= SecPhase && currentPhase == 1 
 		&& rState == RibbyCroaksState::Idle && cState == RibbyCroaksState::Idle)
 	{
@@ -208,6 +317,7 @@ void RibbyCroaks::Update()
 
 		ribby->SetPosition(ribbyInfo.position);
 		croaks->SetPosition(croaksInfo.position);
+	//	hp = maxHp;
 		hp = 510;
 		phaseIntro = false;
 		croaksInfo.bIntro = true;
@@ -228,14 +338,27 @@ void RibbyCroaks::Update()
 		rState = RibbyCroaksState::Intro;
 
 	// attack
-	if (rState != RibbyCroaksState::Intro && cState != RibbyCroaksState::Intro)
+	if (currentPhase != 3 && rState != RibbyCroaksState::Intro && cState != RibbyCroaksState::Intro && !phaseIntro)
 	{
 		if (ribbyInfo.time >= delay && ribbyInfo.bAttack)
 			rState = RibbyCroaksState::Attack;
 		if (croaksInfo.time >= delay && croaksInfo.bAttack)
 			cState = RibbyCroaksState::Attack;
 	}
+	else if (currentPhase == 3 && !phaseIntro)
+	{
+		if (ribbyInfo.bAttack)
+			rState = RibbyCroaksState::Attack;
+		if (croaksInfo.bAttack)
+			cState = RibbyCroaksState::Attack;
+	}
 
+	if (bInit)
+		cState = RibbyCroaksState::Init;
+	else if (bArm)
+		cState = RibbyCroaksState::Arm;
+	else if (SLOTMANAGER->GetEnd())
+		croaksInfo.bAttack = true;
 
 	// nextPhase Intro
 	if (currentPhase == 2 && phaseIntro && rState == RibbyCroaksState::Idle && cState == RibbyCroaksState::Idle)
@@ -255,14 +378,34 @@ void RibbyCroaks::Update()
 	if (bNone)
 		rState = RibbyCroaksState::None;
 
+	// slotman CollisionRect Set
+	if (currentPhase == 3 && !phaseIntro)
+	{
+		collisionRect->SetPosition(Vector2(croaksInfo.position.x - 20.0f, croaksInfo.position.y));
+		collisionRect->SetScale(Vector2(480, 620) * croaksInfo.totalSize);
+	}
+	else
+		collisionRect->SetPosition(Vector2(1000, -1000));
+
+	if (hp <= 0)
+	{
+		bNone = true;
+		CATTACKMANAGER->SetPlatform(false);
+		SLOTMANAGER->SetActivation(false);
+		cState = RibbyCroaksState::Death;
+	}
+
 	// Ribby
 	switch (rState)
 	{
 	case  RibbyCroaksState::None:
-		ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
-		ribby->SetScale(Vector2(370, 350) * ribbyInfo.totalSize);
-		ribbyInfo.position = Vector2(1000, -1000);
-		ribby->SetPosition(ribbyInfo.position);
+		if (ribbyInfo.animCount == 0)
+		{
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"IdleL");
+			ribby->SetScale(Vector2(370, 350) * ribbyInfo.totalSize);
+			ribbyInfo.position = Vector2(1000, -1000);
+			ribby->SetPosition(ribbyInfo.position);
+		}
 		break;
 	case RibbyCroaksState::Idle:
 		if (currentPhase == 1)
@@ -277,7 +420,6 @@ void RibbyCroaks::Update()
 			ribby->SetScale(Vector2(370, 350) * ribbyInfo.totalSize);
 			ribby->SetPosition(ribbyInfo.position);
 		}
-
 		break;
 	case RibbyCroaksState::Attack:
 		if (currentPhase == 1)
@@ -384,6 +526,44 @@ void RibbyCroaks::Update()
 				}
 			}
 		}
+		else if (currentPhase == 3)
+		{
+			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"SpitC");
+			ribby->SetScale(Vector2(107, 46)* croaksInfo.totalSize);
+			// Coin
+			if (ribbyInfo.time > 0.3f && !ribbyInfo.bFrame)
+			{
+				ribbyAttack->InitCoin(bulletRotate);
+				ribbyInfo.bFrame = true;
+			}
+			// animatin End
+			if (ribby->GET_COMP(Animator)->GetEnd())
+			{
+				ribby->SetPosition(Vector2(1000, -1000));
+				if (ribbyInfo.time > 1.0f)
+				{
+					ribbyInfo.bFrame = false;
+					ribby->GET_COMP(Animator)->ResetFrame();
+					ribbyInfo.time = 0.0f;
+				}
+				// croaks Arm
+				if (!bArm && !check)
+				{
+					check = true;
+					croaksInfo.animCount = 0;
+					bInit = false;
+					bArm = true;
+				}
+				if (bParrySlap)
+				{
+					check = false;
+					bNone = true;
+					ribbyInfo.bAttack = false;
+				}
+			}
+			else
+				ribby->SetPosition(Vector2(croaksInfo.position.x - 72 * croaksInfo.totalSize, croaksInfo.position.y + 115 * croaksInfo.totalSize));
+		}
 		break;
 	case RibbyCroaksState::Intro:
 		if (ribbyInfo.bIntro && ribbyInfo.time >= 1.0f)
@@ -483,7 +663,6 @@ void RibbyCroaks::Update()
 			collisionRect->SetPosition(Vector2(1000, -1000));
 			bNone = true;
 		}
-
 		break;
 	}
 
@@ -493,9 +672,9 @@ void RibbyCroaks::Update()
 	case RibbyCroaksState::Idle:
 		if (currentPhase == 3)
 		{
-		//	croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"SIdle");
-		//	croaks->SetScale(Vector2(450, 583)* croaksInfo.totalSize);
-		//	croaks->SetPosition(croaksInfo.position);
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MIdle");
+			croaks->SetScale(Vector2(542, 631) * 1.09 * croaksInfo.totalSize);
+			croaks->SetPosition(croaksInfo.position);
 		}
 		else
 		{
@@ -515,7 +694,7 @@ void RibbyCroaks::Update()
 				if (croaks->GET_COMP(Animator)->GetEnd())
 				{
 					++croaksInfo.animCount;
-					fireFlyList->InitSize();
+					CATTACKMANAGER->InitSize();
 
 					uniform_int_distribution<int> randomCount(1, 2);
 					count = randomCount(mt);
@@ -523,12 +702,12 @@ void RibbyCroaks::Update()
 			}
 			else if (croaksInfo.animCount == 1)
 			{
-				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"Spit");
+				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"SpitL");
 				croaks->SetScale(Vector2(500, 540) * croaksInfo.totalSize);
 				croaks->SetPosition(Vector2(croaksInfo.position.x - 15 * croaksInfo.totalSize, croaksInfo.position.y - 25 * croaksInfo.totalSize));
 				if (croaks->GET_COMP(Animator)->GetCurrentFrameIndex() == 4 && !croaksInfo.bFrame)
 				{
-					fireFlyList->InitPos(croaksInfo.position);
+					CATTACKMANAGER->InitPos(croaksInfo.position);
 					croaksInfo.bFrame = true;
 				}
 				if (croaks->GET_COMP(Animator)->GetEnd())
@@ -537,7 +716,7 @@ void RibbyCroaks::Update()
 					--count;
 					if (count == 0)
 					{
-						if (fireFlyList->Remainder() == 0)
+						if (CATTACKMANAGER->Remainder() == 0)
 							croaksInfo.animCount += 2;
 						else
 							++croaksInfo.animCount;
@@ -553,7 +732,7 @@ void RibbyCroaks::Update()
 				croaks->SetPosition(Vector2(croaksInfo.position.x + 22 * croaksInfo.totalSize, croaksInfo.position.y + 27 * croaksInfo.totalSize));
 				if (croaks->GET_COMP(Animator)->GetEnd())
 				{
-					if (fireFlyList->Remainder() == 1)
+					if (CATTACKMANAGER->Remainder() == 1)
 						count = 1;
 					else
 					{
@@ -631,6 +810,57 @@ void RibbyCroaks::Update()
 				}
 			}
 		}
+		else if (currentPhase == 3)
+		{
+			if (croaksInfo.animCount == 0)
+			{
+				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MAttackS");
+				croaks->SetScale(Vector2(595, 655) * 1.09 * croaksInfo.totalSize);
+				croaks->SetPosition(Vector2(croaksInfo.position.x, croaksInfo.position.y + 14 * croaksInfo.totalSize));
+				if (croaks->GET_COMP(Animator)->GetEnd())
+				{
+					// attack object
+					CATTACKMANAGER->InitPlatform(Vector2(croaks->GetPosition().x, croaks->GetPosition().y - 150.0f), 600.0f, SLOTMANAGER->GetType());
+					++croaksInfo.animCount;
+
+					bNone = false;
+					++ribbyInfo.animCount;
+				}
+			}
+			else if (croaksInfo.animCount == 1)
+			{
+				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MAttackL");
+				croaks->SetScale(Vector2(535, 665) * 1.09 * croaksInfo.totalSize);
+				croaks->SetPosition(Vector2(croaksInfo.position.x - 43 * croaksInfo.totalSize, croaksInfo.position.y + 12 * croaksInfo.totalSize));
+				// Top animation
+				ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"MTop");
+				ribby->SetScale(Vector2(535, 665) * 1.09 * croaksInfo.totalSize);
+				ribby->SetPosition(Vector2(croaksInfo.position.x - 43 * croaksInfo.totalSize, croaksInfo.position.y + 12 * croaksInfo.totalSize));
+
+				if (CATTACKMANAGER->GetEnd())
+				{
+					++croaksInfo.animCount;
+					ribbyInfo.animCount = 0;
+
+					SLOTMANAGER->Init(croaksInfo.position, 1.0f);
+				}
+			}
+			else
+			{
+				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MAttackE");
+				croaks->SetScale(Vector2(595, 655) * 1.09 * croaksInfo.totalSize);
+				croaks->SetPosition(Vector2(croaksInfo.position.x, croaksInfo.position.y + 14 * croaksInfo.totalSize));
+				if (croaks->GET_COMP(Animator)->GetEnd())
+				{
+					croaksInfo.animCount = 0;
+					croaksInfo.bAttack = false;
+
+					ribbyInfo.time = 0.0f;
+					ribbyInfo.bAttack = true;
+					ribbyAttack->Init(2, 700.0f, Vector2(croaksInfo.position.x - 95 * croaksInfo.totalSize, croaksInfo.position.y + 115 * croaksInfo.totalSize), 0.0f, currentPhase);
+				}
+			}
+		}
 		break;
 	case RibbyCroaksState::Intro:
 		if (croaksInfo.bIntro && croaksInfo.time >= 2.0f)
@@ -645,6 +875,72 @@ void RibbyCroaks::Update()
 				croaksInfo.time = 0.0f;
 				ribbyInfo.time = 0.0f;
 				cState = RibbyCroaksState::Idle;
+			}
+		}
+		break;
+	case RibbyCroaksState::Init:
+		if (croaksInfo.animCount == 0)
+		{
+			SLOTMANAGER->Init(croaksInfo.position, 1.0f);
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MOpen");
+			croaks->SetScale(Vector2(542, 631) * 1.09 * croaksInfo.totalSize);
+			croaksInfo.position = Vector2(1064, 330);
+			croaks->SetPosition(croaksInfo.position);
+			if (croaks->GET_COMP(Animator)->GetEnd())
+			{
+				++croaksInfo.animCount;
+				croaksInfo.time = 0.0f;
+			}
+		}
+		else if (croaksInfo.animCount == 1)
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MIdle");
+			croaks->SetScale(Vector2(542, 631) * 1.09 * croaksInfo.totalSize);
+			croaks->SetPosition(croaksInfo.position);
+			if (croaksInfo.time > 2.0f && bNone)
+			{
+				bNone = false;
+				ribbyInfo.time = 0.0f;
+				ribbyInfo.bAttack = true;
+				ribbyAttack->Init(2, 700.0f, Vector2(croaksInfo.position.x - 95 * croaksInfo.totalSize, croaksInfo.position.y + 115 * croaksInfo.totalSize), 0.0f, currentPhase);
+			}
+		}
+		break;
+	case RibbyCroaksState::Arm:
+		if (croaksInfo.animCount == 0)
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MArmS");
+			croaks->SetScale(Vector2(734, 631) * 1.09 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 99 * croaksInfo.totalSize, croaksInfo.position.y - 4 * croaksInfo.totalSize));
+			if (croaks->GET_COMP(Animator)->GetEnd())
+				++croaksInfo.animCount;
+		}
+		else if (croaksInfo.animCount == 1)
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MArmL");
+			croaks->SetScale(Vector2(748, 631) * 1.09 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 112 * croaksInfo.totalSize, croaksInfo.position.y));
+			// collisionParry
+			collisionParry->SetPosition(Vector2(croaksInfo.position.x - 455.0f, croaksInfo.position.y - 15.0f));
+			collisionParry->SetScale(Vector2(98, 98)* croaksInfo.totalSize);
+			if (bParrySlap)
+			{
+				collisionParry->SetPosition(Vector2(1000, -1000));
+				++croaksInfo.animCount;
+				// Slot의 Start 호출
+				SLOTMANAGER->Start();
+			}
+		}
+		else
+		{
+			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MArmE");
+			croaks->SetScale(Vector2(734, 631) * 1.09 * croaksInfo.totalSize);
+			croaks->SetPosition(Vector2(croaksInfo.position.x - 99 * croaksInfo.totalSize, croaksInfo.position.y - 4 * croaksInfo.totalSize));
+			if (croaks->GET_COMP(Animator)->GetEnd())
+			{
+				bParrySlap = false;
+				bArm = false;
+				croaksInfo.animCount = 0;
 			}
 		}
 		break;
@@ -683,36 +979,49 @@ void RibbyCroaks::Update()
 			{
 				croaksInfo.animCount = 0;
 				phaseIntro = false;
+				bInit = true;
 			}
 		}
 		break;
+	case RibbyCroaksState::Death:
+		croaks->SetScale(Vector2(560, 640) * 1.09 * croaksInfo.totalSize);
+		croaks->SetPosition(Vector2(croaksInfo.position.x + 0 * croaksInfo.totalSize, croaksInfo.position.y + 0 * croaksInfo.totalSize));
+		croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
+	break;
 	}
 
+	SLOTMANAGER->Update();
 	ribbyAttack->SetTotalSize(ribbyInfo.totalSize);
-	fireFlyList->SetTotalSize(croaksInfo.totalSize);
+	CATTACKMANAGER->SetTotalSize(croaksInfo.totalSize);
 	croaks->Update();
 	ribby->Update();
 	ribbyAttack->Update();
-	fireFlyList->Update();
+	CATTACKMANAGER->Update();
 	croaksWind->Update();
 	if (collisionRect->GetPosition().y != -1000)
 		collisionRect->Update();
+	if (collisionParry->GetPosition().y != -1000)
+		collisionParry->Update();
 }
 
 void RibbyCroaks::Render()
 {
-	fireFlyList->Render();
-	croaks->Render();
-	croaksWind->Render();
-	ribbyAttack->Render();
 //	if (collisionRect->GetPosition().y != -1000)
 //		collisionRect->Render();
+//	if (collisionParry->GetPosition().y != -1000)
+//		collisionParry->Render();
+	SLOTMANAGER->Render();
+	croaks->Render();
+	CATTACKMANAGER->Render();
+	croaksWind->Render();
+	ribbyAttack->Render();
 	if (!bNone)
 		ribby->Render();
 }
 
 void RibbyCroaks::GUI()
 {
+	CATTACKMANAGER->GUI();
 	static bool bOpen = true;
 	if (ImGui::Begin("RibbyCroaks", &bOpen))
 	{

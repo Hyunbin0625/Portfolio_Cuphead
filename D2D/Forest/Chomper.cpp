@@ -6,7 +6,7 @@ Chomper::Chomper(const Vector2& position, float totailSize, float speed, int max
 {
 	// 초기화
 	time = (float)maxHp;	// maxHp를 재활용해, time 추가
-	G = 0.0f;
+	vel = 0.0f;
 	jumpSpeed = speed;
 
 	animRect = make_shared<AnimationRect>(position, Vector2(196, 486) * state.totalSize, 0.0f, L"_Textures/Enemy/chomper_attack.png");
@@ -34,7 +34,7 @@ void Chomper::Collision(shared_ptr<Player> player)
 void Chomper::Init()
 {
 	animRect->SetPosition(state.position);
-	G = 0.0f;
+	vel = 0.0f;
 	time = 0.0f;
 	jumpSpeed = state.speed;
 }
@@ -52,8 +52,8 @@ void Chomper::Update()
 
 	if (time >= state.regenTime)
 	{
-		G += (float)(9.8 * DELTA);
-		jumpSpeed -= G;
+		vel += (float)(G * DELTA);
+		jumpSpeed -= vel;
 
 		if (bAttackLoop)
 		{

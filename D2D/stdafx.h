@@ -87,6 +87,8 @@ using namespace SimpleMath;
 #define WHITE Color(1, 1, 1, 1)
 #define BLACK Color(0, 0, 0, 1)
 
+#define G 9.8f
+
 #define SUPER __super
 
 //Singleton
@@ -209,11 +211,23 @@ extern float gWinHeight;
 #include "Forest/Forest_Wall.h"
 #include "Forest/FloatingPlatform.h"
 
+// Slot
+#include "Boss/Slot.h"
+#include "Boss/SlotManager.h"
+#define SLOTMANAGER SlotManager::Get()
+
+#include "Boss/CroaksFirefly.h"
+#include "Boss/CroaksPSnake.h"
+#include "Boss/CroaksPTiger.h"
+#include "Boss/CroaksPBison.h"
+#include "Boss/CroaksAttackManager.h"
+
+#define CATTACKMANAGER CroaksAttackManager::Get()
+
 // Boss
 #include "Boss/RibbyFist.h"
-#include "Boss/RibbyClapBall.h"
+#include "Boss/RibbyBall.h"
+#include "Boss/RibbyCoin.h"
 #include "Boss/RibbyAttackManager.h"
-#include "Boss/CroaksFirefly.h"
 #include "Boss/CroaksWind.h"
-#include "Boss/CroaksAttackManager.h"
 #include "Boss/RibbyCroaks.h"
