@@ -283,6 +283,7 @@
     <ClCompile Include="Boss\Pirate.cpp" />
     <ClCompile Include="Bullet\PiratePeaBulletManager.cpp" />
     <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
+    <ClCompile Include="Monster\Barrel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -544,6 +545,7 @@
     <ClInclude Include="Boss\Pirate.h" />
     <ClInclude Include="Bullet\PiratePeaBulletManager.h" />
     <ClInclude Include="Bullet\PirateCannonBallManager.h" />
+    <ClInclude Include="Monster\Barrel.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

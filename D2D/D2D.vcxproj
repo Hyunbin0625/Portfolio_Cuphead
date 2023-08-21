@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Monster\Barrel.cpp" />
     <ClCompile Include="Boss\Pirate.cpp" />
     <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
     <ClCompile Include="Bullet\PiratePeaBulletManager.cpp" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Monster\Barrel.h" />
     <ClInclude Include="Boss\Pirate.h" />
     <ClInclude Include="Bullet\PirateCannonBallManager.h" />
     <ClInclude Include="Bullet\PiratePeaBulletManager.h" />

@@ -94,6 +94,20 @@ void ScenePirate::Update()
 			player->SetHit(true);
 	}
 
+	// Barrel&Object Collision
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision() && BARREL->GetDrop())
+		{
+			if (BARREL->GetAnimRect()->GET_COMP(Collider)->Intersect(object->GetTextureRect()->GET_COMP(Collider)))
+			{
+				BARREL->SetDrop(false);
+				BARREL->SetSmash(true);
+			}
+		}
+	}
+	BARREL->Collision(player->GetPosition());
+
 	// Player&Object Collision
 	for (auto& object : objectList)
 	{
@@ -144,6 +158,7 @@ void ScenePirate::Update()
 	UI->Update();
 
 	CAMERA->Update();
+	BARREL->Update();
 }
 
 void ScenePirate::PreRender()
@@ -162,6 +177,7 @@ void ScenePirate::Render()
 	{
 		pirate->Render();
 		player->Render();
+		BARREL->Render();
 	}
 	ground->FRender();
 	waterList.front()->Render();
@@ -179,6 +195,7 @@ void ScenePirate::PostRender()
 	player->GUI();
 	pirate->GUI();
 	forestObjectSet->GUI();
+	BARREL->GUI();
 	IMGUI->ForestObjectGUIS(objectList, "Object");
 
 	static bool bOpen = true;

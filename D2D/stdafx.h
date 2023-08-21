@@ -237,6 +237,10 @@ extern float gWinHeight;
 #include "Boss/CroaksWind.h"
 #include "Boss/RibbyCroaks.h"
 
+// Monster
+#include "Monster/Barrel.h"
+#define BARREL Barrel::Get()
+
 // Pirate
 #include "Pirate/BG_Cloud.h"
 #include "Pirate/BG_Water.h"
