@@ -264,10 +264,25 @@
     <ClCompile Include="Boss\Slot.cpp">
       <Filter>Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Boss\SlotManager.cpp" />
-    <ClCompile Include="Boss\CroaksPSnake.cpp" />
-    <ClCompile Include="Boss\CroaksPTiger.cpp" />
-    <ClCompile Include="Boss\CroaksPBison.cpp" />
+    <ClCompile Include="Boss\CroaksPBison.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksPSnake.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksPTiger.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\SlotManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Pirate.cpp" />
+    <ClCompile Include="Pirate\BG_Cloud.cpp" />
+    <ClCompile Include="Pirate\BG_Water.cpp" />
+    <ClCompile Include="Pirate\BG_Ground.cpp" />
+    <ClCompile Include="Boss\Pirate.cpp" />
+    <ClCompile Include="Bullet\PiratePeaBulletManager.cpp" />
+    <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -510,10 +525,25 @@
     <ClInclude Include="Boss\Slot.h">
       <Filter>Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Boss\SlotManager.h" />
-    <ClInclude Include="Boss\CroaksPSnake.h" />
-    <ClInclude Include="Boss\CroaksPTiger.h" />
-    <ClInclude Include="Boss\CroaksPBison.h" />
+    <ClInclude Include="Boss\CroaksPBison.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksPSnake.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksPTiger.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\SlotManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Pirate.h" />
+    <ClInclude Include="Pirate\BG_Cloud.h" />
+    <ClInclude Include="Pirate\BG_Water.h" />
+    <ClInclude Include="Pirate\BG_Ground.h" />
+    <ClInclude Include="Boss\Pirate.h" />
+    <ClInclude Include="Bullet\PiratePeaBulletManager.h" />
+    <ClInclude Include="Bullet\PirateCannonBallManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

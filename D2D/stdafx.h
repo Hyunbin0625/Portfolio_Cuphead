@@ -174,6 +174,11 @@ extern float gWinHeight;
 #include "Bullet/PlayerSpecialAttack.h"
 #include "Bullet/PlayerSpecialAttackManager.h"
 #include "Bullet/SuperBeam.h"
+#include "Bullet/PiratePeaBulletManager.h"
+#include "Bullet/PirateCannonBallManager.h"
+
+#define PEABULLETMANAGER PiratePeaBulletManager::Get()
+#define CANNONBALLMANAGER PirateCannonBallManager::Get()
 
 // Character
 #include "Character/Player.h"
@@ -231,3 +236,10 @@ extern float gWinHeight;
 #include "Boss/RibbyAttackManager.h"
 #include "Boss/CroaksWind.h"
 #include "Boss/RibbyCroaks.h"
+
+// Pirate
+#include "Pirate/BG_Cloud.h"
+#include "Pirate/BG_Water.h"
+#include "Pirate/BG_Ground.h"
+
+#include "Boss/Pirate.h"

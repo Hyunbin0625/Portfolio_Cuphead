@@ -188,5 +188,5 @@ private:
 
 	bool bIntro = false;
 
-	bool bMod = 0;
+	bool bMod = false;
 };

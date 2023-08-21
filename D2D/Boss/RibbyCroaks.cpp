@@ -5,7 +5,7 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	: ribbyInfo(ribbyInfo), croaksInfo(croaksInfo), maxHp(maxHp), delay(delay)
 {
 	// ÃÊ±âÈ­
-	hp = 510;
+	hp = maxHp;
 	random_device random;
 	mt = mt19937(random());
 
@@ -16,7 +16,7 @@ RibbyCroaks::RibbyCroaks(RibbyCroaksInfo ribbyInfo, RibbyCroaksInfo croaksInfo, 
 	// Idle
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"IdleR", L"_Textures/RibbyCroaks/shortFrog_idle_R.png", 36, true, true, 0.1));
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"IdleL", L"_Textures/RibbyCroaks/shortFrog_idle_L.png", 36, false, true, 0.1));
-
+	
 	// Intro
 	ribby->AddAnimClip(make_shared<AnimationClip>(L"Intro", L"_Textures/RibbyCroaks/shortFrog_intro.png", 15, false, false, 0.1));
 
@@ -294,7 +294,6 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 
 void RibbyCroaks::Update()
 {
-	cout << hp << '\n';
 	if((int)((float)hp / (float)maxHp * 100) <= SecPhase && currentPhase == 1 
 		&& rState == RibbyCroaksState::Idle && cState == RibbyCroaksState::Idle)
 	{
@@ -317,8 +316,7 @@ void RibbyCroaks::Update()
 
 		ribby->SetPosition(ribbyInfo.position);
 		croaks->SetPosition(croaksInfo.position);
-	//	hp = maxHp;
-		hp = 510;
+		hp = maxHp;
 		phaseIntro = false;
 		croaksInfo.bIntro = true;
 		ribbyInfo.bIntro = false;

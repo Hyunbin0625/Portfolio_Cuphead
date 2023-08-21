@@ -311,30 +311,30 @@ void CroaksAttackManager::FireFlyGUI()
 
 void CroaksAttackManager::PSnakeGUI()
 {
-	string objName = "PlatformSnake";
+		string objName = "PlatformSnake";
 
-	if (ImGui::BeginMenu(objName.c_str()))
-	{
-		for (auto& pSnake : pSnakeList)
-			pSnake->GetAnimRect()->SetOutline(true);
-
-		ImGui::Text(objName.c_str());
-
-		ImGui::InputFloat("RegenTime", &regenTime);
-		float tempSpeed = pSnakeList[0]->GetSpeed();
-		if (ImGui::SliderFloat("Speed", &tempSpeed, 500.0f, 1000.0f, "%.2f"))
+		if (ImGui::BeginMenu(objName.c_str()))
 		{
 			for (auto& pSnake : pSnakeList)
-				pSnake->SetSpeed(tempSpeed);
-		}
+				pSnake->GetAnimRect()->SetOutline(true);
 
-		ImGui::EndMenu();
-	}
-	else
-	{
-		for (auto& pSnake : pSnakeList)
-			pSnake->GetAnimRect()->SetOutline(false);
-	}
+			ImGui::Text(objName.c_str());
+
+			ImGui::InputFloat("RegenTime", &regenTime);
+			float tempSpeed = pSnakeList[0]->GetSpeed();
+			if (ImGui::SliderFloat("Speed", &tempSpeed, 500.0f, 1000.0f, "%.2f"))
+			{
+				for (auto& pSnake : pSnakeList)
+					pSnake->SetSpeed(tempSpeed);
+			}
+
+			ImGui::EndMenu();
+		}
+		else
+		{
+			for (auto& pSnake : pSnakeList)
+				pSnake->GetAnimRect()->SetOutline(false);
+		}
 }
 
 void CroaksAttackManager::PTigerGUI()

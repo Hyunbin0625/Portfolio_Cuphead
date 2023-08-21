@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boss\Pirate.cpp" />
+    <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
+    <ClCompile Include="Bullet\PiratePeaBulletManager.cpp" />
+    <ClCompile Include="Pirate\BG_Cloud.cpp" />
     <ClCompile Include="Boss\CroaksFirefly.cpp" />
     <ClCompile Include="Boss\CroaksPBison.cpp" />
     <ClCompile Include="Boss\CroaksPSnake.cpp" />
@@ -55,8 +59,11 @@
     <ClCompile Include="Forest\MRPoisonManager.cpp" />
     <ClCompile Include="Forest\Spiker.cpp" />
     <ClCompile Include="Objects\SFX.cpp" />
+    <ClCompile Include="Pirate\BG_Ground.cpp" />
+    <ClCompile Include="Pirate\BG_Water.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
+    <ClCompile Include="Scenes\Scene_Pirate.cpp" />
     <ClCompile Include="Scenes\Scene_RibbyCroaks.cpp" />
     <ClCompile Include="Scenes\Scene_Test.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -107,6 +114,10 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boss\Pirate.h" />
+    <ClInclude Include="Bullet\PirateCannonBallManager.h" />
+    <ClInclude Include="Bullet\PiratePeaBulletManager.h" />
+    <ClInclude Include="Pirate\BG_Cloud.h" />
     <ClInclude Include="Boss\CroaksFirefly.h" />
     <ClInclude Include="Boss\CroaksPBison.h" />
     <ClInclude Include="Boss\CroaksPSnake.h" />
@@ -145,8 +156,11 @@
     <ClInclude Include="Forest\MRPoisonManager.h" />
     <ClInclude Include="Forest\Spiker.h" />
     <ClInclude Include="Objects\SFX.h" />
+    <ClInclude Include="Pirate\BG_Ground.h" />
+    <ClInclude Include="Pirate\BG_Water.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />
+    <ClInclude Include="Scenes\Scene_Pirate.h" />
     <ClInclude Include="Scenes\Scene_RibbyCroaks.h" />
     <ClInclude Include="Scenes\Scene_Test.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

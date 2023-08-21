@@ -23,7 +23,7 @@ void CroaksPSnake::Collision(shared_ptr<Player> player)
 	if (collisionRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
 	{
 		// 충돌시 player가 object 위인 경우
-		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 <= collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
+		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 - 1<= collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2)
 		{
