@@ -38,18 +38,19 @@ Barrel::Barrel()
 
 Barrel::~Barrel() {}
 
-void Barrel::Collision(Vector2 playerPos)
+void Barrel::Collision(shared_ptr<Player> player)
 {
 	if (state == BarrelState::Idle && animRect->GET_COMP(Animator)->GetEnd()
-		&& playerPos.x >= animRect->GetPosition().x - animRect->GetScale().x * 0.5f
-		&& playerPos.x <= animRect->GetPosition().x + animRect->GetScale().x * 0.5f)
+		&& player->GetAnimRect()->GetPosition().x >= animRect->GetPosition().x - animRect->GetScale().x * 0.5f
+		&& player->GetAnimRect()->GetPosition().x <= animRect->GetPosition().x + animRect->GetScale().x * 0.5f)
 		bDrop = true;
+
+	if (animRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+		player->SetHit(true);
 }
 
 void Barrel::Update()
 {
-	
-
 	// Move
 	if (state == BarrelState::Idle || state == BarrelState::Safe)
 	{
@@ -182,7 +183,7 @@ void Barrel::Update()
 			fx->SetPosition(position + Vector2(0, -50) * totalSize);
 
 			dust->SetScale(Vector2(477, 130)* totalSize);
-			dust->SetPosition(position + Vector2(0, -130) * totalSize);
+			dust->SetPosition(position + Vector2(0, -80) * totalSize);
 
 			if (fx->GET_COMP(Animator)->GetEnd())
 			{
@@ -233,12 +234,12 @@ void Barrel::Update()
 
 void Barrel::Render()
 {
+	animRect->Render();
 	if (state == BarrelState::Smash)
 	{
 		fx->Render();
 		dust->Render();
 	}
-	animRect->Render();
 }
 
 void Barrel::GUI()

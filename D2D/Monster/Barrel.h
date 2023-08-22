@@ -15,7 +15,7 @@ public:
 	DECLARE_SINGLETON(Barrel);
 
 public:
-	void Collision(Vector2 playerPos);
+	void Collision(shared_ptr<Player> player);
 
 	void Update();
 	void Render();
@@ -43,7 +43,7 @@ private:
 	bool moveDrctn = false;
 	bool animDrctn = false;
 	float time = 0.0f;
-	float safeTime = 3.0f;
+	float safeTime = 4.0f;
 
 	int animCount = 0;
 	bool bDrop = false;

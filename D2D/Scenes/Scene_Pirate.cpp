@@ -106,7 +106,7 @@ void ScenePirate::Update()
 			}
 		}
 	}
-	BARREL->Collision(player->GetPosition());
+	BARREL->Collision(player);
 
 	// Player&Object Collision
 	for (auto& object : objectList)
