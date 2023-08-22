@@ -31,7 +31,8 @@ public:
 	
 private:
 	shared_ptr<AnimationRect> animRect;
-	shared_ptr<AnimationRect> SFX;
+	shared_ptr<AnimationRect> fx;
+	shared_ptr<AnimationRect> dust;
 	
 	BarrelState state = BarrelState::Idle;
 	Vector2 position = Vector2(1100, 680);

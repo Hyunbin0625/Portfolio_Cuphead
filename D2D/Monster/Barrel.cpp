@@ -4,7 +4,8 @@
 Barrel::Barrel()
 {
 	animRect = make_shared<AnimationRect>(Vector2(), Vector2(), 0.0f, L"_Textures/Pirate/pirate_barrelIdle_L.png");
-	SFX = make_shared<AnimationRect>(Vector2(1000, -1000), Vector2(), 0.0f, L"_Textures/Pirate/pirate_barrelFx.png");
+	fx = make_shared<AnimationRect>(Vector2(1000, -1000), Vector2(), 0.0f, L"_Textures/Pirate/pirate_barrelFx.png");
+	dust = make_shared<AnimationRect>(Vector2(1000, -1000), Vector2(), 0.0f, L"_Textures/Pirate/pirate_barrelDust.png");
 
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"IdleL", L"_Textures/Pirate/pirate_barrelIdle_L.png", 10, false, false, 0.12f));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"IdleR", L"_Textures/Pirate/pirate_barrelIdle_R.png", 10, false, false, 0.12f));
@@ -21,12 +22,16 @@ Barrel::Barrel()
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"Up01", L"_Textures/Pirate/pirate_barrelSmash.png", 3, true, false, 0.1f));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"Up02", L"_Textures/Pirate/pirate_barrelUp.png", 6, false, false, 0.1f));
 
-	SFX->AddAnimClip(make_shared<AnimationClip>(L"Fx", L"_Textures/Pirate/pirate_barrelFx.png", 12, false, false, 0.1f));
+	fx->AddAnimClip(make_shared<AnimationClip>(L"Fx", L"_Textures/Pirate/pirate_barrelFx.png", 12, false, false, 0.1f));
+	dust->AddAnimClip(make_shared<AnimationClip>(L"Dust", L"_Textures/Pirate/pirate_barrelDust.png", 23, false, false, 0.1f));
 
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
-	SFX->AddComponent(make_shared<AnimatorComponent>(SFX->GetAnimClips()));
+	fx->AddComponent(make_shared<AnimatorComponent>(fx->GetAnimClips()));
+	dust->AddComponent(make_shared<AnimatorComponent>(dust->GetAnimClips()));
+
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
-	SFX->SetAnimator(SFX->GET_COMP(Animator));
+	fx->SetAnimator(fx->GET_COMP(Animator));
+	dust->SetAnimator(dust->GET_COMP(Animator));
 
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 }
@@ -131,11 +136,26 @@ void Barrel::Update()
 		}
 		break;
 	case BarrelState::Drop:
-		val += G * DELTA;
-		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop03");
-		animRect->SetScale(Vector2(165, 825) * totalSize);
-		animRect->SetPosition(position + Vector2(0, 275) * totalSize);
+		val += G * 1.5 * DELTA;
 
+		if (val <= 3.0f)
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop01");
+			animRect->SetScale(Vector2(165, 825) * totalSize);
+			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
+		}
+		else if (val <= 6.0f)
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop02");
+			animRect->SetScale(Vector2(165, 825) * totalSize);
+			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
+		}
+		else
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop03");
+			animRect->SetScale(Vector2(165, 825) * totalSize);
+			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
+		}
 		position.y -= val;
 		break;
 	case BarrelState::Smash:
@@ -147,8 +167,9 @@ void Barrel::Update()
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
 				++animCount;
-				SFX->GET_COMP(Animator)->ResetFrame();
-			//	val = 0.0f;
+
+				dust->GET_COMP(Animator)->ResetFrame();
+				fx->GET_COMP(Animator)->ResetFrame();
 			}
 		}
 		else
@@ -156,17 +177,21 @@ void Barrel::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SmashL");
 			animRect->SetScale(Vector2(263, 834) * totalSize);
 			animRect->SetPosition(position + Vector2(0, 279.5f) * totalSize);
-		}
 
-		SFX->SetScale(Vector2(623, 380) * totalSize);
-		SFX->SetPosition(position + Vector2(0, -50) * totalSize);
-		if (SFX->GET_COMP(Animator)->GetEnd())
-		{
-			animCount = 0;
-			bSmash = false;
-			bUp = true;
+			fx->SetScale(Vector2(623, 380)* totalSize);
+			fx->SetPosition(position + Vector2(0, -50) * totalSize);
 
-			SFX->SetPosition(Vector2(1000, -1000));
+			dust->SetScale(Vector2(477, 130)* totalSize);
+			dust->SetPosition(position + Vector2(0, -130) * totalSize);
+
+			if (fx->GET_COMP(Animator)->GetEnd())
+			{
+				animCount = 0;
+				bSmash = false;
+				bUp = true;
+
+				fx->SetPosition(Vector2(1000, -1000));
+			}
 		}
 		break;
 	case BarrelState::Up:
@@ -195,17 +220,24 @@ void Barrel::Update()
 				bSafe = true;
 			}
 		}
+
+		if (dust->GET_COMP(Animator)->GetEnd())
+			dust->SetPosition(Vector2(1000, -1000));
 		break;
 	}
 
-	SFX->Update();
+	fx->Update();
+	dust->Update();
 	animRect->Update();
 }
 
 void Barrel::Render()
 {
 	if (state == BarrelState::Smash)
-		SFX->Render();
+	{
+		fx->Render();
+		dust->Render();
+	}
 	animRect->Render();
 }
 
