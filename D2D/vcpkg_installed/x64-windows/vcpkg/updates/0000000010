@@ -1,8 +1,0 @@
-Package: directx-headers
-Version: 1.610.2
-Depends: vcpkg-cmake, vcpkg-cmake-config
-Architecture: x64-windows
-Multi-Arch: same
-Abi: eaaa71e4c1ecfc49a059c0f8698859b8001a917c9349d589a7969a5def1046cf
-Description: Official DirectX 12 Headers
-Status: purge ok half-installed

@@ -1,0 +1,624 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{ae95a4ba-a51c-4799-8dec-fd705da9abc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renders">
+      <UniqueIdentifier>{41bd0035-833f-4b69-8baa-1a345c253fb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renders\IA">
+      <UniqueIdentifier>{dc3c2c33-9a5a-49b3-b63f-b1d3ae276fe4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renders\Resources">
+      <UniqueIdentifier>{3bebaa73-cc05-42aa-8353-b73e605f1f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renders\Shaders">
+      <UniqueIdentifier>{f0bc0f72-2477-44ec-bd7a-458b944ed844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{8e8b152e-5388-4024-b51c-692fb6df72d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{bce623d3-5518-4741-9c66-3e11f8445f4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{1765df28-c103-428c-b056-64d51689cb68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{d3862996-1254-4dc2-a161-9dbb9f9992f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Character">
+      <UniqueIdentifier>{8c259163-0078-47c3-87a2-ee0511cbe266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bullet">
+      <UniqueIdentifier>{93a74b53-29d8-402b-89a8-96c61dddf9ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{af71b243-ae70-481b-bb8b-346eb3e754df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TutorialObject">
+      <UniqueIdentifier>{1a9be92c-04ee-4e85-9218-095e7b1e1de0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Forest">
+      <UniqueIdentifier>{1b54bb7b-41d8-4b07-b366-e2d51c0a5f6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss">
+      <UniqueIdentifier>{89496c11-3c91-46c0-a95e-0fc9ab8abfdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Monster">
+      <UniqueIdentifier>{f66e2c47-cafb-488c-86d2-2656cb801624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pirate">
+      <UniqueIdentifier>{6bd5f787-ae3f-4e3e-8b58-360456fdb5e0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Program.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Systems\Input.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Time.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Window.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Graphics.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\IA\VertexBuffer.cpp">
+      <Filter>Renders\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Resources\VertexType.cpp">
+      <Filter>Renders\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\IA\IndexBuffer.cpp">
+      <Filter>Renders\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Shaders\IShader.cpp">
+      <Filter>Renders\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Shaders\VertexShader.cpp">
+      <Filter>Renders\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\IA\InputLayout.cpp">
+      <Filter>Renders\IA</Filter>
+    </ClCompile>
+    <ClCompile Include="Renders\Shaders\PixelShader.cpp">
+      <Filter>Renders\Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\ColorRect.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Drawable.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Object.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\ColorComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\MoveComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Collision.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\ColliderComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\TextureRect.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\RenderTexture.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SelectionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\String.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Path.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Gui.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Sound.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\Camera.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\AnimationRect.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\Animator.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Test.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Character\Player.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\AnimatorComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerBullet.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerBulletManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerSpecialAttack.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PlayerSpecialAttackManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\SuperMeterCard.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\Sphere.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\UI.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\SFXManager.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Objects\SFX.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\SuperBeam.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Main.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_ForestFollies.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Tutorial.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_Cube.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\TutoSet.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\FlowerGrunt.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Forest_Ground.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\ForestEnemySet.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\ForestObjectSet.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Forest_Wall.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Blob.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Mushroom.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\MRPoisonManager.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Lobber.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Chomper.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Spiker.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\LSeedManager.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Acorn.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\AcornMachine.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\FloatingPlatform.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyCroaks.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_RibbyCroaks.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksAttackManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksFirefly.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksWind.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyAttackManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyBall.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyCoin.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\RibbyFist.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\Slot.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksPBison.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksPSnake.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\CroaksPTiger.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\SlotManager.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Barrel.cpp">
+      <Filter>Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\DogFish.cpp">
+      <Filter>Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss\Pirate.cpp">
+      <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Scene_Pirate.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Shark.cpp">
+      <Filter>Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PirateCannonBallManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PiratePeaBulletManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Pirate\BG_Cloud.cpp">
+      <Filter>Pirate</Filter>
+    </ClCompile>
+    <ClCompile Include="Pirate\BG_Ground.cpp">
+      <Filter>Pirate</Filter>
+    </ClCompile>
+    <ClCompile Include="Pirate\BG_Water.cpp">
+      <Filter>Pirate</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Program.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Systems\Input.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Time.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Window.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Graphics.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\IA\VertexBuffer.h">
+      <Filter>Renders\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Resources\VertexType.h">
+      <Filter>Renders\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\IA\IndexBuffer.h">
+      <Filter>Renders\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Shaders\IShader.h">
+      <Filter>Renders\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Shaders\VertexShader.h">
+      <Filter>Renders\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\IA\InputLayout.h">
+      <Filter>Renders\IA</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Resources\ConstantBuffer.h">
+      <Filter>Renders\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Resources\GlobalBuffers.h">
+      <Filter>Renders\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Renders\Shaders\PixelShader.h">
+      <Filter>Renders\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ColorRect.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Component.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Drawable.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Object.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ColorComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SceneList.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\IScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MoveComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Collision.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\ColliderComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\TextureRect.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\RenderTexture.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SelectionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\String.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Path.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Gui.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Sound.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\Camera.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\AnimationRect.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Animator.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Test.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Character\Player.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\AnimatorComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerBullet.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerBulletManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerSpecialAttack.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PlayerSpecialAttackManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Sphere.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SuperMeterCard.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\UI.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\SFXManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\SFX.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\SuperBeam.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Main.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_ForestFollies.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Tutorial.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_Cube.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\TutoSet.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\ITutoObjects.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\FlowerGrunt.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Forest_Ground.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\ForestEnemySet.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\ForestObjectSet.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\IForestEnemy.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\IForestObjects.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Forest_Wall.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Blob.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Mushroom.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\MRPoisonManager.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Lobber.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Chomper.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Spiker.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\LSeedManager.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Acorn.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\AcornMachine.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\FloatingPlatform.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyCroaks.h">
+      <Filter>Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_RibbyCroaks.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksAttackManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksFirefly.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksWind.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyAttackManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyBall.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyCoin.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\RibbyFist.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\Slot.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksPBison.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksPSnake.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\CroaksPTiger.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\SlotManager.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Barrel.h">
+      <Filter>Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\DogFish.h">
+      <Filter>Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss\Pirate.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Shark.h">
+      <Filter>Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Scene_Pirate.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PirateCannonBallManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PiratePeaBulletManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Pirate\BG_Cloud.h">
+      <Filter>Pirate</Filter>
+    </ClInclude>
+    <ClInclude Include="Pirate\BG_Ground.h">
+      <Filter>Pirate</Filter>
+    </ClInclude>
+    <ClInclude Include="Pirate\BG_Water.h">
+      <Filter>Pirate</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="_Shaders\Vertex.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\VertexTextureInverse.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\Grayscale.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\Vignette.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\Blur.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="_Shaders\CBuffers.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Cuphead.rc" />
+  </ItemGroup>
+</Project>

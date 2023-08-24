@@ -1,9 +1,0 @@
-Package: imgui
-Version: 1.89.4
-Port-Version: 1
-Depends: vcpkg-cmake, vcpkg-cmake-config
-Architecture: x64-windows
-Multi-Arch: same
-Abi: 6113e0a6ab3ecfb6cc587c7cd00d849605a21e8981888dddbeb995e7820cf2c5
-Description: Bloat-free Immediate Mode Graphical User interface for C++ with minimal dependencies.
-Status: install ok installed
