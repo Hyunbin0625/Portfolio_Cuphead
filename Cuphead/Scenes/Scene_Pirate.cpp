@@ -113,6 +113,19 @@ void ScenePirate::Update()
 	// Shark&Player
 	SHARK->Collision(player);
 
+	// DogFish&Ground
+	for (auto& object : objectList)
+	{
+		if (object->GetState().type == ForestObjectType::Ground)
+		{
+			for (auto& dogFish : DOGFISH->GetDogFishList())
+				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(dogFish->GetAnimRect()->GET_COMP(Collider)))
+					dogFish->SetGround(object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y * 0.5f);
+		}
+	}
+	// DogFish&Player
+	DOGFISH->Collision(player);
+
 	// Player&Object Collision
 	for (auto& object : objectList)
 	{
@@ -224,6 +237,7 @@ void ScenePirate::PostRender()
 	{
 		BARREL->GUI();
 		SHARK->GUI();
+		DOGFISH->GUI();
 	}
 	ImGui::End();
 
