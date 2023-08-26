@@ -61,7 +61,7 @@ private:
 	shared_ptr<AnimationRect> fRail;
 	shared_ptr<AnimationRect> bBoat;
 
-
+	int tempva = 0;
 
 	PirateInfo captainInfo;
 	PirateInfo boatInfo;

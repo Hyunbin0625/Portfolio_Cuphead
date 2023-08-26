@@ -10,7 +10,7 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 	random_device random;
 	mt = mt19937(random());
 
-	speed = waveValue * 0.5f;
+	speed = 50.0f;
 	defPos = boatInfo.position;
 
 	captain = make_shared<AnimationRect>(boatInfo.position + captainInfo.position * captainInfo.totalSize, Vector2(370, 350) * captainInfo.totalSize, 0.0f, L"_Textures/Pirate/pirate_idle.png");
@@ -157,7 +157,6 @@ void Pirate::Update()
 	else
 		cState = PirateState::Idle;
 
-//	cout << ((int)((float)hp / (float)maxHp * 100)) << '\n';
 	if (currentPhase == 1 && (int)((float)hp / (float)maxHp * 100) <= SecPhase + bAttackPer
 		&& boatInfo.time >= boatInfo.delayTime)
 		bState = PirateState::Attack;
@@ -302,8 +301,26 @@ void Pirate::Update()
 				captainInfo.time = 0;
 				bWhistle = false;
 
-			//	SHARK->Init(Vector2(CAMERA->GetPosition().x, 302.0f), 1.0f);
-				DOGFISH->Init(boatInfo.position, 1.0f);
+				uniform_int_distribution<int> randomSubMonster(0, 2);
+				int temp = randomSubMonster(mt);
+				if (tempva == 0)
+				{
+					SHARK->Init(Vector2(CAMERA->GetPosition().x, 302.0f), 1.0f);
+					++tempva;
+				}
+				else if (tempva == 1)
+				{
+					DOGFISH->Init(boatInfo.position, 1.0f);
+					++tempva;
+				}
+				else if (tempva == 2)
+				{
+					SQUID->Init(Vector2(CENTER_X - 100.0f, CENTER_Y), 1.0f);
+					++tempva;
+				}
+
+				if (tempva == 3)
+					tempva = 0;
 			}
 		}
 		break;
@@ -397,17 +414,36 @@ void Pirate::Update()
 
 	if (direction)	// ╩С
 	{
-		speed += DELTA / 2.5;
-		if (speed >= waveValue)
-			direction = false;
+		if (fBoat->GetPosition().y >= defPos.y + waveValue)
+		{
+			speed -= 40 * DELTA;
+			if ((int)speed == 0)
+				direction = false;
+		}
+		else
+		{
+			speed += 40 * DELTA;
+			if (speed >= 49.0f)
+				speed = 50.0f;
+		}
 	}
 	else	// го
 	{
-		speed -= DELTA / 2.5;
-		if (speed <= -waveValue)
-			direction = true;
+		if (fBoat->GetPosition().y <= defPos.y - waveValue)
+		{
+			speed += 40 * DELTA;
+			if ((int)speed == 0)
+				direction = true;
+		}
+		else
+		{
+			speed -= 40 * DELTA;
+			if (speed <= -49.0f)
+				speed = -50.0f;
+		}
+			
 	}
-	boatInfo.position.y += speed;
+	boatInfo.position.y += speed * DELTA;
 
 	PEABULLETMANAGER->SetTotalSize(captainInfo.totalSize);
 	CANNONBALLMANAGER->SetTotalSize(captainInfo.totalSize);
@@ -415,6 +451,7 @@ void Pirate::Update()
 	PEABULLETMANAGER->Update();
 	SHARK->Update();
 	DOGFISH->Update();
+	SQUID->Update();
 	bBoat->Update();
 	captain->Update();
 	fRail->Update();
@@ -446,7 +483,7 @@ void Pirate::GUI()
 		{
 			direction = true;
 			waveValue = tempWave;
-			speed = waveValue / 2;
+			speed = 0.0f;
 			boatInfo.position.y = defPos.y;
 		}
 		
@@ -462,7 +499,7 @@ void Pirate::GUI()
 		if (ImGui::SliderFloat2("Position", (float*)&defPos, CAMERA->GetPosition().x, CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH))
 		{
 			direction = true;
-			speed = waveValue / 2;
+			speed = 0.0f;
 			boatInfo.position.y = defPos.y;
 		}
 		ImGui::InputFloat("BScale", &boatInfo.totalSize, 0.1f, 10.0f, "%0.2f");

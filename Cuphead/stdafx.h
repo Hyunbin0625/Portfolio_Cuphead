@@ -177,9 +177,11 @@ extern float gWinHeight;
 #include "Bullet/SuperBeam.h"
 #include "Bullet/PiratePeaBulletManager.h"
 #include "Bullet/PirateCannonBallManager.h"
+#include "Bullet/SquidBulletManager.h"
 
 #define PEABULLETMANAGER PiratePeaBulletManager::Get()
 #define CANNONBALLMANAGER PirateCannonBallManager::Get()
+#define SQUIDBULLETMANAGER SquidBulletManager::Get()
 
 // Character
 #include "Character/Player.h"
@@ -242,14 +244,19 @@ extern float gWinHeight;
 #include "Monster/Barrel.h"
 #include "Monster/Shark.h"
 #include "Monster/DogFish.h"
+#include "Monster/Squid.h"
 
 #define BARREL Barrel::Get()
 #define SHARK Shark::Get()
 #define DOGFISH DogFishManager::Get()
+#define SQUID Squid::Get()
 
 // Pirate
 #include "Pirate/BG_Cloud.h"
 #include "Pirate/BG_Water.h"
 #include "Pirate/BG_Ground.h"
+#include "Pirate/InkScreen.h"
+
+#define INKSCREEN InkScreen::Get()
 
 #include "Boss/Pirate.h"

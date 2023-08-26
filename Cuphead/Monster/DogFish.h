@@ -47,7 +47,7 @@ private:
 	float val = 0.0f;
 	float jumpSpeed = 0.0f;
 	float maxJumpSpeed = 1400.0f;
-	float aclrt = 3.5f;
+	float aclrt = 1000.0f;
 
 	int animCount = 0;
 	float groundPosY = 0.0f;

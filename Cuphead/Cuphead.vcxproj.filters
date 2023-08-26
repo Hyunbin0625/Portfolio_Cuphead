@@ -312,6 +312,9 @@
     <ClCompile Include="Pirate\BG_Water.cpp">
       <Filter>Pirate</Filter>
     </ClCompile>
+    <ClCompile Include="Monster\Squid.cpp" />
+    <ClCompile Include="Bullet\SquidBulletManager.cpp" />
+    <ClCompile Include="Pirate\InkScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -597,6 +600,9 @@
       <Filter>Pirate</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Monster\Squid.h" />
+    <ClInclude Include="Bullet\SquidBulletManager.h" />
+    <ClInclude Include="Pirate\InkScreen.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

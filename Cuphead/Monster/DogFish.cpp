@@ -90,7 +90,7 @@ void DogFish::Update()
 		break;
 	case DogFishState::Up:
 		val += G * aclrt * DELTA;
-		jumpSpeed -= val;
+		jumpSpeed -= val * DELTA;
 		animRect->SetScale(Vector2(246, 305) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Up");
 

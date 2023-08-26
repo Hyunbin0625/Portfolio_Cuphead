@@ -19,12 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet\SquidBulletManager.cpp" />
     <ClCompile Include="Monster\Barrel.cpp" />
     <ClCompile Include="Boss\Pirate.cpp" />
     <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
     <ClCompile Include="Bullet\PiratePeaBulletManager.cpp" />
     <ClCompile Include="Monster\DogFish.cpp" />
     <ClCompile Include="Monster\Shark.cpp" />
+    <ClCompile Include="Monster\Squid.cpp" />
     <ClCompile Include="Pirate\BG_Cloud.cpp" />
     <ClCompile Include="Boss\CroaksFirefly.cpp" />
     <ClCompile Include="Boss\CroaksPBison.cpp" />
@@ -64,6 +66,7 @@
     <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Pirate\BG_Ground.cpp" />
     <ClCompile Include="Pirate\BG_Water.cpp" />
+    <ClCompile Include="Pirate\InkScreen.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
     <ClCompile Include="Scenes\Scene_Pirate.cpp" />
@@ -117,12 +120,14 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet\SquidBulletManager.h" />
     <ClInclude Include="Monster\Barrel.h" />
     <ClInclude Include="Boss\Pirate.h" />
     <ClInclude Include="Bullet\PirateCannonBallManager.h" />
     <ClInclude Include="Bullet\PiratePeaBulletManager.h" />
     <ClInclude Include="Monster\DogFish.h" />
     <ClInclude Include="Monster\Shark.h" />
+    <ClInclude Include="Monster\Squid.h" />
     <ClInclude Include="Pirate\BG_Cloud.h" />
     <ClInclude Include="Boss\CroaksFirefly.h" />
     <ClInclude Include="Boss\CroaksPBison.h" />
@@ -164,6 +169,7 @@
     <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Pirate\BG_Ground.h" />
     <ClInclude Include="Pirate\BG_Water.h" />
+    <ClInclude Include="Pirate\InkScreen.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />
     <ClInclude Include="Scenes\Scene_Main.h" />

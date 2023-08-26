@@ -143,7 +143,7 @@ void Barrel::Update()
 		}
 		break;
 	case BarrelState::Drop:
-		val += G * 1.5 * DELTA;
+		val += G * 300.0f * DELTA;
 
 		if (val <= 3.0f)
 		{
@@ -163,7 +163,7 @@ void Barrel::Update()
 			animRect->SetScale(Vector2(165, 825) * totalSize);
 			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
 		}
-		position.y -= val;
+		position.y -= val * DELTA;
 		break;
 	case BarrelState::Smash:
 		if (animCount == 0)
@@ -216,7 +216,7 @@ void Barrel::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Up02");
 			animRect->SetScale(Vector2(165, 826) * totalSize);
 			animRect->SetPosition(position + Vector2(0, 275.5) * totalSize);
-			position.y += val / 2;
+			position.y += val / 2 * DELTA;
 
 			if (position.y >= 680.0f)
 			{
