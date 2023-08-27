@@ -23,6 +23,7 @@ struct PirateInfo
 	float time = 0.0f;
 	int animClipCount = 0;
 	bool subAnimRect = false;
+	bool bDeath = false;
 };
 
 class Pirate
@@ -35,6 +36,8 @@ public:
 
 	void Update();
 	void Render();
+
+	void BRender();
 
 	void GUI();
 
@@ -58,7 +61,7 @@ private:
 	shared_ptr<AnimationRect> captain;
 	shared_ptr<AnimationRect> tCaptain;
 	shared_ptr<AnimationRect> fBoat;
-	shared_ptr<AnimationRect> fRail;
+	shared_ptr<AnimationRect> mBoat;
 	shared_ptr<AnimationRect> bBoat;
 
 	int tempva = 0;
