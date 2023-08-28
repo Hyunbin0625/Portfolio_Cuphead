@@ -57,6 +57,9 @@ void Barrel::Collision(shared_ptr<Player> player)
 
 void Barrel::Update()
 {
+	if (bMod)
+		position = Vector2(840, 680);
+
 	// Move
 	if (!bIntro && (state == BarrelState::Idle || state == BarrelState::Safe))
 	{

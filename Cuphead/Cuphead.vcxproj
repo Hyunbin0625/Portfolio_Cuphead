@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet\PirateBeam.cpp" />
+    <ClCompile Include="Bullet\PirateBubbleManager.cpp" />
     <ClCompile Include="Bullet\SquidBulletManager.cpp" />
     <ClCompile Include="Monster\Barrel.cpp" />
     <ClCompile Include="Boss\Pirate.cpp" />
@@ -120,6 +122,8 @@
     <ClCompile Include="Renders\Shaders\VertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet\PirateBeam.h" />
+    <ClInclude Include="Bullet\PirateBubbleManager.h" />
     <ClInclude Include="Bullet\SquidBulletManager.h" />
     <ClInclude Include="Monster\Barrel.h" />
     <ClInclude Include="Boss\Pirate.h" />

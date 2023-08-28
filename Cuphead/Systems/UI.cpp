@@ -51,23 +51,34 @@ void Ui::Init(Vector2 position, UINT currentHp, int cardPoint)
 		superMeterCards[i]->SetActivation(false);
 	//	cout << "superMeterCards" << i << " : " <<  superMeterCards[i]->GetPosition().x << ", " << superMeterCards[i]->GetPosition().y << '\n';
 	}
-	switch (cardPoint)
-	{
-	case 100:
-		superMeterCards[4]->SetActivation(true);
-	case 90:
-	case 80:
-		superMeterCards[3]->SetActivation(true);
-	case 70:
-	case 60:
-		superMeterCards[2]->SetActivation(true);
-	case 50:
-	case 40:
-		superMeterCards[1]->SetActivation(true);
-	case 30:
-	case 20:
+//	switch (cardPoint)
+//	{
+//	case 100:
+//		superMeterCards[4]->SetActivation(true);
+//	case 90:
+//	case 80:
+//		superMeterCards[3]->SetActivation(true);
+//	case 70:
+//	case 60:
+//		superMeterCards[2]->SetActivation(true);
+//	case 50:
+//	case 40:
+//		superMeterCards[1]->SetActivation(true);
+//	case 30:
+//	case 20:
+//		superMeterCards[0]->SetActivation(true);
+//	}
+	
+	if(cardPoint >= 20)
 		superMeterCards[0]->SetActivation(true);
-	}
+	if (cardPoint >= 40)
+		superMeterCards[1]->SetActivation(true);
+	if (cardPoint >= 60)
+		superMeterCards[2]->SetActivation(true);
+	if (cardPoint >= 80)
+		superMeterCards[3]->SetActivation(true);
+	if (cardPoint >= 100)
+		superMeterCards[4]->SetActivation(true);
 }
 
 void Ui::Update()

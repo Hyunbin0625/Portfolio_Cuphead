@@ -35,11 +35,6 @@ void Scene::Update()
 	sphere->Update();
 
 	sphere->CheckCollision(player);
-
-	
-	INKSCREEN->Init(10.0f);
-
-	INKSCREEN->Update();
 }
 
 void Scene::PreRender()
@@ -53,7 +48,6 @@ void Scene::Render()
 	sphere->Render();
 	player->Render();
 
-	INKSCREEN->Render();
 	UI->Render();
 }
 

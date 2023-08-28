@@ -315,6 +315,8 @@
     <ClCompile Include="Monster\Squid.cpp" />
     <ClCompile Include="Bullet\SquidBulletManager.cpp" />
     <ClCompile Include="Pirate\InkScreen.cpp" />
+    <ClCompile Include="Bullet\PirateBeam.cpp" />
+    <ClCompile Include="Bullet\PirateBubbleManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -603,6 +605,8 @@
     <ClInclude Include="Monster\Squid.h" />
     <ClInclude Include="Bullet\SquidBulletManager.h" />
     <ClInclude Include="Pirate\InkScreen.h" />
+    <ClInclude Include="Bullet\PirateBeam.h" />
+    <ClInclude Include="Bullet\PirateBubbleManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

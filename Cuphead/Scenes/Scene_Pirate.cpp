@@ -3,10 +3,10 @@
 
 void ScenePirate::Init()
 {
-	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
+	player = make_shared<Player>(Vector2(250, 180), Vector2(101, 159), 500.0f, 3, 100.0f);
 	player->SetTotalSize(1.0f);
 
-	pirate = make_shared<Pirate>(PirateInfo{ Vector2(-18, 272), 1.04, 10.0f }, PirateInfo{ Vector2(1110, 225), 1.3f, 4.0f }, 1000, 0.7f);
+	pirate = make_shared<Pirate>(PirateInfo{ Vector2(-18, 272), 1.04, 10.0f }, PirateInfo{ Vector2(1110, 225), 1.3f, 3.0f }, 500.0f, 0.7f);
 
 	// backGround
 	backGround = make_unique<TextureRect>(CENTER + Vector2(0, 90.0f), Vector2(1020, 360) * 1.5f, 0.0f, L"_Textures/Pirate/pirate_clouds_D.png");
@@ -138,7 +138,21 @@ void ScenePirate::Update()
 	}	
 	// SquidBulletManager&Player
 	SQUIDBULLETMANAGER->Collision(player);
-	
+
+	// PirateBeam&Player
+	if (PIRATEBEAM->GetCollisionRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+		player->SetHit(true);
+
+	// PirateBubbleManager&Player
+	for (auto& bubble : BUBBLEMANAGER->GetBullets())
+	{
+		if (bubble->GetActivation() && bubble->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+		{
+			player->SetHit(true);
+			bubble->SetIsEnd(true);
+		}
+	}
+
 	// Player&Object Collision
 	for (auto& object : objectList)
 	{
@@ -276,6 +290,7 @@ void ScenePirate::PostRender()
 				object->SetMod(mod);
 			player->SetMod(mod);
 			pirate->SetMod(mod);
+			BARREL->SetIsMod(mod);
 		}
 	}
 	ImGui::End();

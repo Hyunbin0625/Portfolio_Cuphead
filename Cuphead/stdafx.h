@@ -178,10 +178,14 @@ extern float gWinHeight;
 #include "Bullet/PiratePeaBulletManager.h"
 #include "Bullet/PirateCannonBallManager.h"
 #include "Bullet/SquidBulletManager.h"
+#include "Bullet/PirateBeam.h"
+#include "Bullet/PirateBubbleManager.h"
 
 #define PEABULLETMANAGER PiratePeaBulletManager::Get()
 #define CANNONBALLMANAGER PirateCannonBallManager::Get()
 #define SQUIDBULLETMANAGER SquidBulletManager::Get()
+#define PIRATEBEAM PirateBeam::Get()
+#define BUBBLEMANAGER PirateBubbleManager::Get()
 
 // Character
 #include "Character/Player.h"

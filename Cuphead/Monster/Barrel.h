@@ -30,6 +30,7 @@ public:
 	void SetSmash(bool bSmash) { this->bSmash = bSmash; }
 
 	void SetMinMax(Vector2 minMax) { this->minMax = minMax; }
+	void SetIsMod(bool bMod) { this->bMod = bMod; }
 	
 private:
 	shared_ptr<AnimationRect> animRect;
@@ -55,4 +56,5 @@ private:
 	bool bSafe = false;
 
 	bool bIntro = false;
+	bool bMod = false;
 };

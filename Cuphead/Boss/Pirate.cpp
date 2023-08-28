@@ -5,15 +5,14 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 	: captainInfo(captainInfo), boatInfo(boatInfo), maxHp(maxHp), waveValue(waveValue)
 {
 	// 초기화
-//	hp = maxHp;
-	hp = 410;
+	hp = maxHp;
 	bIntro = true;
 	random_device random;
 	mt = mt19937(random());
 
 	speed = 50.0f;
 	defPos = boatInfo.position;
-
+	boatInfo.position.y -= 1000.0f;
 	captain = make_shared<AnimationRect>(boatInfo.position + captainInfo.position * captainInfo.totalSize, Vector2(370, 350) * captainInfo.totalSize, 0.0f, L"_Textures/Pirate/pirate_idle.png");
 	tCaptain = make_shared<AnimationRect>(boatInfo.position + captainInfo.position * captainInfo.totalSize, Vector2(580, 465) * captainInfo.totalSize, 0.0f, L"_Textures/Pirate/pirate_peaPutDown_T.png");
 	fBoat = make_shared<AnimationRect>(boatInfo.position, Vector2(450, 583) * boatInfo.totalSize, 0.0f, L"_Textures/Pirate/pirate_boat_idle.png");
@@ -72,7 +71,17 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 	fBoat->AddAnimClip(make_shared<AnimationClip>(L"Attack02", L"_Textures/Pirate/pirate_boat_cannon_02.png", 10, false, false, 0.1));
 	fBoat->AddAnimClip(make_shared<AnimationClip>(L"Attack03", L"_Textures/Pirate/pirate_boat_cannon_03.png", 9, false, false, 0.1));
 
+	// Beam Charge
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"BeamCS", L"_Textures/Pirate/pirate_whaleboat_beam_charge_start.png", 6, false, false, 0.1));
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"BeamCL", L"_Textures/Pirate/pirate_whaleboat_beam_charge_loop.png", 3, false, true, 0.12));
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"BeamCE", L"_Textures/Pirate/pirate_whaleboat_beam_charge_end.png", 6, false, false, 0.1));
+	
+	// Beam
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"BeamL", L"_Textures/Pirate/pirate_whaleboat_beam_loop.png", 4, false, true, 0.1));
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"BeamE", L"_Textures/Pirate/pirate_whaleboat_beam_end.png", 1, false, false, 0.1));
+
 	// Death
+	fBoat->AddAnimClip(make_shared<AnimationClip>(L"Death", L"_Textures/Pirate/pirate_whaleboat_death.png", 16, false, true, 0.1));
 
 
 	// mBoat
@@ -81,6 +90,9 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 
 	// Uvula Idle
 	mBoat->AddAnimClip(make_shared<AnimationClip>(L"Uvula", L"_Textures/Pirate/pirate_whaleboat_uvula_idle.png", 20, false, true, 0.1));
+
+	// Uvula Attack
+	mBoat->AddAnimClip(make_shared<AnimationClip>(L"UShoot", L"_Textures/Pirate/pirate_whaleboat_uvula_shoot.png", 13, false, false, 0.1));
 
 
 	// bBoat
@@ -93,6 +105,7 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 
 	// Components
 	captain->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+	mBoat->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 	fBoat->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 	// AddAnimator
 	captain->AddComponent(make_shared<AnimatorComponent>(captain->GetAnimClips()));
@@ -111,27 +124,56 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 
 void Pirate::Collision(shared_ptr<Player> player)
 {
-	// playerBullts&enemies
-	for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
+	if (currentPhase == 1)
 	{
-		if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
+		// playerBullts&enemies
+		for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
 		{
-			if (player->GetBullet()->GetBullets()[i]->GetHit())
+			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
 			{
-				player->GetBullet()->GetBullets()[i]->Hit();
-				--hp;
+				if (player->GetBullet()->GetBullets()[i]->GetHit())
+				{
+					player->GetBullet()->GetBullets()[i]->Hit();
+					player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+					--hp;
+				}
 			}
 		}
-	}
 
-	for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
-	{
-		if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
+		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
+		{
+			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
+				--hp;
+		}
+
+		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
 			--hp;
 	}
+	else if (currentPhase == 2 && !phaseIntro)
+	{
+		// playerBullts&enemies
+		for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
+		{
+			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(mBoat->GET_COMP(Collider)))
+			{
+				if (player->GetBullet()->GetBullets()[i]->GetHit())
+				{
+					player->GetBullet()->GetBullets()[i]->Hit();
+					--hp;
+				}
+			}
+		}
 
-	if(player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(captain->GET_COMP(Collider)))
-		--hp;	
+		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
+		{
+			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(mBoat->GET_COMP(Collider)))
+				--hp;
+		}
+
+		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(mBoat->GET_COMP(Collider)))
+			--hp;
+	}
+	
 
 	// playerPos, Bullet Rotation
 	if (currentPhase == 1 && cState == PirateState::Attack)
@@ -149,7 +191,7 @@ void Pirate::Collision(shared_ptr<Player> player)
 
 void Pirate::Update()
 {
-//	cout << ((int)((float)hp / (float)maxHp * 100)) << '\n';
+	cout << ((int)((float)hp / (float)maxHp * 100)) << '\n';
 	if ((int)((float)hp / (float)maxHp * 100) <= SecPhase && currentPhase == 1
 		&& cState == PirateState::Idle && bState == PirateState::Idle)
 	{
@@ -179,6 +221,8 @@ void Pirate::Update()
 
 	if (currentPhase == 1)
 	{
+		boatInfo.subAnimRect = true;
+
 		if (bIntro)
 			cState = PirateState::Intro;
 		else if (captainInfo.time >= captainInfo.delayTime - 6.0f && bWhistle)
@@ -203,13 +247,20 @@ void Pirate::Update()
 		else
 			cState = PirateState::Idle;
 			
-
-		bState = PirateState::Idle;
+		if (!phaseIntro)
+		{
+			boatInfo.subAnimRect = true;
+			if (boatInfo.time >= boatInfo.delayTime)
+				bState = PirateState::Attack;
+			else
+				bState = PirateState::Idle;
+		}
 	}
 
 	// nextPhase Intro
 	if (currentPhase == 2 && phaseIntro)
 	{
+		boatInfo.subAnimRect = true;
 		bState = PirateState::Start2P;
 	}
 
@@ -223,6 +274,9 @@ void Pirate::Update()
 		mBoat->SetScale(Vector2(164, 80) * 0.8 * boatInfo.totalSize);
 		mBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Rail");
 	}
+
+	if (hp <= 0)
+		bState = PirateState::Death;
 
 	switch (cState)
 	{
@@ -448,44 +502,160 @@ void Pirate::Update()
 			bBoat->SetScale(Vector2(565, 740)* boatInfo.totalSize);
 			bBoat->SetPosition(boatInfo.position + Vector2(120, 70) * boatInfo.totalSize);
 
-
 			mBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Uvula");
 			mBoat->SetScale(Vector2(83, 123)* boatInfo.totalSize);
-			mBoat->SetPosition(boatInfo.position + Vector2(100, 63) * boatInfo.totalSize);
-
+			mBoat->SetPosition(boatInfo.position + Vector2(100, 75) * boatInfo.totalSize);
 		}
 		break;
 	case PirateState::Attack:
-		if (boatInfo.animClipCount == 0)
+		if (currentPhase == 1)
 		{
-			fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack01");
-			fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
-			fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
-			if (fBoat->GET_COMP(Animator)->GetEnd())
-				++boatInfo.animClipCount;
-		}
-		else if (boatInfo.animClipCount == 1)
-		{
-			fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack02");
-			fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
-			fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
-			CANNONBALLMANAGER->Init(fBoat->GetPosition() + Vector2(-150.0f, -80.0f) * boatInfo.totalSize, 0.0f, 750.0f);
-			if (fBoat->GET_COMP(Animator)->GetEnd())
+			if (boatInfo.animClipCount == 0)
 			{
-				++boatInfo.animClipCount;
-				// Bullet 호출
-				CANNONBALLMANAGER->IndexManagement();
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack01");
+				fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+					++boatInfo.animClipCount;
+			}
+			else if (boatInfo.animClipCount == 1)
+			{
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack02");
+				fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
+				CANNONBALLMANAGER->Init(fBoat->GetPosition() + Vector2(-150.0f, -80.0f) * boatInfo.totalSize, 0.0f, 750.0f);
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					++boatInfo.animClipCount;
+					// Bullet 호출
+					CANNONBALLMANAGER->IndexManagement();
+				}
+			}
+			else
+			{
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack03");
+				fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					boatInfo.animClipCount = 0;
+					boatInfo.time = 0.0f;
+				}
 			}
 		}
-		else
+		else if (currentPhase == 2)
 		{
-			fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack03");
-			fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
-			fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
-			if (fBoat->GET_COMP(Animator)->GetEnd())
+			deltaTime += DELTA;
+			if (boatInfo.animClipCount < 3 && deltaTime >= 2.5f)
 			{
-				boatInfo.animClipCount = 0;
-				boatInfo.time = 0.0f;
+				mBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"UShoot");
+				mBoat->SetScale(Vector2(251, 176) * boatInfo.totalSize);
+				mBoat->SetPosition(boatInfo.position + Vector2(50, 70) * boatInfo.totalSize);
+
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BIdle");
+				fBoat->SetScale(Vector2(565, 740)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(120, 70) * boatInfo.totalSize);
+
+				bBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Jaw");
+				bBoat->SetScale(Vector2(565, 740)* boatInfo.totalSize);
+				bBoat->SetPosition(boatInfo.position + Vector2(120, 70) * boatInfo.totalSize);
+
+				if (mBoat->GET_COMP(Animator)->GetCurrentFrameIndex() == 8 && !check)
+				{
+					BUBBLEMANAGER->IndexManagement(mBoat->GetPosition() + Vector2(-120, -25) * boatInfo.totalSize, 0.0f, boatInfo.totalSize, 140.0f, 140.0f);
+					check = true;
+				}
+
+				if (mBoat->GET_COMP(Animator)->GetEnd())
+				{
+					check = false;
+					++boatInfo.animClipCount;
+					deltaTime = 0.0f;
+				}
+			}
+			else if(boatInfo.animClipCount <= 3)
+			{
+				mBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Uvula");
+				mBoat->SetScale(Vector2(83, 123)* boatInfo.totalSize);
+				mBoat->SetPosition(boatInfo.position + Vector2(100, 75) * boatInfo.totalSize);
+
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BIdle");
+				fBoat->SetScale(Vector2(565, 740)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(120, 70) * boatInfo.totalSize);
+
+				bBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Jaw");
+				bBoat->SetScale(Vector2(565, 740)* boatInfo.totalSize);
+				bBoat->SetPosition(boatInfo.position + Vector2(120, 70) * boatInfo.totalSize);
+
+				if (boatInfo.animClipCount == 3 && deltaTime >= 1.5f)
+				{
+					++boatInfo.animClipCount;
+					deltaTime = 0.0f;
+				}
+			}
+			else if (boatInfo.animClipCount == 4)
+			{
+				boatInfo.subAnimRect = false;
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BeamCS");
+				fBoat->SetScale(Vector2(620, 703)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(90, 67) * boatInfo.totalSize);
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					++boatInfo.animClipCount;
+					deltaTime = 0.0f;
+				}
+			}
+			else if (boatInfo.animClipCount == 5)
+			{
+				boatInfo.subAnimRect = false;
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BeamCL");
+				fBoat->SetScale(Vector2(620, 703)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(90, 67) * boatInfo.totalSize);
+				if (deltaTime >= 2.5f)
+					++boatInfo.animClipCount;
+			}
+			else if (boatInfo.animClipCount == 6)
+			{
+				boatInfo.subAnimRect = false;
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BeamCE");
+				fBoat->SetScale(Vector2(620, 703) * boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(90, 67) * boatInfo.totalSize);
+
+				if (fBoat->GET_COMP(Animator)->GetCurrentFrameIndex() == 2)
+					PIRATEBEAM->Init(fBoat->GetPosition(), boatInfo.totalSize);
+
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					++boatInfo.animClipCount;
+					deltaTime = 0.0f;
+				}
+			}
+			else if (boatInfo.animClipCount == 7)
+			{
+				boatInfo.subAnimRect = false;
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BeamL");
+				fBoat->SetScale(Vector2(564, 726)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(115, 67) * boatInfo.totalSize);
+				if (deltaTime >= 2.5f)
+				{
+					++boatInfo.animClipCount;
+					PIRATEBEAM->SetIsEnd(true);
+				}
+			}
+			else
+			{
+				boatInfo.subAnimRect = false;
+				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"BeamE");
+				fBoat->SetScale(Vector2(564, 726)* boatInfo.totalSize);
+				fBoat->SetPosition(boatInfo.position + Vector2(110, 67) * boatInfo.totalSize);
+				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					boatInfo.animClipCount = 0;
+					deltaTime = 0.0f;
+					boatInfo.time = 0.0f;
+
+					bBoat->GET_COMP(Animator)->ResetFrame();
+				}
 			}
 		}
 		break;
@@ -548,17 +718,26 @@ void Pirate::Update()
 			if (fBoat->GET_COMP(Animator)->GetEnd())
 			{
 				boatInfo.animClipCount = 0;
-				deltaTime = 0.0f;
+				deltaTime = 2.0f;
 				phaseIntro = false;
 			}
 		}
 		break;
 	case PirateState::Death:
+			fBoat->SetScale(Vector2(563, 737) * boatInfo.totalSize);
+			fBoat->SetPosition(boatInfo.position + Vector2(75, 60) * boatInfo.totalSize);
+			fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		break;
 	}
 
 	if (!captainInfo.subAnimRect)
 		tCaptain->SetPosition(Vector2(1000, -1000));
+
+	if (!boatInfo.subAnimRect)
+	{
+		mBoat->SetPosition(Vector2(1000, -1000));
+		bBoat->SetPosition(Vector2(1000, -1000));
+	}
 
 	if (currentPhase == 1)
 	{
@@ -636,6 +815,8 @@ void Pirate::Update()
 	SHARK->Update();
 	DOGFISH->Update();
 	SQUID->Update();
+	PIRATEBEAM->Update();
+	BUBBLEMANAGER->Update();
 	bBoat->Update();
 	captain->Update();
 	mBoat->Update();
@@ -645,15 +826,19 @@ void Pirate::Update()
 
 void Pirate::Render()
 {
-	bBoat->Render();
+	if (boatInfo.subAnimRect)
+		bBoat->Render();
 	PEABULLETMANAGER->Render();
 	if (!bNone && !captainInfo.bDeath)
 		captain->Render();
 	CANNONBALLMANAGER->Render();
-	mBoat->Render();
+	if (boatInfo.subAnimRect)
+		mBoat->Render();
 	fBoat->Render();
 	if (captainInfo.subAnimRect)
 		tCaptain->Render();
+	PIRATEBEAM->Render();
+	BUBBLEMANAGER->Render();
 }
 
 void Pirate::BRender()

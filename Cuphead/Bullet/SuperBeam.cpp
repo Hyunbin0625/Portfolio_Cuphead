@@ -34,7 +34,7 @@ void SuperBeam::Init(Vector2 position, float totalSize, float deltaTime, float m
 			animRect->SetScale(Vector2(1011, 271) * totalSize);
 			animRect->SetPosition(Vector2(position.x - 560 * totalSize, position.y));
 		}
-		else if (deltaTime >= 1.1f && deltaTime < maxTime - 0.3)
+		else if (deltaTime >= 1.1f && deltaTime < maxTime - 0.3f)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"LoopL");
 			animRect->SetScale(Vector2(1018, 276) * totalSize);
@@ -55,7 +55,7 @@ void SuperBeam::Init(Vector2 position, float totalSize, float deltaTime, float m
 			animRect->SetScale(Vector2(1011, 271) * totalSize);
 			animRect->SetPosition(Vector2(position.x + 560 * totalSize, position.y));
 		}
-		else if (deltaTime >= 1.1f && deltaTime < maxTime - 0.5)
+		else if (deltaTime >= 1.1f && deltaTime < maxTime - 0.5f)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"LoopR");
 			animRect->SetScale(Vector2(1018, 276) * totalSize);
