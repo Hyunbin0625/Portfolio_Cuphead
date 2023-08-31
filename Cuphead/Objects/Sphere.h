@@ -4,7 +4,7 @@ class Player;
 class Sphere
 {
 public:
-	Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap);
+	Sphere(Vector2 position, float size, float rotation, bool parrySlap);
 
 public:
 	void CheckCollision(shared_ptr<Player> player);
@@ -14,15 +14,21 @@ public:
 
 	void GUI();
 
+public:
+	shared_ptr<AnimationRect> GetAnimRect() { return animRect; }
+	bool GetISParrSlap() { return bParrySlap; }
+
+	void SetPosition(Vector2 position) { this->position = position; }
+	void SetSize(float size) { this->size = size; }
+	void SetISParrSlap(bool bParrySlap) { this->bParrySlap = bParrySlap; }
+
 private:
-	unique_ptr<AnimationRect> animRect;
+	shared_ptr<AnimationRect> animRect;
 	
-	Vector2 position;
-	float size = 1;
-	float rotation;
+	Vector2 position = Vector2();
+	float size = 1.0f;
+	float rotation = 0.0f;
 
-	bool bParrySlap;
-
-	bool bObstacle;
+	bool bParrySlap = false;
 };
 

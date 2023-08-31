@@ -12,6 +12,11 @@ void SceneTutorial::Init()
 	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 
 	tutoSet = make_unique<TutoSet>();
+
+	IRISA->Start();
+
+	SOUND->AddSound("Back", L"_Sounds/MUS_Tutorial.wav", true);
+	SOUND->Play("Back");
 }
 
 void SceneTutorial::Destroy()
@@ -20,6 +25,12 @@ void SceneTutorial::Destroy()
 
 void SceneTutorial::Update()
 {
+	if (!mod)
+	{
+		Vector2 temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
+		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, temp.y + 210));
+	}
+
 	CheckGround();
 
 	for (auto& object : objectList)
@@ -28,26 +39,52 @@ void SceneTutorial::Update()
 			object->Collision(player);
 	}
 
+	// Add
+	if (tutoSet->GetSelectedIndex() == 0)
+		objectList.push_back(make_shared<Tuto_Cube>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+	if (tutoSet->GetSelectedIndex() == 1)
+		objectList.push_back(make_shared<Tuto_Platform>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+	if (tutoSet->GetSelectedIndex() == 2)
+		objectList.push_back(make_shared<Tuto_Pyramid>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+	if (tutoSet->GetSelectedIndex() == 3)
+		objectList.push_back(make_shared<Tuto_Cylinder>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+	if (tutoSet->GetSelectedIndex() == 4)
+		objectList.push_back(make_shared<Tuto_ExitDoor>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+	if (tutoSet->GetSelectedIndex() == 5)
+		objectList.push_back(make_shared<Tuto_Sphere>(CAMERA->GetPosition() + CENTER, 1.0f, 3.0f, 0));
+
+	// Delete
 	for (int i = 0; i < objectList.size(); ++i)
 	{
 		if (objectList[i]->GetDelete())
 			objectList.erase(objectList.begin() + i);
 	}
 
-	if (tutoSet->GetSelectedIndex() == 0)
-		objectList.push_back(make_shared<Tuto_Cube>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
+
+	// Add
+	if (INPUT->Down(VK_SPACE))
+		if (!ImGui::IsAnyItemActive())
+			trRectList.push_back(make_shared<TextureRect>(INPUT->GetMousePosition(), Vector2(300, 300), 0.0f));
+
+	// Delete
+	for (int i = 0; i < trRectList.size(); ++i)
+	{
+		if (trRectList[i]->GetIsDelete())
+			trRectList.erase(trRectList.begin() + i);
+	}
+
 
 	for (const auto& object : objectList)
 		object->Update();
+
+	for (const auto& trRect : trRectList)
+		trRect->Update();
 
 	ground->Update();
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
-
-	Vector2 temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
-	CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, temp.y + 210));
-
+	
 	CAMERA->Update();
 	backLayer->SetPosition(CAMERA->GetPosition() + CENTER);
 	frontLayer->SetPosition(CAMERA->GetPosition() + CENTER);
@@ -64,7 +101,11 @@ void SceneTutorial::Render()
 	CAMERA->Render();
 	backLayer->Render();
 	{
-		ground->Render();
+		if (mod)
+			ground->Render();
+
+		for (const auto& trRect : trRectList)
+			trRect->Render();
 
 		for (const auto& object : objectList)
 			object->Render();
@@ -82,6 +123,7 @@ void SceneTutorial::PostRender()
 	tutoSet->GUI();
 	
 	IMGUI->TutoObjectGUIS(objectList, "TutoObjects");
+	IMGUI->TextureRectGUIS(trRectList, "TextureRects");
 
 	static bool bOpen = true;
 	if (ImGui::Begin("TutorialMap", &bOpen))
@@ -91,6 +133,14 @@ void SceneTutorial::PostRender()
 		ImGui::SameLine();
 		if (ImGui::Button("Load", ImVec2(50, 30)))
 			LoadTutorialMap();
+
+		if (ImGui::Checkbox("CreateMod", &mod))
+		{
+			// Objects
+			player->SetMod(mod);
+			for (auto& object : objectList)
+				object->SetIsMod(mod);
+		}
 	}
 	ImGui::End();
 }
@@ -124,8 +174,24 @@ void SceneTutorial::SaveTutorialMap(const wstring& path)
 				tempState = objectList[i]->GetState();
 				out.write((char*)&tempState, sizeof(tempState));
 			}
-		}
 
+			listSize = (int)trRectList.size();
+			out.write((char*)&listSize, sizeof(listSize));
+
+			string tempPath;
+			Vector2 tempScale;
+			for (UINT i = 0; i < trRectList.size(); ++i)
+			{
+				tempPos = trRectList[i]->GetPosition();
+				out.write((char*)&tempPos, sizeof(tempPos));
+
+				tempScale = trRectList[i]->GetScale();
+				out.write((char*)&tempScale, sizeof(tempScale));
+
+				tempPath = String::ToString(trRectList[i]->GetPath());
+				out.write(tempPath.c_str(), tempPath.size());
+			}
+		}
 		out.close();
 	}
 }
@@ -163,14 +229,42 @@ void SceneTutorial::LoadTutorialMap(const wstring& path)
 
 				if (tempState.type == TutoType::Cube)
 					objectList[i] = make_shared<Tuto_Cube>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				else if (tempState.type == TutoType::Platform)
+					objectList[i] = make_shared<Tuto_Platform>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				else if (tempState.type == TutoType::Pyramid)
+					objectList[i] = make_shared<Tuto_Pyramid>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				else if (tempState.type == TutoType::Cylinder)
+					objectList[i] = make_shared<Tuto_Cylinder>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				else if (tempState.type == TutoType::ExitDoor)
+					objectList[i] = make_shared<Tuto_ExitDoor>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				else if (tempState.type == TutoType::Sphere)
+					objectList[i] = make_shared<Tuto_Sphere>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+			}
+
+			listSize;
+			in.read((char*)&listSize, sizeof(listSize));
+
+			trRectList.clear();
+			trRectList.resize(listSize);
+
+			wstring tempPath;
+			Vector2 tempScale;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in.read((char*)&tempPos, sizeof(tempPos));
+				in.read((char*)&tempScale, sizeof(tempScale));
+
+				string str = "";
+				getline(in, str);
+				tempPath = String::ToWString(str);
+
+				trRectList[i] = make_shared<TextureRect>(tempPos, tempScale, 0.0f, tempPath);
 			}
 		}
-
 		in.close();
 	}
 }
 
-// 각 플렛폼에서 검사할 예정
 void SceneTutorial::CheckGround()
 {
 	player->SetCheckCollider(0);

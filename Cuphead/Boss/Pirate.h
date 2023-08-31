@@ -55,6 +55,7 @@ public:
 	void SetHit(bool hit) { hp -= hit; }
 	void SetCIntro(bool bIntro) { this->bIntro = bIntro; }
 	void SetMaxHp(int maxHp) { this->maxHp = maxHp; }
+	void SetIntro(bool bIntro) { this->bIntro = bIntro; }
 	void SetMod(bool bMod) { this->bMod = bMod; }
 
 private:

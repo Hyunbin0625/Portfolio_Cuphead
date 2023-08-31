@@ -3,6 +3,9 @@
 
 void ScenePirate::Init()
 {
+	// √ ±‚»≠
+	bIntro = false;
+
 	player = make_shared<Player>(Vector2(250, 180), Vector2(101, 159), 500.0f, 3, 100.0f);
 	player->SetTotalSize(1.0f);
 
@@ -21,16 +24,19 @@ void ScenePirate::Init()
 	waterList.resize(4);
 	waterList[0] = make_unique<BG_Water>((WaterType)0, Vector2(CENTER_X,-50), 1.3f);
 
-	waterList[1] = make_unique<BG_Water>((WaterType)3, Vector2(CENTER_X, 118), 1.3f);
+	waterList[1] = make_unique<BG_Water>((WaterType)3, Vector2(CENTER_X, 118), 1.3f); 
 	waterList[2] = make_unique<BG_Water>((WaterType)2, Vector2(CENTER_X, 45), 1.3f);
 	waterList[3] = make_unique<BG_Water>((WaterType)1, Vector2(CENTER_X, 0), 1.3f);
 
 	forestObjectSet = make_unique<ForestObjectSet>();
 	objectList.push_back(make_shared<Forest_Ground>(Vector2(193.0f, 73.999f), 6.0f, 0.0f, true));
-		
-	player->SetIntro(true);
 
 	BARREL->SetMinMax(Vector2(CAMERA->GetPosition().x, ground->GetTextureRect()->GetPosition().x + ground->GetTextureRect()->GetScale().x * 0.5f));
+
+	IRISA->Start();
+
+	SOUND->AddSound("Back", L"_Sounds/MUS_Pirate.wav", true);
+	SOUND->Play("Back");
 }
 
 void ScenePirate::Destroy()
@@ -39,128 +45,13 @@ void ScenePirate::Destroy()
 
 void ScenePirate::Update()
 {
-	player->SetCheckCollider(false);
-	player->SetPlatform(false);
+	Collision();
 
-	// Player&Enemies Collision
-	pirate->Collision(player);
-
-	// PeaBullet&Player
-	for (int i = 0; i < PEABULLETMANAGER->GetBullets().size(); ++i)
+	if (IRISA->GetIsAnimEnd() && !bIntro)
 	{
-		if (PEABULLETMANAGER->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider))
-			&& !PEABULLETMANAGER->GetBullets()[i]->GetDeath())
-		{
-			if (PEABULLETMANAGER->GetBullets()[i]->GetParrySlap())
-			{
-				parryTime += DELTA;
-				if (parryTime < 0.5f && player->GetParry())
-				{
-					player->SetJumpSpeed(400.0f);
-					player->SetVel(0.0f);
-					player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));
-					PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
-					parryTime = 0.0f;
-				}
-				else if (parryTime >= 0.5f)
-				{
-					player->SetHit(true);
-					PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
-					parryTime = 0.0f;
-				}
-			}
-			else
-			{
-				PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
-				player->SetHit(true);
-			}
-		}
-		else
-		{
-			for (auto& object : objectList)
-			{
-				if (object->GetState().type == ForestObjectType::Ground)
-				{
-					if (PEABULLETMANAGER->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(object->GetTextureRect()->GET_COMP(Collider))
-						&& !PEABULLETMANAGER->GetBullets()[i]->GetDeath())
-						PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
-				}
-			}
-		}
-	}
-
-	// CannonBullet&Player
-	for (int i = 0; i < CANNONBALLMANAGER->GetBullets().size(); ++i)
-	{
-		if (CANNONBALLMANAGER->GetBullets()[i]->GetColorRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
-			player->SetHit(true);
-	}
-
-	// Barrel&Object Collision
-	for (auto& object : objectList)
-	{
-		if (object->GetCollision() && BARREL->GetDrop())
-		{
-			if (BARREL->GetAnimRect()->GET_COMP(Collider)->Intersect(object->GetTextureRect()->GET_COMP(Collider)))
-			{
-				BARREL->SetDrop(false);
-				BARREL->SetSmash(true);
-			}
-		}
-	}
-	BARREL->Collision(player);
-
-	// Shark&Player
-	SHARK->Collision(player);
-
-	// DogFish&Ground
-	for (auto& object : objectList)
-	{
-		if (object->GetState().type == ForestObjectType::Ground)
-		{
-			for (auto& dogFish : DOGFISH->GetDogFishList())
-				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(dogFish->GetAnimRect()->GET_COMP(Collider)))
-					dogFish->SetGround(object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y * 0.5f);
-		}
-	}
-	// DogFish&Player
-	DOGFISH->Collision(player);
-
-	// SquidBulletManager&Ground
-	for (auto& object : objectList)
-	{
-		if (object->GetState().type == ForestObjectType::Ground)
-		{
-			for (auto& squidBullet : SQUIDBULLETMANAGER->GetSquidBulletList())
-				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(squidBullet->GetAnimRect()->GET_COMP(Collider)))
-					squidBullet->SetEnd(true);
-		}
-	}	
-	// SquidBulletManager&Player
-	SQUIDBULLETMANAGER->Collision(player);
-
-	// PirateBeam&Player
-	if (PIRATEBEAM->GetCollisionRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
-		player->SetHit(true);
-
-	// PirateBubbleManager&Player
-	for (auto& bubble : BUBBLEMANAGER->GetBullets())
-	{
-		if (bubble->GetActivation() && bubble->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
-		{
-			player->SetHit(true);
-			bubble->SetIsEnd(true);
-		}
-	}
-
-	// Player&Object Collision
-	for (auto& object : objectList)
-	{
-		if (object->GetCollision())
-		{
-			if (object->Collision(player))
-				player->SetCheckCollider(true);
-		}
+		bIntro = true;
+		player->SetIntro(true);
+		pirate->SetIntro(true);
 	}
 
 	// Delete Object
@@ -294,6 +185,133 @@ void ScenePirate::PostRender()
 		}
 	}
 	ImGui::End();
+}
+
+void ScenePirate::Collision()
+{
+	player->SetCheckCollider(false);
+	player->SetPlatform(false);
+
+	// Player&Enemies Collision
+	pirate->Collision(player);
+
+	// PeaBullet&Player
+	for (int i = 0; i < PEABULLETMANAGER->GetBullets().size(); ++i)
+	{
+		if (PEABULLETMANAGER->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider))
+			&& !PEABULLETMANAGER->GetBullets()[i]->GetDeath())
+		{
+			if (PEABULLETMANAGER->GetBullets()[i]->GetParrySlap())
+			{
+				parryTime += DELTA;
+				if (parryTime < 0.5f && player->GetParry())
+				{
+					player->SetJumpSpeed(400.0f);
+					player->SetVel(0.0f);
+					player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));
+					PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
+					parryTime = 0.0f;
+				}
+				else if (parryTime >= 0.5f)
+				{
+					player->SetHit(true);
+					PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
+					parryTime = 0.0f;
+				}
+			}
+			else
+			{
+				PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
+				player->SetHit(true);
+			}
+		}
+		else
+		{
+			for (auto& object : objectList)
+			{
+				if (object->GetState().type == ForestObjectType::Ground)
+				{
+					if (PEABULLETMANAGER->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(object->GetTextureRect()->GET_COMP(Collider))
+						&& !PEABULLETMANAGER->GetBullets()[i]->GetDeath())
+						PEABULLETMANAGER->GetBullets()[i]->SetDeath(true);
+				}
+			}
+		}
+	}
+
+	// CannonBullet&Player
+	for (int i = 0; i < CANNONBALLMANAGER->GetBullets().size(); ++i)
+	{
+		if (CANNONBALLMANAGER->GetBullets()[i]->GetColorRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+			player->SetHit(true);
+	}
+
+	// Barrel&Object Collision
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision() && BARREL->GetDrop())
+		{
+			if (BARREL->GetAnimRect()->GET_COMP(Collider)->Intersect(object->GetTextureRect()->GET_COMP(Collider)))
+			{
+				BARREL->SetDrop(false);
+				BARREL->SetSmash(true);
+			}
+		}
+	}
+	BARREL->Collision(player);
+
+	// Shark&Player
+	SHARK->Collision(player);
+
+	// DogFish&Ground
+	for (auto& object : objectList)
+	{
+		if (object->GetState().type == ForestObjectType::Ground)
+		{
+			for (auto& dogFish : DOGFISH->GetDogFishList())
+				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(dogFish->GetAnimRect()->GET_COMP(Collider)))
+					dogFish->SetGround(object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y * 0.5f);
+		}
+	}
+	// DogFish&Player
+	DOGFISH->Collision(player);
+
+	// SquidBulletManager&Ground
+	for (auto& object : objectList)
+	{
+		if (object->GetState().type == ForestObjectType::Ground)
+		{
+			for (auto& squidBullet : SQUIDBULLETMANAGER->GetSquidBulletList())
+				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(squidBullet->GetAnimRect()->GET_COMP(Collider)))
+					squidBullet->SetEnd(true);
+		}
+	}
+	// SquidBulletManager&Player
+	SQUIDBULLETMANAGER->Collision(player);
+
+	// PirateBeam&Player
+	if (PIRATEBEAM->GetCollisionRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+		player->SetHit(true);
+
+	// PirateBubbleManager&Player
+	for (auto& bubble : BUBBLEMANAGER->GetBullets())
+	{
+		if (bubble->GetActivation() && bubble->GetAnimRect()->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
+		{
+			player->SetHit(true);
+			bubble->SetIsEnd(true);
+		}
+	}
+
+	// Player&Object Collision
+	for (auto& object : objectList)
+	{
+		if (object->GetCollision())
+		{
+			if (object->Collision(player))
+				player->SetCheckCollider(true);
+		}
+	}
 }
 
 void ScenePirate::SaveRibbyCroaks(const wstring& path)

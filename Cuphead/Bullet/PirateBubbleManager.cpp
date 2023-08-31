@@ -40,21 +40,21 @@ void PirateBubble::Update()
 	{
 		if (count == 0)
 		{
-			animRect->SetScale(Vector2(105, 103) * 0.8f * totalSize);
+			animRect->SetScale(Vector2(105, 103) * 0.7f * totalSize);
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 				++count;
 		}
 		else if (bEnd)
 		{
-			animRect->SetScale(Vector2(366, 400) * 0.8f * totalSize);
+			animRect->SetScale(Vector2(366, 400) * 0.7f * totalSize);
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 				bActivation = false;
 		}
 		else if (count == 1)
 		{
-			animRect->SetScale(Vector2(105, 103) * 0.8f * totalSize);
+			animRect->SetScale(Vector2(105, 103) * 0.7f * totalSize);
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Loop");
 		}
 

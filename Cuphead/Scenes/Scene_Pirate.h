@@ -10,8 +10,10 @@ public:
 	void PreRender() override;
 	void Render() override;
 	void PostRender() override;
-
+	
 public:
+	void Collision();
+
 	void SaveRibbyCroaks(const wstring& path = L"");
 	void LoadRibbyCroaks(const wstring& path = L"");
 
@@ -31,5 +33,6 @@ private:
 	unique_ptr<ForestObjectSet> forestObjectSet;
 
 	float parryTime = 0.0f;
+	bool bIntro = false;
 	bool mod = false;
 };

@@ -104,6 +104,9 @@ void TextureRect::GUI(int ordinal)
 		if (ImGui::Button("ChangShader", ImVec2(100, 30)))
 			ChangeShaderFunc();
 
+		if (ImGui::Button("Delete", ImVec2(50, 30)))
+			bDelete = true;
+
 		ImGui::EndMenu();
 	}
 }

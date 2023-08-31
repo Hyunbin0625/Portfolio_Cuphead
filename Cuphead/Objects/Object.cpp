@@ -34,7 +34,9 @@ void Object::Render()
 
 void Object::GUI()
 {
-	ImGui::SliderFloat2("Translation", (float*)&position, 0, gWinWidth, "%.2f");
-	ImGui::SliderFloat2("Scale", (float*)&scale, 1, gWinWidth, "%.2f");
+	ImGui::InputFloat("TranslationX", &position.x, 1.0f, 100.0f);
+	ImGui::InputFloat("TranslationY", &position.y, 1.0f, 100.0f);
+	ImGui::InputFloat("ScaleX", &scale.x, 0.1f, 10.0f);
+	ImGui::InputFloat("ScaleY", &scale.y, 0.1f, 10.0f);
 	ImGui::SliderAngle("Rotation", &rotation);
 }

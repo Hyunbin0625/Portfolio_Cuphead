@@ -312,11 +312,28 @@
     <ClCompile Include="Pirate\BG_Water.cpp">
       <Filter>Pirate</Filter>
     </ClCompile>
-    <ClCompile Include="Monster\Squid.cpp" />
-    <ClCompile Include="Bullet\SquidBulletManager.cpp" />
-    <ClCompile Include="Pirate\InkScreen.cpp" />
-    <ClCompile Include="Bullet\PirateBeam.cpp" />
-    <ClCompile Include="Bullet\PirateBubbleManager.cpp" />
+    <ClCompile Include="Screen\InkScreen.cpp">
+      <Filter>Pirate</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PirateBeam.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\PirateBubbleManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster\Squid.cpp">
+      <Filter>Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet\SquidBulletManager.cpp">
+      <Filter>Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\ScreenFx.cpp" />
+    <ClCompile Include="Screen\IrisA.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Platform.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Pyramid.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Cylinder.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_ExitDoor.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -602,11 +619,28 @@
       <Filter>Pirate</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Monster\Squid.h" />
-    <ClInclude Include="Bullet\SquidBulletManager.h" />
-    <ClInclude Include="Pirate\InkScreen.h" />
-    <ClInclude Include="Bullet\PirateBeam.h" />
-    <ClInclude Include="Bullet\PirateBubbleManager.h" />
+    <ClInclude Include="Screen\InkScreen.h">
+      <Filter>Pirate</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PirateBeam.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\PirateBubbleManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster\Squid.h">
+      <Filter>Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet\SquidBulletManager.h">
+      <Filter>Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\ScreenFx.h" />
+    <ClInclude Include="Screen\IrisA.h" />
+    <ClInclude Include="TutorialObject\Tuto_Platform.h" />
+    <ClInclude Include="TutorialObject\Tuto_Pyramid.h" />
+    <ClInclude Include="TutorialObject\Tuto_Cylinder.h" />
+    <ClInclude Include="TutorialObject\Tuto_ExitDoor.h" />
+    <ClInclude Include="TutorialObject\Tuto_Sphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

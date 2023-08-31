@@ -7,7 +7,7 @@ void Scene::Init()
 	ground = make_unique<ColorRect>(Vector2(CENTER_X, 100), Vector2(WIN_DEFAULT_WIDTH, 3), 0.0f, BLACK);
 	ground2 = make_unique<ColorRect>(Vector2(CENTER_X, 300), Vector2(300, 3), 0.0f, BLACK);
 
-	sphere = make_unique<Sphere>(Vector2(1100, 300), Vector2(48, 48), 0.0f, true);
+	sphere = make_unique<Sphere>(Vector2(1100, 300), 1.0f, 0.0f, true);
 
 	// AddComponent
 	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));

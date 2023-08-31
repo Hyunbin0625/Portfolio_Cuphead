@@ -20,8 +20,6 @@ public:
 	void PostRender() override;
 
 public:
-	void Reset();
-
 	bool GetStart() { return bStart; }
 	bool GetMod() { return bMod; }
 	bool GetOption() { return bOption; }

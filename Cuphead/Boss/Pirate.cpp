@@ -6,7 +6,6 @@ Pirate::Pirate(PirateInfo captainInfo, PirateInfo boatInfo, UINT maxHp, float wa
 {
 	// 초기화
 	hp = maxHp;
-	bIntro = true;
 	random_device random;
 	mt = mt19937(random());
 
@@ -159,6 +158,7 @@ void Pirate::Collision(shared_ptr<Player> player)
 				if (player->GetBullet()->GetBullets()[i]->GetHit())
 				{
 					player->GetBullet()->GetBullets()[i]->Hit();
+					player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
 					--hp;
 				}
 			}
@@ -216,8 +216,11 @@ void Pirate::Update()
 		boatInfo.time = 0.0f;
 	}
 
-	captainInfo.time += DELTA;
-	boatInfo.time += DELTA;
+	if (IRISA->GetIsAnimEnd())
+	{
+		captainInfo.time += DELTA;
+		boatInfo.time += DELTA;
+	}
 
 	if (currentPhase == 1)
 	{
@@ -546,7 +549,7 @@ void Pirate::Update()
 		else if (currentPhase == 2)
 		{
 			deltaTime += DELTA;
-			if (boatInfo.animClipCount < 3 && deltaTime >= 2.5f)
+			if (boatInfo.animClipCount < 3 && deltaTime >= 4.0f)
 			{
 				mBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"UShoot");
 				mBoat->SetScale(Vector2(251, 176) * boatInfo.totalSize);
@@ -739,7 +742,7 @@ void Pirate::Update()
 		bBoat->SetPosition(Vector2(1000, -1000));
 	}
 
-	if (currentPhase == 1)
+	if (currentPhase == 1 && IRISA->GetIsAnimEnd())
 	{
 		if (direction)	// 상
 		{

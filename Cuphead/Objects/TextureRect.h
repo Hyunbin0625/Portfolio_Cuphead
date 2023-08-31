@@ -9,6 +9,8 @@ public:
 public:
 	wstring GetPath() const { return texturePath; }
 	ScratchImage* GetImage() { return &image; }
+	bool GetIsDelete() { return bDelete; }
+
 	void SetOutline(bool bOutline) { OB->SetOutline(bOutline); }
 
 	void SetSRV(ComPtr<ID3D11ShaderResourceView> srv) { this->srv = srv; }
@@ -40,4 +42,6 @@ protected:
 	ComPtr<ID3D11BlendState> blendState;
 
 	unique_ptr<OutlineBuffer> OB;
+
+	bool bDelete = false;
 };

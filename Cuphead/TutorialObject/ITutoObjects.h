@@ -4,6 +4,11 @@ enum class TutoType
 {
 	None = -1,
 	Cube,
+	Platform,
+	Pyramid,
+	Cylinder,
+	ExitDoor,
+	Sphere,
 };
 
 struct TutoState
@@ -34,5 +39,7 @@ public:
 	virtual TutoState GetState() = 0;
 	virtual bool GetCollision() = 0;
 
+
 	virtual void SetState(TutoState state) = 0;
+	virtual void SetIsMod(bool bMod) = 0;
 };

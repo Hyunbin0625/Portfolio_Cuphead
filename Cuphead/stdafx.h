@@ -110,6 +110,7 @@ public:															\
 extern HWND gHandle;
 extern float gWinWidth;
 extern float gWinHeight;
+extern int currentSceneIndex;
 
 //Systems
 #include "Systems/Input.h"
@@ -169,6 +170,15 @@ extern float gWinHeight;
 #include "Objects/SFX.h"
 #include "Objects/SuperMeterCard.h"
 
+// Screen
+#include "Screen/InkScreen.h"
+#include "Screen/ScreenFx.h"
+#include "Screen/IrisA.h"
+
+#define INKSCREEN InkScreen::Get()
+#define SCREENFX ScreenFx::Get()
+#define IRISA IrisA::Get()
+
 // Bullet
 #include "Bullet/PlayerBullet.h"
 #include "Bullet/PlayerBulletManager.h"
@@ -204,6 +214,11 @@ extern float gWinHeight;
 // Tuto
 #include "TutorialObject/TutoSet.h"
 #include "TutorialObject/Tuto_Cube.h"
+#include "TutorialObject/Tuto_Platform.h"
+#include "TutorialObject/Tuto_Pyramid.h"
+#include "TutorialObject/Tuto_Cylinder.h"
+#include "TutorialObject/Tuto_ExitDoor.h"
+#include "TutorialObject/Tuto_Sphere.h"
 
 // Forest
 #include "Forest/ForestEnemySet.h"
@@ -259,8 +274,5 @@ extern float gWinHeight;
 #include "Pirate/BG_Cloud.h"
 #include "Pirate/BG_Water.h"
 #include "Pirate/BG_Ground.h"
-#include "Pirate/InkScreen.h"
-
-#define INKSCREEN InkScreen::Get()
 
 #include "Boss/Pirate.h"

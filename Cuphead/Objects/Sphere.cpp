@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Sphere.h"
 
-Sphere::Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap)
-	: position(position), rotation(rotation), bParrySlap(parrySlap)
+Sphere::Sphere(Vector2 position, float size, float rotation, bool parrySlap)
+	: position(position), size(size), rotation(rotation), bParrySlap(parrySlap)
 {
-	animRect = make_unique<AnimationRect>(position, Scale, rotation, L"_Textures/Scene_Tutorial/tutorial_sphere.png");
+	animRect = make_shared<AnimationRect>(position, Vector2(48, 48) * size, rotation, L"_Textures/Scene_Tutorial/tutorial_sphere.png");
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"Sphere", L"_Textures/Scene_Tutorial/tutorial_sphere.png", 2, false, true, 1));
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"PinkSphere", L"_Textures/Scene_Tutorial/tutorial_pink_sphere.png", 2, false, true, 1));
 	// AddAnimator
@@ -13,6 +13,10 @@ Sphere::Sphere(Vector2 position, Vector2 Scale, float rotation, bool parrySlap)
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
+
+	SOUND->AddSound("Parry", L"_Sounds/sfx_player_parry_slap_01.wav", false, true);
+	SOUND->AddSound("ParryHit", L"_Sounds/sfx_player_parry_power_up_hit_01.wav", false, true);
+	SOUND->AddSound("ParryFull", L"_Sounds/sfx_player_parry_power_up_full.wav", false, true);
 }
 
 void Sphere::CheckCollision(shared_ptr<Player> player)
@@ -23,13 +27,17 @@ void Sphere::CheckCollision(shared_ptr<Player> player)
 	{
 		if (player->GetParry())
 		{
-			player->SetJumpSpeed(400.0f);
+			SOUND->Play("Parry");
+			player->SetJumpSpeed(600.0f);
 			player->SetVel(0.0f);
 			player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
+			if (player->GetSuperMeterCard() >= 100)
+				SOUND->Play("ParryFull");
+			else
+				SOUND->Play("ParryHit");
+
 			bParrySlap = 0;
 		}
-		else if (bObstacle)	// 충돌 object인 경우
-			player->SetHit(true);
 	}
 }
 
@@ -67,7 +75,6 @@ void Sphere::GUI()
 		ImGui::SliderAngle("Rotation", &rotation);
 		
 		ImGui::Checkbox("ParrySlap", &bParrySlap);
-		ImGui::Checkbox("obstacle", &bObstacle);
 	}
 	ImGui::End();
 }

@@ -17,4 +17,6 @@ public:
 private:
 	vector<shared_ptr<IScene>> sceneList;
 	shared_ptr<IScene> currentScene;
+
+	int currentIndex = 0;
 };

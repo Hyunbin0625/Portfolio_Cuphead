@@ -7,6 +7,8 @@ public:
 	Tuto_Cube(const Vector2& position, const float& totalSize, float rotation, bool bCollision);
 
 public:
+	virtual void Collision(shared_ptr<Player> player) override;
+
 	virtual void Update() override;
 	virtual void Render() override;
 	virtual void GUI(int ordinal) override;
@@ -16,8 +18,7 @@ public:
 	virtual bool GetCollision() override { return state.bCollision; }
 
 	virtual void SetState(TutoState state) override { this->state = state; }
-
-	virtual void Collision(shared_ptr<Player> player) override;
+	virtual void SetIsMod(bool bMod) override { this->bMod = bMod; }
 
 private:
 	unique_ptr<TextureRect> textureRect;
@@ -31,5 +32,6 @@ private:
 	Vector2 colScale = Vector2(-33, -54);
 	
 	bool bPlatform = false;
-	bool bDelete = 0;
+	bool bMod = false;
+	bool bDelete = false;
 };

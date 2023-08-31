@@ -5,6 +5,11 @@
 TutoSet::TutoSet()
 {
 	SetTextID(L"_Textures/Scene_Tutorial/tutorial_cube.png");
+	SetTextID(L"_Textures/Scene_Tutorial/tutorial_cylinder_and_platform.png");
+	SetTextID(L"_Textures/Scene_Tutorial/tutorial_pyramid_Icon.png");
+	SetTextID(L"_Textures/Scene_Tutorial/tutorial_cylinder_1.png");
+	SetTextID(L"_Textures/Scene_Tutorial/tutorial_exit_door.png");
+	SetTextID(L"_Textures/Scene_Tutorial/tutorial_pink_sphere_Icon.png");
 }
 
 void TutoSet::SetTextID(const wstring& texturePath)

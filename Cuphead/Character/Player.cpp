@@ -146,6 +146,16 @@ Player::Player(const Vector2& position, const Vector2& scale, float speed, UINT 
 
 	// Components
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	// Sound
+	SOUND->AddSound("Shoot", L"_Sounds/sfx_player_default_fire_loop_01.wav", true);
+	SOUND->AddSound("Dash", L"_Sounds/sfx_player_dash_01.wav", false);
+	SOUND->AddSound("Crack", L"_Sounds/sfx_player_damage_crack_level3.wav", false);
+	SOUND->AddSound("Hit", L"_Sounds/sfx_player_hit_01.wav", false);
+	SOUND->AddSound("Death", L"_Sounds/sfx_player_death_01.wav", false);
+	SOUND->AddSound("Jump", L"_Sounds/sfx_player_jump_01.wav", false);
+	SOUND->AddSound("BeamS", L"_Sounds/sfx_player_super_beam_start_01.wav", false);
+	SOUND->AddSound("BeamL", L"_Sounds/sfx_player_super_beam_firing_loop.wav", false);
 }
 
 void Player::Move()
@@ -579,7 +589,7 @@ void Player::Update()
 	{
 		superBeam->SetIsSuperBeam(true);
 		bSuperBeam = 1;
-		check = 1;
+		check = true;
 		if (INPUT->Press(VK_RIGHT) || direction == Direction::R)
 		{
 			direction = Direction::R;
@@ -596,7 +606,7 @@ void Player::Update()
 	else if (INPUT->Press('V') && (int)(superMeterCard / maxSuperMeterCard * 100) >= 20 && bSpecialAttack == 0 && !bSuperBeam)
 	{
 		bSpecialAttack = 1;
-		check = 1;
+		check = true;
 
 		
 		if (checkCollider == 0 && jumpCount == 1)
@@ -692,6 +702,7 @@ void Player::Update()
 
 	if (deltaTime >= maxTime && bSuperBeam == 1)
 	{
+		SOUND->Stop("BeamL");
 		superMeterCard = 0;
 		bSuperBeam = 2;
 		superBeam->SetIsSuperBeam(false);
@@ -746,10 +757,14 @@ void Player::Update()
 		animRect->SetScale(Vector2(137, 169)* totalSize);
 		break;
 	case Jump_R:
+		if (jumpSpeed >= jumpMaxSpeed * 0.5f)
+			SOUND->Play("Jump");
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpR");
 		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
 	case Jump_L:
+		if (jumpSpeed >= jumpMaxSpeed * 0.5f)
+			SOUND->Play("Jump");
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpL");
 		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
@@ -910,6 +925,7 @@ void Player::Update()
 		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 85 * totalSize));
 		break;
 	case Dash:
+		SOUND->Play("Dash");
 		animRect->SetScale(Vector2(158, 132) * totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashR");
@@ -987,6 +1003,7 @@ void Player::Update()
 		superBeam->Init(animRect->GetPosition(), totalSize, deltaTime, maxTime, 0);
 		if (deltaTime < 0.9f)
 		{
+			SOUND->Play("BeamS");
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroR1");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
@@ -997,6 +1014,7 @@ void Player::Update()
 		}
 		else
 		{
+			SOUND->Play("BeamL");
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamLoopR");
 			animRect->SetScale(Vector2(202, 140) * totalSize);
 		}
@@ -1005,6 +1023,7 @@ void Player::Update()
 		superBeam->Init(animRect->GetPosition(), totalSize, deltaTime, maxTime, 1);
 		if (deltaTime < 0.9f)
 		{
+			SOUND->Play("BeamS");
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroL1");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
@@ -1015,19 +1034,31 @@ void Player::Update()
 		}
 		else
 		{
+			SOUND->Play("BeamL");
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamLoopL");
 			animRect->SetScale(Vector2(202, 140) * totalSize);
 		}
 		break;
 	case Hit_R:
+		SOUND->Play("Crack");
+		SOUND->Play("Hit");
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitR");
 		animRect->SetScale(Vector2(125, 188) * totalSize);
 		break;
 	case Hit_L:
+		SOUND->Play("Crack");
+		SOUND->Play("Hit");
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitL");
 		animRect->SetScale(Vector2(125, 188) * totalSize);
 		break;
 	case Death:
+		if (!check)
+		{
+			check = true;
+			SOUND->Play("Crack");
+			SOUND->Play("Hit");
+			SOUND->Play("Death");
+		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		animRect->SetScale(Vector2(172, 106) * totalSize);
 		break;
@@ -1064,14 +1095,25 @@ void Player::Update()
 	else
 		bullet->SetTime((float)(bullet->GetLastIndex() + 1));
 
-	if (bSpecialAttack >= 1 && check == 1 && deltaTime >= 0.4f)
+	if (bSpecialAttack >= 1 && check && deltaTime >= 0.4f)
 	{
 		specialAttack->IndexManagement();
-		check = 0;
+		check = false;
 	}
 
 	if (superMeterCard > maxSuperMeterCard)
 		superMeterCard = maxSuperMeterCard;
+
+	// Sound
+	if (state >= PlayerState::Shoot_Down_R && state <= PlayerState::Run_Shoot_Diagonal_Up_L
+		|| state >= PlayerState::Aim_Shoot_Diagonal_Up_R && state <= PlayerState::Aim_Shoot_Down_L
+		|| state >= PlayerState::Jump_R && state <= PlayerState::Jump_L && INPUT->Press('X'))
+	{
+		SOUND->Play("Shoot");
+	}
+	else
+		SOUND->Stop("Shoot");
+
 
 	SFXbullet->Update();
 	animRect->Update();

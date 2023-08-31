@@ -181,13 +181,10 @@ private:
 	int bSpecialAttack = 0;
 	int bSuperBeam = 0;
 	float maxTime = 3.0f;
-	bool check = 0;
-
-	bool platform = 0;
-
 	float tempTime = 0;
 
+	bool check = false;
+	bool platform = 0;
 	bool bIntro = false;
-
 	bool bMod = false;
 };
