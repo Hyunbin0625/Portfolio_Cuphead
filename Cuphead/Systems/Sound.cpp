@@ -73,13 +73,17 @@ void Sound::Play(const string& key)
 	if (iter != soundList.end())
 	{
 		if (iter->second->canMulti)
+		{
 			system->playSound(iter->second->sound, nullptr, false, &iter->second->channel);
+			SetMasterVolume(volume);
+		}
 		else
 		{
 			bool isPlaying;
 			iter->second->channel->isPlaying(&isPlaying);
 			if (!isPlaying)
 				system->playSound(iter->second->sound, nullptr, false, &iter->second->channel);
+			SetMasterVolume(volume);
 		}
 	}
 }

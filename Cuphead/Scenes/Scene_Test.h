@@ -23,4 +23,9 @@ private:
 
 	shared_ptr<ColorRect> ground;
 	shared_ptr<ColorRect> ground2;
+
+	bool mod = true;
+
+
+	shared_ptr<CroaksPSnake> pSnake;
 };

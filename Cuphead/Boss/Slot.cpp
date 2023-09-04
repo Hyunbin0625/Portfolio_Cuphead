@@ -7,12 +7,15 @@ Slot::Slot()
 
 	for (auto& slot : slotList)
 		slot = make_unique<TextureRect>(Vector2(1000, -1000), Vector2(66, 130), 0.0f, L"_Textures/RibbyCroaks/tallfrog_slotman_slot_TEMP.png");
+
+	SOUND->AddSound("MspinEP3", L"_Sounds/sfx_frogs_morphed_spin_01.wav", false, true);
 }
 
 void Slot::Init(Vector2 position, float totalSize)
 {
 	bStart = false;
 	bEnd = false;
+	bSpinES = false;
 	count = 0;
 	time = 0.0f;
 	flashCount = 0;
@@ -59,6 +62,12 @@ void Slot::Update()
 		}
 		else if (count <= 2)
 		{
+			if (!bSpinES)
+			{
+				bSpinES = true;
+				SOUND->Play("MspinEP3");
+			}
+
 			switch (type)
 			{
 			case SlotType::Snake:

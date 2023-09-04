@@ -43,4 +43,7 @@ private:
 	float groundY = 0.0f;
 	bool bGround = false;
 	bool bActivation = false;
+
+	// Sounds
+	bool bBallS = false;
 };

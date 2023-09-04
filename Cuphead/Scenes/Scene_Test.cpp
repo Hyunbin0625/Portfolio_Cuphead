@@ -12,6 +12,13 @@ void Scene::Init()
 	// AddComponent
 	ground->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 	ground2->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	
+	IRISA->Start();
+
+
+	pSnake = make_shared<CroaksPSnake>();
+	pSnake->Init(CENTER, CENTER.y);
 }
 
 void Scene::Destroy()
@@ -21,6 +28,7 @@ void Scene::Destroy()
 void Scene::Update()
 {
 	CheckGround();
+	pSnake->Collision(player);
 
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
@@ -35,6 +43,9 @@ void Scene::Update()
 	sphere->Update();
 
 	sphere->CheckCollision(player);
+
+
+	pSnake->Update();
 }
 
 void Scene::PreRender()
@@ -43,10 +54,13 @@ void Scene::PreRender()
 
 void Scene::Render()
 {
+	pSnake->Render();
+
 	ground->Render();
 	ground2->Render();
 	sphere->Render();
 	player->Render();
+
 
 	UI->Render();
 }
@@ -55,6 +69,14 @@ void Scene::PostRender()
 {
 	player->GUI();
 	sphere->GUI();
+
+	static bool bOpen = true;
+	if (ImGui::Begin("RibbyCroaksScene", &bOpen))
+	{
+		ImGui::Checkbox("CreateMod", &mod);
+		player->SetMod(mod);
+	}
+	ImGui::End();
 }
 
 // 각 플렛폼에서 검사할 예정

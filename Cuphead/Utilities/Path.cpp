@@ -69,6 +69,38 @@ wstring Path::GetDirectoryName(wstring path)
 	return path.substr(0, index + 1);
 }
 
+string Path::GetDirectoryName(string path, int count)
+{
+	string tempPath = path;
+	String::Replace(path, "\\", "/");
+	size_t lastIndex = path.find_last_of('/');
+	size_t fastIndex = lastIndex;
+	while (count > 0)
+	{
+		tempPath = tempPath.substr(0, fastIndex);
+		fastIndex = tempPath.find_last_of('/');
+		--count;
+	}
+
+	return  path.substr(fastIndex + 1, lastIndex + 1);
+}
+
+wstring Path::GetDirectoryName(wstring path, int count)
+{
+	wstring tempPath = path;
+	String::Replace(path, L"\\", L"/");
+	size_t lastIndex = path.find_last_of('/');
+	size_t fastIndex = lastIndex;
+	while (count > 0)
+	{
+		tempPath = tempPath.substr(0, fastIndex);
+		fastIndex = tempPath.find_last_of('/');
+		--count;
+	}
+
+	return  path.substr(fastIndex + 1, lastIndex + 1);
+}
+
 string Path::GetExtension(string path)
 {
 	String::Replace(path, "\\", "/");

@@ -19,11 +19,14 @@ void Program::Init()
 
 	currentSceneIndex = 0;
 	currentScene = sceneList[currentIndex];
+//	currentScene = sceneList[5];
 	currentScene->Init();
 
 	SOUND->AddSound("Noise", L"_Sounds/sfx_noise_1920s_01.wav", true);
-	SOUND->SetVolume("Noise", 0.2f);
 	SOUND->Play("Noise");
+	SOUND->SetMasterVolume(0.5f);
+
+	SCREENFX->Start();
 }
 
 void Program::Update()

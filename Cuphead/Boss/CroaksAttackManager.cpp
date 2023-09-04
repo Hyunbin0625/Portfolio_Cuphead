@@ -16,6 +16,8 @@ CroaksAttackManager::CroaksAttackManager()
 	regenTime = 1.0f;
 	random_device random;
 	mt = mt19937(random());
+
+	SOUND->AddSound("FirFlyDeath", L"_Sounds/sfx_frogs_tall_firefly_death_01.wav", false, true);
 }
 
 CroaksAttackManager::~CroaksAttackManager() {}

@@ -29,6 +29,11 @@ Shark::Shark()
 	dust->SetAnimator(dust->GET_COMP(Animator));
 
 	collisionRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	// Sounds
+	SOUND->AddSound("SharkWarning", L"_Sounds/sfx_level_pirate_shark_warning.wav");
+	SOUND->AddSound("SharkAttack", L"_Sounds/sfx_pirate_shark_attack.wav");
+	SOUND->AddSound("SharkExit", L"_Sounds/sfx_pirate_shark_exit_normal_loop.wav", true);
 }
 
 Shark::~Shark() {}
@@ -58,6 +63,7 @@ void Shark::Update()
 		dust->SetPosition(position);
 		break;
 	case SharkState::Intro:
+		SOUND->Play("SharkWarning");
 		animRect->SetScale(Vector2(178, 156) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
 		animRect->Move(Vector2(-800.0f, 0));
@@ -88,6 +94,7 @@ void Shark::Update()
 		}
 		break;
 	case SharkState::Bite:
+		SOUND->Play("SharkAttack");
 		position.x += speed * DELTA;
 		animRect->SetScale(Vector2(835, 535) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Bite");
@@ -104,6 +111,7 @@ void Shark::Update()
 			state = SharkState::Leave;
 		break;
 	case SharkState::Leave:
+		SOUND->Play("SharkExit");
 		position.x -= speed * 0.5f * DELTA;
 		animRect->SetScale(Vector2(795, 498) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Leave");
@@ -113,7 +121,10 @@ void Shark::Update()
 		collisionRect->SetPosition(position + Vector2(-60, 0) * totalSize);
 
 		if (position.x <= CAMERA->GetPosition().x - animRect->GetScale().x)
+		{
+			SOUND->Stop("SharkExit");
 			state = SharkState::None;
+		}
 		break;
 	}
 

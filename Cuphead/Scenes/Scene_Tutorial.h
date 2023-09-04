@@ -27,9 +27,9 @@ private:
 	unique_ptr<ColorRect> ground;
 
 	vector<shared_ptr<ITutoObjects>> objectList;
-	vector<shared_ptr<TextureRect>> trRectList;
-
 	unique_ptr<class TutoSet> tutoSet;
+
+	vector<shared_ptr<TextureRect>> trRectList;
 
 	bool mod = false;
 };

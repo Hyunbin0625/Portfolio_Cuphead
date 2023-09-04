@@ -80,8 +80,5 @@ void PlayerBulletManager::Update()
 void PlayerBulletManager::Render()
 {
 	for (int i = 0; i < (int)totalBullet; ++i)
-	{
-		if (bullets[i]->GetActivation() == true)
-			bullets[i]->Render();
-	}
+		bullets[i]->Render();
 }

@@ -40,6 +40,13 @@ Mushroom::Mushroom(const Vector2& position, float totailSize, float poisonSpeed,
 
 	// Bullet
 	bullet = make_shared<MRPoisonManager>(1, poisonSpeed);
+
+	SOUND->AddSound("MRDeath", L"_Sounds/sfx_platforming_flowergrunt_death_01.wav", false, true);
+	SOUND->AddSound("MRShoot", L"_Sounds/sfx_platforming_forest_mushroom_shoot_01.wav");
+
+	SOUND->AddSound("Parry", L"_Sounds/sfx_player_parry_slap_01.wav", false, true);
+	SOUND->AddSound("ParryHit", L"_Sounds/sfx_player_parry_power_up_hit_01.wav", false, true);
+	SOUND->AddSound("ParryFull", L"_Sounds/sfx_player_parry_power_up_full.wav", false, true);
 }
 
 void Mushroom::Collision(shared_ptr<Player> player)
@@ -76,9 +83,14 @@ void Mushroom::Collision(shared_ptr<Player> player)
 				parryTime += DELTA;
 				if (parryTime < 0.5f && player->GetParry())
 				{
-					player->SetJumpSpeed(400.0f);
+					SOUND->Play("Parry");
+					player->SetJumpSpeed(600.0f);
 					player->SetVel(0.0f);
 					player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
+					if (player->GetSuperMeterCard() >= 100)
+						SOUND->Play("ParryFull");
+					else
+						SOUND->Play("ParryHit");
 					bullet->GetBullets()[i]->SetActivation(false);
 					parryTime = 0.0f;
 				}
@@ -98,9 +110,16 @@ void Mushroom::Collision(shared_ptr<Player> player)
 
 void Mushroom::Init()
 {
+	bDeathS = false;
 	animRect->SetPosition(state.position);
 	hp = state.maxHp;
 	direction = state.direction;
+}
+
+void Mushroom::Destroy()
+{
+	SOUND->Stop("MRDeath");
+	SOUND->Stop("MRShoot");
 }
 
 void Mushroom::Update()
@@ -114,10 +133,7 @@ void Mushroom::Update()
 	{
 		if (!(ImGui::IsAnyItemActive()) && animRect->GET_COMP(Collider)->Intersect(INPUT->GetMousePosition()) && INPUT->Press(VK_LBUTTON))
 			state.position = INPUT->GetMousePosition();
-		animRect->SetPosition(state.position);
-		direction = state.direction;
-		hp = state.maxHp;
-
+		Init();
 		bullet->SetBulletSpeed(state.speed);
 	}
 
@@ -186,6 +202,11 @@ void Mushroom::Update()
 		}
 		break;
 	case MushroomState::PopOut:
+		if (!bPopS && animRect->GetPosition().y != -1000 && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bPopS = true;
+			SOUND->Play("MRShoot");
+		}
 		animRect->SetScale(Vector2(121, 135) * state.totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"PopOutR");
@@ -193,6 +214,7 @@ void Mushroom::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"PopOutL");
 		if (animRect->GET_COMP(Animator)->GetEnd())
 		{
+			bPopS = false;
 			checkState = 1;
 			time = 0.0f;
 			shoot = true;
@@ -208,13 +230,17 @@ void Mushroom::Update()
 			checkState = 0;
 		break;
 	case MushroomState::Death:
+		if (!bDeathS && animRect->GetPosition().y != -1000 && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bDeathS = true;
+			SOUND->Play("MRDeath");
+		}
 		animRect->SetScale(Vector2(234, 261) * (float)(0.6 * state.totalSize));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())
 			animRect->SetPosition(Vector2(1000, -1000));
 		break;
 	}
-
 	bullet->SetTotalSize(state.totalSize);
 	animRect->Update();
 	bullet->Update();

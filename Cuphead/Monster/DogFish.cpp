@@ -29,6 +29,11 @@ DogFish::DogFish()
 
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 	dust->SetAnimator(dust->GET_COMP(Animator));
+
+	// Sounds
+	SOUND->AddSound("DogFishJump", L"_Sounds/sfx_pirate_dogfish_jump.wav", false, true);
+	SOUND->AddSound("DogFishSlide", L"_Sounds/sfx_pirate_dogfish_slide.wav", false, true);
+	SOUND->AddSound("DogFishDeath", L"_Sounds/sfx_pirate_dogfish_death_poof_01.wav", false, true);
 }
 
 void DogFish::Collision(shared_ptr<Player> player)
@@ -43,8 +48,13 @@ void DogFish::Collision(shared_ptr<Player> player)
 	{
 		if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(animRect->GET_COMP(Collider)) && state != DogFishState::Death)
 		{
-			--hp;
-			player->GetBullet()->GetBullets()[i]->SetActivation(false);
+			if (!player->GetBullet()->GetBullets()[i]->GetHit())
+			{
+				--hp;
+				player->GetBullet()->GetBullets()[i]->SetIsHit(true);
+				player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+			}
+
 		}
 	}
 
@@ -65,9 +75,12 @@ void DogFish::Init(Vector2 position, float size, float speed, int maxHp)
 	this->speed = speed;
 	this->hp = maxHp;
 	
+	state = DogFishState::Up;
 	val = 0.0f;
 	bActivation = true;
-	state = DogFishState::Up;
+	bJumpS = false;
+	bSlideS = false;
+	bDeathS = false;
 
 	jumpSpeed = maxJumpSpeed;
 	animRect->SetPosition(this->position);
@@ -89,6 +102,11 @@ void DogFish::Update()
 		dust->SetPosition(position);
 		break;
 	case DogFishState::Up:
+		if (!bJumpS)
+		{
+			bJumpS = true;
+			SOUND->Play("DogFishJump");
+		}
 		val += G * aclrt * DELTA;
 		jumpSpeed -= val * DELTA;
 		animRect->SetScale(Vector2(246, 305) * totalSize);
@@ -138,11 +156,21 @@ void DogFish::Update()
 		}
 		break;
 	case DogFishState::Slide:
+		if (!bSlideS)
+		{
+			bSlideS = true;
+			SOUND->Play("DogFishSlide");
+		}
 		animRect->SetScale(Vector2(243, 102) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Slide");
 		animRect->Move(Vector2(-speed, 0));
 		break;
 	case DogFishState::Death:
+		if (!bDeathS)
+		{
+			bDeathS = true;
+			SOUND->Play("DogFishDeath");
+		}
 		animRect->SetScale(Vector2(250, 118) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		animRect->Move(Vector2(0, speed));

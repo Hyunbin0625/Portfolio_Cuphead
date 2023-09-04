@@ -16,31 +16,50 @@ LobberSeed::LobberSeed(float bulletSpeed)
 
 	// AddComponent
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	SOUND->AddSound("LBExplosion", L"_Sounds/sfx_platforming_forest_lobber_projectile_explosion_01.wav", false, true);
 }
 
 void LobberSeed::Init(Vector2 position, float rotation, float playerX)
 {
 	vel = 0;
-	jumpSpeed = 500.0f;
+	jumpSpeed = 450.0f;
 
 	space = playerX - position.x;
 	bGround = false;
+	bExplosionS = false;
 
 	this->playerX = playerX;
+	this->position = position;
 	animRect->SetPosition(position);
 	animRect->SetRotation(rotation);
 }
 
 void LobberSeed::Update()
 {
+	Vector2 dist = Vector2(playerX - animRect->GetPosition().x, 0);
+	if (dist.x > 0)
+		dist.Normalize();
+	else
+	{
+		dist.Normalize();
+		dist.x *= -1;
+	}
+
 	// Animation
 	if (bGround)
 	{
+		if (bActivation && !bExplosionS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bExplosionS = true;
+			SOUND->Play("LBExplosion");
+		}
 		animRect->SetScale(Vector2(370, 443) * 0.5 * totalSize);
 		animRect->SetPosition(Vector2(position.x, position.y + 70 * totalSize));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"ExplosionR");
 		if (animRect->GET_COMP(Animator)->GetEnd())
 		{
+			bExplosionS = false;
 			bActivation = false;
 			animRect->SetPosition(Vector2(1000, -1000));
 		}
@@ -48,15 +67,15 @@ void LobberSeed::Update()
 	else
 	{
 		// time, G
-		vel += (float)(G * DELTA);
-		jumpSpeed -= vel;
+		vel += (float)(G * 280.0f * DELTA);
+		jumpSpeed -= vel * DELTA;
 
 		animRect->SetScale(Vector2(70, 73) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Seed");
 		this->position = animRect->GetPosition();
 
 		// Move
-		animRect->Move(Vector2(space, jumpSpeed));
+		animRect->Move(Vector2(dist.x * space, jumpSpeed));
 	}
 	animRect->Update();
 }

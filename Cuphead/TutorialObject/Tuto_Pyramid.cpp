@@ -113,10 +113,10 @@ void Tuto_Pyramid::Collision(shared_ptr<Player> player)
 	{
 		if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(animTarget->GET_COMP(Collider)))
 		{
-			if (player->GetBullet()->GetBullets()[i]->GetHit())
+			if (!player->GetBullet()->GetBullets()[i]->GetHit())
 			{
-				player->GetBullet()->GetBullets()[i]->SetActivation(false);
 				--hp;
+				player->GetBullet()->GetBullets()[i]->SetIsHit(true);
 			}
 		}
 	}

@@ -12,7 +12,7 @@ Tuto_ExitDoor::Tuto_ExitDoor(const Vector2& position, const float& totalSize, fl
 
 void Tuto_ExitDoor::Collision(shared_ptr<Player> player)
 {
-	if (textureRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
+	if (textureRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)))
 	{
 		if (INPUT->Press('Z') && !nextScene)
 		{

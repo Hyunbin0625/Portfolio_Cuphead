@@ -22,7 +22,7 @@ void ScenePirate::Init()
 	cloudList[2] = make_unique<BG_Cloud>((CloudType)0, Vector2(CENTER_X, 390.0f), 250.0f, 1.5f);
 
 	waterList.resize(4);
-	waterList[0] = make_unique<BG_Water>((WaterType)0, Vector2(CENTER_X,-50), 1.3f);
+	waterList[0] = make_unique<BG_Water>((WaterType)0, Vector2(CENTER_X, -50), 1.3f);
 
 	waterList[1] = make_unique<BG_Water>((WaterType)3, Vector2(CENTER_X, 118), 1.3f); 
 	waterList[2] = make_unique<BG_Water>((WaterType)2, Vector2(CENTER_X, 45), 1.3f);
@@ -30,6 +30,8 @@ void ScenePirate::Init()
 
 	forestObjectSet = make_unique<ForestObjectSet>();
 	objectList.push_back(make_shared<Forest_Ground>(Vector2(193.0f, 73.999f), 6.0f, 0.0f, true));
+
+	CAMERA->SetPosition(Vector2());
 
 	BARREL->SetMinMax(Vector2(CAMERA->GetPosition().x, ground->GetTextureRect()->GetPosition().x + ground->GetTextureRect()->GetScale().x * 0.5f));
 
@@ -45,14 +47,21 @@ void ScenePirate::Destroy()
 
 void ScenePirate::Update()
 {
-	Collision();
-
-	if (IRISA->GetIsAnimEnd() && !bIntro)
+	// Intro
+	if (!mod && IRISA->GetIsAnimEnd() && !bIntro)
 	{
 		bIntro = true;
 		player->SetIntro(true);
 		pirate->SetIntro(true);
+		FIGHTTEXT->Init(FightTextType::Boss_B, true);
 	}
+
+	if (mod)
+	{
+		bIntro = false;
+	}
+
+	Collision();
 
 	// Delete Object
 	for (int i = 0; i < objectList.size(); ++i)
@@ -68,6 +77,25 @@ void ScenePirate::Update()
 		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 	else if (forestObjectSet->GetSelectedIndex() == 2)
 		objectList.push_back(make_shared<FloatingPlatform>(ForestObjectType::FPlatform_a, CAMERA->GetPosition() + CENTER, 0.72f, 0.0f, true, 1, 100.0f));
+
+	// NextScene
+	if (pirate->GetHp() <= 0)
+	{
+		deltaTime += DELTA;
+		if (deltaTime <= 1.0f)
+			FIGHTTEXT->Init(FightTextType::Boss_B, false, true);
+
+		if ((int)deltaTime == 5)
+			IRISA->End();
+
+		if (deltaTime >= 5 && IRISA->GetIsAnimEnd())
+		{
+			deltaTime = 0.0f;
+			pirate->Destroy();
+			SOUND->DeleteSound("Back");
+			currentSceneIndex = 0;
+		}
+	}
 
 	backGround->Update();
 	ground->Update();
@@ -94,8 +122,10 @@ void ScenePirate::Update()
 	UI->Update();
 
 	CAMERA->Update();
-	BARREL->Update();
+	if (bIntro)
+		BARREL->Update();
 	INKSCREEN->Update();
+	FIGHTTEXT->Update();
 }
 
 void ScenePirate::PreRender()
@@ -136,6 +166,7 @@ void ScenePirate::Render()
 
 	INKSCREEN->Render();
 	UI->Render();
+	FIGHTTEXT->Render();
 }
 
 void ScenePirate::PostRender()

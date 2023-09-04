@@ -37,6 +37,8 @@ private:
 	float playerX = 0.0f;
 
 	bool bGround = false;
+
+	bool bExplosionS = true;
 };
 
 class LSeedManager

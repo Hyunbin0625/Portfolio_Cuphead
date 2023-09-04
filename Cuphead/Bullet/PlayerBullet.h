@@ -19,19 +19,19 @@ public:
 	bool GetActivation() { return bActivation; }
 	bool GetHit() { return bHit; }
 
-
+	void SetIsHit(bool bHit) { this->bHit = bHit; }
 	void SetActivation(bool bActivation) { this->bActivation = bActivation; }
-	void SetRunTime(float runTime) { this->runTime = runTime; }
 	void SetTotalSize(float totalSize) { this->totalSize = totalSize; }
 
 private:
 	shared_ptr<AnimationRect> animRect;
-	bool bActivation;
-	bool bHit = true;
-	float time = 0.0f;
 
 	float speed;
-	float runTime = 0.0f;
-
 	float totalSize;
+	int animCount = 0;
+
+	float time = 0.0f;
+
+	bool bHit = false;
+	bool bActivation;
 };

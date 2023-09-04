@@ -23,6 +23,8 @@ Chomper::Chomper(const Vector2& position, float totailSize, float speed, int max
 
 	// Components
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	SOUND->AddSound("ChomperBite", L"_Sounds/sfx_platforming_forest_chomper_bite_01.wav");
 }
 
 void Chomper::Collision(shared_ptr<Player> player)
@@ -39,6 +41,11 @@ void Chomper::Init()
 	jumpSpeed = state.speed;
 }
 
+void Chomper::Destroy()
+{
+	SOUND->Stop("ChomperBite");
+}
+
 void Chomper::Update()
 {
 	if (bMod)
@@ -52,11 +59,12 @@ void Chomper::Update()
 
 	if (time >= state.regenTime)
 	{
-		vel += (float)(G * DELTA);
-		jumpSpeed -= vel;
+		vel += (float)(G * 250 * DELTA);
+		jumpSpeed -= vel * DELTA;
 
 		if (bAttackLoop)
 		{
+			bSoundBite = false;
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AttackLoop");
 			if (animRect->GetPosition().y <= state.position.y)
 			{
@@ -66,9 +74,17 @@ void Chomper::Update()
 		}
 		else 
 		{
+			if (!bSoundBite && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x
+				&& animRect->GetPosition().y <= CAMERA->GetPosition().y + WIN_DEFAULT_WIDTH && animRect->GetPosition().y >= CAMERA->GetPosition().y)
+			{
+				bSoundBite = true;
+				SOUND->Play("ChomperBite");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack");
 			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
 				bAttackLoop = true;
+			}
 		}
 
 		animRect->Move(Vector2(0, jumpSpeed));

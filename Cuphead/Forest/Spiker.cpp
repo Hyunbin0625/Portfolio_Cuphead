@@ -21,6 +21,10 @@ Spiker::Spiker(const Vector2& position, float totailSize, float speed, int maxHp
 
 	// Components
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	SOUND->AddSound("Parry", L"_Sounds/sfx_player_parry_slap_01.wav", false, true);
+	SOUND->AddSound("ParryHit", L"_Sounds/sfx_player_parry_power_up_hit_01.wav", false, true);
+	SOUND->AddSound("ParryFull", L"_Sounds/sfx_player_parry_power_up_full.wav", false, true);
 }
 
 void Spiker::Collision(shared_ptr<Player> player)
@@ -30,9 +34,14 @@ void Spiker::Collision(shared_ptr<Player> player)
 		parryTime += DELTA;
 		if (parryTime < 0.5f && player->GetParry())
 		{
-			player->SetJumpSpeed(400.0f);
+			SOUND->Play("Parry");
+			player->SetJumpSpeed(600.0f);
 			player->SetVel(0.0f);
 			player->SetSuperMeterCard((float)(player->GetSuperMeterCard() + 0.2 * player->GetMaxSuperMeterCard()));	// 20 퍼센트 추가
+			if (player->GetSuperMeterCard() >= 100)
+				SOUND->Play("ParryFull");
+			else
+				SOUND->Play("ParryHit");
 			bActivation = false;
 			parryTime = 0.0f;
 		}
@@ -48,6 +57,13 @@ void Spiker::Init()
 {
 	animRect->SetPosition(state.position);
 	bActivation = true;
+}
+
+void Spiker::Destroy()
+{
+	SOUND->Stop("Parry");
+	SOUND->Stop("ParryHit");
+	SOUND->Stop("ParryFull");
 }
 
 void Spiker::Update()

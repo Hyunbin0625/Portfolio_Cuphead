@@ -27,7 +27,8 @@ void Forest_Wall::Update()
 
 void Forest_Wall::Render()
 {
-	textureRect->Render();
+	if (bMod)
+		textureRect->Render();
 }
 
 void Forest_Wall::GUI(int ordinal)
@@ -55,47 +56,4 @@ void Forest_Wall::GUI(int ordinal)
 	{
 		textureRect->SetOutline(false);
 	}
-}
-
-bool Forest_Wall::Collision(shared_ptr<Player> player)
-{
-	if (textureRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
-	{
-		// 충돌시 player가 object 위인 경우
-		if (player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y + textureRect->GetScale().y / 2
-			&& player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x - textureRect->GetScale().x / 2
-			&& player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x + textureRect->GetScale().x / 2)
-		{
-			player->SetGroundPos(Vector2(textureRect->GetPosition().x, textureRect->GetPosition().y + textureRect->GetScale().y / 2));
-
-			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < textureRect->GetPosition().y + textureRect->GetScale().y / 2 - 1)
-			{
-				player->GetAnimRect()->Move(Vector2(0, 400));
-			}
-			return true;
-		}	// 충돌시 player가 object 아래인 경우
-		else if (player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y - textureRect->GetScale().y / 2
-			&& player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x - textureRect->GetScale().x / 2
-			&& player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x + textureRect->GetScale().x / 2)
-		{
-			player->GetAnimRect()->Move(Vector2(0, player->GetJumpSpeed()));
-			player->SetJumpSpeed(0.0f);
-			return false;
-		}	// 충돌시 player가 object 옆인 경우
-		else if (player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x + textureRect->GetScale().x / 2
-			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
-			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
-		{
-			player->GetAnimRect()->Move(Vector2(1000, 0));
-			return false;
-		}
-		else if (player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x - textureRect->GetScale().x / 2
-			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
-			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
-		{
-			player->GetAnimRect()->Move(Vector2(-1000, 0));
-			return false;
-		}
-	}
-	return false;
 }

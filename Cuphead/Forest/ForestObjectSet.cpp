@@ -5,7 +5,9 @@ ForestObjectSet::ForestObjectSet()
 {
 	SetTextID(L"_Textures/ground.png");
 	SetTextID(L"_Textures/wall.png");
+	SetTextID(L"_Textures/Scene_ForestFollies/lv1-1_mg_dark-brambles-loop.png");
 	SetTextID(L"_Textures/Scene_ForestFollies/lv1-1_mg_floating-platform-double.png");
+	SetTextID(L"_Textures/Scene_ForestFollies/level_world_1_exit_sign.png");
 }
 
 void ForestObjectSet::SetTextID(const wstring& texturePath)
@@ -21,7 +23,7 @@ void ForestObjectSet::SetTextID(const wstring& texturePath)
 void ForestObjectSet::GUI()
 {
 	static bool bOpen = true;
-	if (ImGui::Begin("ForestObjects", &bOpen))
+	if (ImGui::Begin("Objects", &bOpen))
 	{
 		int index = 0;
 		selectedIndex = -1;

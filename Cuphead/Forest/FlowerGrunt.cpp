@@ -37,6 +37,9 @@ FlowerGrunt::FlowerGrunt(const Vector2& position, float totailSize, float speed,
 	// Components
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 
+	SOUND->AddSound("Float", L"_Sounds/sfx_platforming_flowergrunt_float_03.wav", false, true);
+	SOUND->AddSound("Land", L"_Sounds/sfx_platforming_flowergrunt_float_land_01.wav", false, true);
+	SOUND->AddSound("GruntDeath", L"_Sounds/sfx_platforming_flowergrunt_death_02.wav", false, true);
 }
 
 void FlowerGrunt::Collision(shared_ptr<Player> player)
@@ -47,10 +50,20 @@ void FlowerGrunt::Collision(shared_ptr<Player> player)
 
 void FlowerGrunt::Init()
 {
+	bFloatS = false;
+	bLandS = false;
+	bDeathS = false;
 	animRect->SetPosition(state.position);
 	hp = state.maxHp;
 	direction = state.direction;
 	groundPos = Vector2(-1000, -1000);
+}
+
+void FlowerGrunt::Destroy()
+{
+	SOUND->Stop("Float");
+	SOUND->Stop("Land");
+	SOUND->Stop("GruntDeath");
 }
 
 void FlowerGrunt::Update()
@@ -84,6 +97,11 @@ void FlowerGrunt::Update()
 		animState = FwGruntState::Turn;
 	else if (bGround)
 	{
+		if (!bLandS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bLandS = true;
+			SOUND->Play("Land");
+		}
 		animState = FwGruntState::Run;
 		if (!bMod && hp > 0)
 			Move();
@@ -110,6 +128,11 @@ void FlowerGrunt::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunL");
 		break;
 	case FwGruntState::Float:
+		if (!bFloatS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bFloatS = true;
+			SOUND->Play("Float");
+		}
 		animRect->SetScale(Vector2(207, 248) * state.totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"FloatR");
@@ -146,6 +169,11 @@ void FlowerGrunt::Update()
 		}
 			break;
 		case FwGruntState::Death:
+			if (!bDeathS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+			{
+				bDeathS = true;
+				SOUND->Play("GruntDeath");
+			}
 			animRect->SetScale(Vector2(234, 261) * 1.5 * state.totalSize);
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 			if (animRect->GET_COMP(Animator)->GetEnd())

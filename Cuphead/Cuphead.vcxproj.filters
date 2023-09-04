@@ -52,6 +52,9 @@
     <Filter Include="Pirate">
       <UniqueIdentifier>{6bd5f787-ae3f-4e3e-8b58-360456fdb5e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Screen">
+      <UniqueIdentifier>{e84c7859-93a6-4559-91d9-10d314e7f42e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
@@ -312,9 +315,6 @@
     <ClCompile Include="Pirate\BG_Water.cpp">
       <Filter>Pirate</Filter>
     </ClCompile>
-    <ClCompile Include="Screen\InkScreen.cpp">
-      <Filter>Pirate</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet\PirateBeam.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
@@ -327,13 +327,37 @@
     <ClCompile Include="Bullet\SquidBulletManager.cpp">
       <Filter>Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="Screen\ScreenFx.cpp" />
-    <ClCompile Include="Screen\IrisA.cpp" />
-    <ClCompile Include="TutorialObject\Tuto_Platform.cpp" />
-    <ClCompile Include="TutorialObject\Tuto_Pyramid.cpp" />
-    <ClCompile Include="TutorialObject\Tuto_Cylinder.cpp" />
-    <ClCompile Include="TutorialObject\Tuto_ExitDoor.cpp" />
-    <ClCompile Include="TutorialObject\Tuto_Sphere.cpp" />
+    <ClCompile Include="TutorialObject\Tuto_Cylinder.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_ExitDoor.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_Platform.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_Pyramid.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialObject\Tuto_Sphere.cpp">
+      <Filter>TutorialObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\ScreenFx.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\IrisA.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\InkScreen.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Screen\FightText.cpp">
+      <Filter>Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Forest_Exit.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
+    <ClCompile Include="Forest\Forest_Hole.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -619,9 +643,6 @@
       <Filter>Pirate</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Screen\InkScreen.h">
-      <Filter>Pirate</Filter>
-    </ClInclude>
     <ClInclude Include="Bullet\PirateBeam.h">
       <Filter>Bullet</Filter>
     </ClInclude>
@@ -634,13 +655,37 @@
     <ClInclude Include="Bullet\SquidBulletManager.h">
       <Filter>Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="Screen\ScreenFx.h" />
-    <ClInclude Include="Screen\IrisA.h" />
-    <ClInclude Include="TutorialObject\Tuto_Platform.h" />
-    <ClInclude Include="TutorialObject\Tuto_Pyramid.h" />
-    <ClInclude Include="TutorialObject\Tuto_Cylinder.h" />
-    <ClInclude Include="TutorialObject\Tuto_ExitDoor.h" />
-    <ClInclude Include="TutorialObject\Tuto_Sphere.h" />
+    <ClInclude Include="TutorialObject\Tuto_Cylinder.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_ExitDoor.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_Platform.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_Pyramid.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialObject\Tuto_Sphere.h">
+      <Filter>TutorialObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\ScreenFx.h">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\IrisA.h">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\InkScreen.h">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Screen\FightText.h">
+      <Filter>Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Forest_Exit.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest\Forest_Hole.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

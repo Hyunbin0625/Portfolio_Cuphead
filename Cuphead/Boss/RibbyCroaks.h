@@ -33,6 +33,7 @@ public:
 
 public:
 	void Collision(shared_ptr<Player> player);
+	void Destroy();
 
 	void Update();
 	void Render();
@@ -42,6 +43,7 @@ public:
 public:
 	shared_ptr<AnimationRect> GetRibby() { return ribby; }
 	shared_ptr<AnimationRect> GetCroaks() { return croaks; }
+	
 
 	int GetMaxHp() { return (int)maxHp; }
 	float GetDelay() { return delay; }
@@ -60,7 +62,6 @@ public:
 private:
 	shared_ptr<AnimationRect> ribby;
 	shared_ptr<AnimationRect> croaks;
-	shared_ptr<RibbyAttackManager> ribbyAttack;
 	unique_ptr<CroaksWind> croaksWind;
 	unique_ptr<ColorRect> collisionRect;
 	unique_ptr<ColorRect> collisionParry;
@@ -93,4 +94,8 @@ private:
 	bool bArm = false;
 	bool bParrySlap = false;
 	bool bMod = false;
+
+	// sounds
+	bool bSAttack = false;
+	bool bTAttack = false;
 };

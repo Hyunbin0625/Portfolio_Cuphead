@@ -49,4 +49,7 @@ private:
 	Vector2 startPos = Vector2();
 	Vector2 playerPos = Vector2();
 	bool bActivation = false;
+
+	// Sounds
+	bool bDeathS = false;
 };

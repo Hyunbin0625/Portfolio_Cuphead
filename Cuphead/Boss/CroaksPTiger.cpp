@@ -31,6 +31,8 @@ CroaksPTiger::CroaksPTiger()
 	// Components
 	collisionRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 	bulletRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
+
+	SOUND->AddSound("BBall", L"_Sounds/sfx_frogs_ball_platform_ball_launch_01.wav", false, true);
 }
 
 void CroaksPTiger::Collision(shared_ptr<Player> player)
@@ -56,23 +58,6 @@ void CroaksPTiger::Collision(shared_ptr<Player> player)
 		}	// 충돌시 player가 object 옆인 경우
 		else
 			player->SetHit(true);
-//		else if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
-//			|| player->GetAnimRect()->GetPosition().y + player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y - collisionRect->GetScale().y / 2)
-//		{
-//			if (player->GetAnimRect()->GetPosition().x + player->GetAnimRect()->GetScale().x / 2 > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
-//				&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x)
-//			{
-//				// player hit
-//				player->SetHit(true);
-//			}
-//			if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x / 2 < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2
-//				&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x)
-//			{
-//				// player hit
-//				player->SetHit(true);
-//			}
-//		//	cout << "LeftRight\n";
-//		}
 	}
 
 	if (bulletRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
@@ -99,6 +84,8 @@ void CroaksPTiger::Init(Vector2 position, float groundY)
 	vel = 0.0f;
 	BVel = 0.0f;
 	bActivation = true;
+	bBallS = false;
+
 	animRect->SetPosition(position);
 	topAnimRect->SetPosition(animRect->GetPosition());
 	bulletRect->SetPosition(animRect->GetPosition());
@@ -126,7 +113,14 @@ void CroaksPTiger::Update()
 
 		bulletRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Idle");
 		if (bulletRect->GetPosition().y <= animRect->GetPosition().y)
+		{
+			if(!bBallS)
+			{
+				bBallS = true;
+				SOUND->Play("BBall");
+			}
 			BVel = maxJumpSpeed;
+		}
 		else
 			BVel -= G * 200 * DELTA;
 		bulletRect->Move(Vector2(0, BVel));

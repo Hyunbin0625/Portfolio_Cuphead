@@ -32,7 +32,9 @@ private:
 	vector<shared_ptr<IForestObjects>> objectList;
 	unique_ptr<ForestObjectSet> forestObjectSet;
 
+	float deltaTime = 0.0f;
 	float parryTime = 0.0f;
+
 	bool bIntro = false;
 	bool mod = false;
 };

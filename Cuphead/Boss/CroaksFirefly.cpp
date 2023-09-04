@@ -45,8 +45,12 @@ void CroaksFirefly::Collision(shared_ptr<Player> player)
 	{
 		if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(animRect->GET_COMP(Collider)) && animState != CroaksFireflyState::Death)
 		{
-			--hp;
-			player->GetBullet()->GetBullets()[i]->SetActivation(false);
+			if (!player->GetBullet()->GetBullets()[i]->GetHit())
+			{
+				--hp;
+				player->GetBullet()->GetBullets()[i]->SetIsHit(true);
+				player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+			}
 		}
 	}
 
@@ -62,6 +66,7 @@ void CroaksFirefly::Collision(shared_ptr<Player> player)
 
 void CroaksFirefly::Init(Vector2 position, Vector2 startPos)
 {
+	bDeathS = false;
 	bActivation = true;
 	hp = 1;
 	time = 0.0f;
@@ -145,6 +150,11 @@ void CroaksFirefly::Update()
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Down");
 		break;
 	case CroaksFireflyState::Death:
+		if (!bDeathS)
+		{
+			bDeathS = true;
+			SOUND->Play("FirFlyDeath");
+		}
 		animRect->SetScale(Vector2(608, 611) * (float)(1 * totalSize));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())

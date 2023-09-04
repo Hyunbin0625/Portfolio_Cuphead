@@ -13,6 +13,9 @@ void SceneTutorial::Init()
 
 	tutoSet = make_unique<TutoSet>();
 
+	CAMERA->SetPosition(Vector2());
+	CAMERA->SetEdges(false);
+
 	IRISA->Start();
 
 	SOUND->AddSound("Back", L"_Sounds/MUS_Tutorial.wav", true);
@@ -39,33 +42,12 @@ void SceneTutorial::Update()
 			object->Collision(player);
 	}
 
-	// Add
-	if (tutoSet->GetSelectedIndex() == 0)
-		objectList.push_back(make_shared<Tuto_Cube>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
-	if (tutoSet->GetSelectedIndex() == 1)
-		objectList.push_back(make_shared<Tuto_Platform>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
-	if (tutoSet->GetSelectedIndex() == 2)
-		objectList.push_back(make_shared<Tuto_Pyramid>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
-	if (tutoSet->GetSelectedIndex() == 3)
-		objectList.push_back(make_shared<Tuto_Cylinder>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
-	if (tutoSet->GetSelectedIndex() == 4)
-		objectList.push_back(make_shared<Tuto_ExitDoor>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, 0));
-	if (tutoSet->GetSelectedIndex() == 5)
-		objectList.push_back(make_shared<Tuto_Sphere>(CAMERA->GetPosition() + CENTER, 1.0f, 3.0f, 0));
-
-	// Delete
+	// Delete Object
 	for (int i = 0; i < objectList.size(); ++i)
 	{
 		if (objectList[i]->GetDelete())
 			objectList.erase(objectList.begin() + i);
 	}
-
-
-	// Add
-	if (INPUT->Down(VK_SPACE))
-		if (!ImGui::IsAnyItemActive())
-			trRectList.push_back(make_shared<TextureRect>(INPUT->GetMousePosition(), Vector2(300, 300), 0.0f));
-
 	// Delete
 	for (int i = 0; i < trRectList.size(); ++i)
 	{
@@ -73,10 +55,29 @@ void SceneTutorial::Update()
 			trRectList.erase(trRectList.begin() + i);
 	}
 
+	// Add Object
+	if (tutoSet->GetSelectedIndex() == 0)
+		objectList.push_back(make_shared<Tuto_Cube>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	if (tutoSet->GetSelectedIndex() == 1)
+		objectList.push_back(make_shared<Tuto_Platform>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	if (tutoSet->GetSelectedIndex() == 2)
+		objectList.push_back(make_shared<Tuto_Pyramid>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	if (tutoSet->GetSelectedIndex() == 3)
+		objectList.push_back(make_shared<Tuto_Cylinder>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	if (tutoSet->GetSelectedIndex() == 4)
+		objectList.push_back(make_shared<Tuto_ExitDoor>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+	if (tutoSet->GetSelectedIndex() == 5)
+		objectList.push_back(make_shared<Tuto_Sphere>(CAMERA->GetPosition() + CENTER, 1.0f, 3.0f, true));
 
+	// Add TextureRect
+	if (INPUT->Down(VK_SPACE))
+		if (!ImGui::IsAnyItemActive())
+			trRectList.push_back(make_shared<TextureRect>(INPUT->GetMousePosition(), Vector2(300, 300), 0.0f));
+
+	// ObjectList Update
 	for (const auto& object : objectList)
 		object->Update();
-
+	// TextureRectList Update
 	for (const auto& trRect : trRectList)
 		trRect->Update();
 
@@ -134,13 +135,10 @@ void SceneTutorial::PostRender()
 		if (ImGui::Button("Load", ImVec2(50, 30)))
 			LoadTutorialMap();
 
-		if (ImGui::Checkbox("CreateMod", &mod))
-		{
-			// Objects
-			player->SetMod(mod);
-			for (auto& object : objectList)
-				object->SetIsMod(mod);
-		}
+		ImGui::Checkbox("CreateMod", &mod);
+		player->SetMod(mod);
+		for (auto& object : objectList)
+			object->SetIsMod(mod);
 	}
 	ImGui::End();
 }
@@ -154,8 +152,6 @@ void SceneTutorial::SaveTutorialMap(const wstring& path)
 	}
 	else
 	{
-		if (objectList.empty()) return;
-
 		ofstream out(path.c_str());
 
 		if (out.is_open())
@@ -165,31 +161,51 @@ void SceneTutorial::SaveTutorialMap(const wstring& path)
 			float tempSize = player->GetTotalSize();
 			out.write((char*)&tempSize, sizeof(tempSize));
 
-			int listSize = (int)objectList.size();
-			out.write((char*)&listSize, sizeof(listSize));
-
-			TutoState tempState;
-			for (UINT i = 0; i < objectList.size(); ++i)
+			int listSize = 0;
+			if (!objectList.empty())
 			{
-				tempState = objectList[i]->GetState();
-				out.write((char*)&tempState, sizeof(tempState));
-			}
+				listSize = (int)objectList.size();
+				out.write((char*)&listSize, sizeof(listSize));
 
-			listSize = (int)trRectList.size();
-			out.write((char*)&listSize, sizeof(listSize));
+				TutoState tempState;
+				for (UINT i = 0; i < objectList.size(); ++i)
+				{
+					tempState = objectList[i]->GetState();
+					out.write((char*)&tempState, sizeof(tempState));
+				}
+			}
+			else
+				out.write((char*)&listSize, sizeof(listSize));
 
 			string tempPath;
 			Vector2 tempScale;
-			for (UINT i = 0; i < trRectList.size(); ++i)
+			if (!trRectList.empty())
 			{
-				tempPos = trRectList[i]->GetPosition();
-				out.write((char*)&tempPos, sizeof(tempPos));
+				listSize = (int)trRectList.size();
+				out.write((char*)&listSize, sizeof(listSize));
 
-				tempScale = trRectList[i]->GetScale();
-				out.write((char*)&tempScale, sizeof(tempScale));
+				for (UINT i = 0; i < trRectList.size(); ++i)
+				{
+					tempPos = trRectList[i]->GetPosition();
+					out.write((char*)&tempPos, sizeof(tempPos));
 
-				tempPath = String::ToString(trRectList[i]->GetPath());
-				out.write(tempPath.c_str(), tempPath.size());
+					tempScale = trRectList[i]->GetScale();
+					out.write((char*)&tempScale, sizeof(tempScale));
+
+					size_t tempLength = trRectList[i]->GetPath().length();
+					out.write((char*)&tempLength, sizeof(tempLength));
+
+					if (!trRectList[i]->GetPath().empty())
+					{
+						tempPath = String::ToString(trRectList[i]->GetPath());
+						out.write(tempPath.c_str(), tempPath.size());
+					}
+				}
+			}
+			else
+			{
+				listSize = 0;
+				out.write((char*)&listSize, sizeof(listSize));
 			}
 		}
 		out.close();
@@ -222,43 +238,54 @@ void SceneTutorial::LoadTutorialMap(const wstring& path)
 			objectList.clear();
 			objectList.resize(listSize);
 
-			TutoState tempState;
-			for (UINT i = 0; i < listSize; ++i)
+			if (listSize)
 			{
-				in.read((char*)&tempState, sizeof(tempState));
+				TutoState tempState;
+				for (UINT i = 0; i < listSize; ++i)
+				{
+					in.read((char*)&tempState, sizeof(tempState));
 
-				if (tempState.type == TutoType::Cube)
-					objectList[i] = make_shared<Tuto_Cube>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
-				else if (tempState.type == TutoType::Platform)
-					objectList[i] = make_shared<Tuto_Platform>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
-				else if (tempState.type == TutoType::Pyramid)
-					objectList[i] = make_shared<Tuto_Pyramid>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
-				else if (tempState.type == TutoType::Cylinder)
-					objectList[i] = make_shared<Tuto_Cylinder>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
-				else if (tempState.type == TutoType::ExitDoor)
-					objectList[i] = make_shared<Tuto_ExitDoor>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
-				else if (tempState.type == TutoType::Sphere)
-					objectList[i] = make_shared<Tuto_Sphere>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					if (tempState.type == TutoType::Cube)
+						objectList[i] = make_shared<Tuto_Cube>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					else if (tempState.type == TutoType::Platform)
+						objectList[i] = make_shared<Tuto_Platform>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					else if (tempState.type == TutoType::Pyramid)
+						objectList[i] = make_shared<Tuto_Pyramid>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					else if (tempState.type == TutoType::Cylinder)
+						objectList[i] = make_shared<Tuto_Cylinder>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					else if (tempState.type == TutoType::ExitDoor)
+						objectList[i] = make_shared<Tuto_ExitDoor>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+					else if (tempState.type == TutoType::Sphere)
+						objectList[i] = make_shared<Tuto_Sphere>(tempState.position, tempState.totalSize, tempState.rotation, tempState.bCollision);
+				}
 			}
 
-			listSize;
 			in.read((char*)&listSize, sizeof(listSize));
 
 			trRectList.clear();
 			trRectList.resize(listSize);
 
-			wstring tempPath;
-			Vector2 tempScale;
-			for (UINT i = 0; i < listSize; ++i)
+			if (listSize)
 			{
-				in.read((char*)&tempPos, sizeof(tempPos));
-				in.read((char*)&tempScale, sizeof(tempScale));
+				wstring tempPath;
+				Vector2 tempScale;
+				for (UINT i = 0; i < listSize; ++i)
+				{
+					in.read((char*)&tempPos, sizeof(tempPos));
+					in.read((char*)&tempScale, sizeof(tempScale));
 
-				string str = "";
-				getline(in, str);
-				tempPath = String::ToWString(str);
+					size_t tempLength = 0;
+					in.read((char*)&tempLength, sizeof(tempLength));
+					if (tempLength)
+					{
+						string str = "";
+						str.resize(tempLength);
+						in.read(&str[0], tempLength);
+						tempPath = String::ToWString(str);
+					}
 
-				trRectList[i] = make_shared<TextureRect>(tempPos, tempScale, 0.0f, tempPath);
+					trRectList[i] = make_shared<TextureRect>(tempPos, tempScale, 0.0f, tempPath);
+				}
 			}
 		}
 		in.close();

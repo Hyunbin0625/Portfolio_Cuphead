@@ -48,6 +48,9 @@ InkScreen::InkScreen()
 
 	random_device random;
 	mt = mt19937(random());
+
+	// Sounds
+	SOUND->AddSound("SquidBlackout", L"_Sounds/sfx_pirate_squid_blackout_screen.wav");
 }
 
 InkScreen::~InkScreen() {}
@@ -58,6 +61,7 @@ void InkScreen::Init(float duration)
 
 	if (!bActivation)
 	{
+		SOUND->Play("SquidBlackout");
 		uniform_real_distribution<float> randomScale(MScale.x, MScale.y);
 		uniform_real_distribution<float> randomPosX(CAMERA->GetPosition().x, CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH);
 		uniform_real_distribution<float> randomPosY(CAMERA->GetPosition().y, CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT);

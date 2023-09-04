@@ -8,6 +8,8 @@ RibbyAttackManager::RibbyAttackManager()
 	mt = mt19937(random());
 }
 
+RibbyAttackManager::~RibbyAttackManager() {}
+
 void RibbyAttackManager::Init(UINT totalBullet, float bulletSpeed, Vector2 position, float rotation, int currentPhase)
 {
 	bEnd = false;
@@ -57,10 +59,10 @@ void RibbyAttackManager::InitBall()
 	}
 }
 
-void RibbyAttackManager::InitCoin(float rotation)
+void RibbyAttackManager::InitCoin(float rotation, Vector2 position)
 {
 	if (!coins[currentIndex]->GetActivation())
-		coins[currentIndex++]->Init(Vector2(position.x, position.y + rebound * count), rotation);
+		coins[currentIndex++]->Init(position, rotation);
 
 	if (currentIndex >= totalBullet)
 	{

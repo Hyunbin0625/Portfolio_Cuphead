@@ -89,6 +89,7 @@ using namespace SimpleMath;
 #define BLACK Color(0, 0, 0, 1)
 
 #define G 9.8f
+#define SOUNDDSTNS 740.0f
 
 #define SUPER __super
 
@@ -174,10 +175,12 @@ extern int currentSceneIndex;
 #include "Screen/InkScreen.h"
 #include "Screen/ScreenFx.h"
 #include "Screen/IrisA.h"
+#include "Screen/FightText.h"
 
 #define INKSCREEN InkScreen::Get()
 #define SCREENFX ScreenFx::Get()
 #define IRISA IrisA::Get()
+#define FIGHTTEXT FightText::Get()
 
 // Bullet
 #include "Bullet/PlayerBullet.h"
@@ -236,7 +239,9 @@ extern int currentSceneIndex;
 #include "Forest/ForestObjectSet.h"
 #include "Forest/Forest_Ground.h"
 #include "Forest/Forest_Wall.h"
+#include "Forest/Forest_Hole.h"
 #include "Forest/FloatingPlatform.h"
+#include "Forest/Forest_Exit.h"
 
 // Slot
 #include "Boss/Slot.h"
@@ -258,6 +263,8 @@ extern int currentSceneIndex;
 #include "Boss/RibbyAttackManager.h"
 #include "Boss/CroaksWind.h"
 #include "Boss/RibbyCroaks.h"
+
+#define RATTACKMANAGER RibbyAttackManager::Get()
 
 // Monster
 #include "Monster/Barrel.h"

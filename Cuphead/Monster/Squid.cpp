@@ -24,6 +24,11 @@ Squid::Squid()
 
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 	dust->SetAnimator(dust->GET_COMP(Animator));
+
+	// Sound
+	SOUND->AddSound("SquidEneter", L"_Sounds/sfx_pirate_squid_enter.wav");
+	SOUND->AddSound("SquidAttack", L"_Sounds/sfx_pirate_squid_attack_loop.wav", true);
+	SOUND->AddSound("SquidExit", L"_Sounds/sfx_pirate_squid_exit.wav");
 }
 
 Squid::~Squid() {}
@@ -50,6 +55,7 @@ void Squid::Update()
 		dust->SetPosition(Vector2(1000, -1000));
 		break;
 	case SquidState::Intro:
+		SOUND->Play("SquidEneter");
 		animRect->SetPosition(position);
 		animRect->SetScale(Vector2(489, 544));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
@@ -75,6 +81,7 @@ void Squid::Update()
 		}
 		else
 		{
+			SOUND->Play("SquidAttack");
 			animRect->SetPosition(position);
 			animRect->SetScale(Vector2(587, 537));
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AttackL");
@@ -83,6 +90,7 @@ void Squid::Update()
 			time += DELTA;
 			if (time >= attackTime)
 			{
+				SOUND->Stop("SquidAttack");
 				animCount = 0;
 				time = 0.0f;
 				SQUIDBULLETMANAGER->SetActivation(false);
@@ -91,6 +99,7 @@ void Squid::Update()
 		}
 		break;
 	case SquidState::Leave:
+		SOUND->Play("SquidExit");
 		animRect->SetPosition(position + Vector2(10, 30) * totalSize);
 		animRect->SetScale(Vector2(449, 606));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Leave");

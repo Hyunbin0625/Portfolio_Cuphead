@@ -5,9 +5,11 @@ enum class ForestObjectType
 	None = -1,
 	Ground,
 	Wall,
+	Hole,
 	FPlatform_a,
 	FPlatform_b,
 	FPlatform_c,
+	Exit,
 };
 
 struct ForestObjectState

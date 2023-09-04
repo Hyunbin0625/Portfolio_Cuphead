@@ -22,42 +22,55 @@ void CroaksPSnake::Collision(shared_ptr<Player> player)
 {
 	if (collisionRect->GET_COMP(Collider)->Intersect(player->GetAnimRect()->GET_COMP(Collider)) && !(player->GetState() >= PlayerState::Special_Attack_R && player->GetState() <= PlayerState::Super_Beam_L))
 	{
+	//	// 충돌시 player가 object 위인 경우
+	//	if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 - 1<= collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
+	//		&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
+	//		&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2)
+	//	{
+	//		player->SetCheckCollider(true);
+	//
+	//		// player move
+	//		if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x * 0.5f > CAMERA->GetPosition().x)
+	//			player->GetAnimRect()->Move(Vector2(-speed, 0));
+	//
+	//		player->SetGroundPos(Vector2(collisionRect->GetPosition().x, collisionRect->GetPosition().y + collisionRect->GetScale().y / 2));
+	//	}	// 충돌시 player가 object 옆인 경우
+	//	else
+	//		player->SetHit(true);
+
+	//	else if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
+	//		|| player->GetAnimRect()->GetPosition().y + player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y - collisionRect->GetScale().y / 2)
+	//	{
+	//		if (player->GetAnimRect()->GetPosition().x + player->GetAnimRect()->GetScale().x / 2 > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
+	//			&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x)
+	//		{
+	//			// player hit
+	//			player->SetHit(true);
+	//		}
+	//		if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x / 2 < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2
+	//			&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x)
+	//		{
+	//			// player hit
+	//			player->SetHit(true);
+	//		}
+	//	//	cout << "LeftRight\n";
+	//	}
+
 		// 충돌시 player가 object 위인 경우
-		if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 - 1<= collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
+		if (player->GetAnimRect()->GetPosition().y > collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2)
 		{
 			player->SetCheckCollider(true);
 
 			// player move
-			player->GetAnimRect()->Move(Vector2(-speed, 0));
+			if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x * 0.5f > CAMERA->GetPosition().x)
+				player->GetAnimRect()->Move(Vector2(-speed, 0));
 
 			player->SetGroundPos(Vector2(collisionRect->GetPosition().x, collisionRect->GetPosition().y + collisionRect->GetScale().y / 2));
-
-			if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y + collisionRect->GetScale().y / 2 - 1)
-				player->GetAnimRect()->Move(Vector2(0, 400));
-			
-		//	cout << "Up\n";
 		}	// 충돌시 player가 object 옆인 경우
 		else
 			player->SetHit(true);
-//		else if (player->GetAnimRect()->GetPosition().y - player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y + collisionRect->GetScale().y / 2
-//			|| player->GetAnimRect()->GetPosition().y + player->GetAnimRect()->GetScale().y / 2 < collisionRect->GetPosition().y - collisionRect->GetScale().y / 2)
-//		{
-//			if (player->GetAnimRect()->GetPosition().x + player->GetAnimRect()->GetScale().x / 2 > collisionRect->GetPosition().x - collisionRect->GetScale().x / 2
-//				&& player->GetAnimRect()->GetPosition().x < collisionRect->GetPosition().x)
-//			{
-//				// player hit
-//				player->SetHit(true);
-//			}
-//			if (player->GetAnimRect()->GetPosition().x - player->GetAnimRect()->GetScale().x / 2 < collisionRect->GetPosition().x + collisionRect->GetScale().x / 2
-//				&& player->GetAnimRect()->GetPosition().x > collisionRect->GetPosition().x)
-//			{
-//				// player hit
-//				player->SetHit(true);
-//			}
-//		//	cout << "LeftRight\n";
-//		}
 	}
 }
 

@@ -119,7 +119,10 @@ void TextureRect::ChangeImageFunc(const wstring& path)
 		Path::OpenFileDialog(L"", Path::ImageFilter, L"_Textures/", func, gHandle);
 	}
 	else
+	{
+		wstring tempPath = path.substr(path.find(L"_Textures/"));
 		SetSRV(path);
+	}
 }
 
 void TextureRect::ChangeShaderFunc(const wstring& path)
@@ -130,5 +133,8 @@ void TextureRect::ChangeShaderFunc(const wstring& path)
 		Path::OpenFileDialog(L"", Path::ShaderFilter, L"_Shaders/", func, gHandle);
 	}
 	else
+	{
+		wstring tempPath = path.substr(path.find(L"_Shaders/"));
 		SetShader(path);
+	}
 }

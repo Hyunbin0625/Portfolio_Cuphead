@@ -11,7 +11,7 @@ public:
 	virtual void Render() override;
 	virtual void GUI(int ordinal) override;
 
-	virtual bool Collision(shared_ptr<Player> player) override;
+	virtual bool Collision(shared_ptr<Player> player) override { return false; }
 	
 	virtual shared_ptr<AnimationRect> GetAnimRect() override { return nullptr; }
 	virtual shared_ptr<TextureRect> GetTextureRect() override { return textureRect; }

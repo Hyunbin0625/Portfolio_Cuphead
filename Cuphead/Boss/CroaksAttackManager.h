@@ -75,7 +75,7 @@ private:
 	float regenTime = 0.0f;
 
 	float groundY = 0.0f;
-	float addGroundY = 130.0f;
+	float addGroundY = 129.79f;
 
 	bool bEnd = false;
 	bool bPlatform = false;

@@ -22,6 +22,8 @@
     <ClCompile Include="Bullet\PirateBeam.cpp" />
     <ClCompile Include="Bullet\PirateBubbleManager.cpp" />
     <ClCompile Include="Bullet\SquidBulletManager.cpp" />
+    <ClCompile Include="Forest\Forest_Exit.cpp" />
+    <ClCompile Include="Forest\Forest_Hole.cpp" />
     <ClCompile Include="Monster\Barrel.cpp" />
     <ClCompile Include="Boss\Pirate.cpp" />
     <ClCompile Include="Bullet\PirateCannonBallManager.cpp" />
@@ -68,6 +70,7 @@
     <ClCompile Include="Objects\SFX.cpp" />
     <ClCompile Include="Pirate\BG_Ground.cpp" />
     <ClCompile Include="Pirate\BG_Water.cpp" />
+    <ClCompile Include="Screen\FightText.cpp" />
     <ClCompile Include="Screen\InkScreen.cpp" />
     <ClCompile Include="Scenes\Scene_ForestFollies.cpp" />
     <ClCompile Include="Scenes\Scene_Main.cpp" />
@@ -132,6 +135,8 @@
     <ClInclude Include="Bullet\PirateBeam.h" />
     <ClInclude Include="Bullet\PirateBubbleManager.h" />
     <ClInclude Include="Bullet\SquidBulletManager.h" />
+    <ClInclude Include="Forest\Forest_Exit.h" />
+    <ClInclude Include="Forest\Forest_Hole.h" />
     <ClInclude Include="Monster\Barrel.h" />
     <ClInclude Include="Boss\Pirate.h" />
     <ClInclude Include="Bullet\PirateCannonBallManager.h" />
@@ -180,6 +185,7 @@
     <ClInclude Include="Objects\SFX.h" />
     <ClInclude Include="Pirate\BG_Ground.h" />
     <ClInclude Include="Pirate\BG_Water.h" />
+    <ClInclude Include="Screen\FightText.h" />
     <ClInclude Include="Screen\InkScreen.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scenes\Scene_ForestFollies.h" />

@@ -34,6 +34,9 @@ Barrel::Barrel()
 	dust->SetAnimator(dust->GET_COMP(Animator));
 
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	// Sounds
+	SOUND->AddSound("BarrelDrop", L"_Sounds/sfx_pirate_barrel_drop_attack.wav");
 }
 
 Barrel::~Barrel() {}
@@ -147,14 +150,14 @@ void Barrel::Update()
 		break;
 	case BarrelState::Drop:
 		val += G * 300.0f * DELTA;
-
-		if (val <= 3.0f)
+		if (val <= 850.0f)
 		{
+			SOUND->Play("BarrelDrop");
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop01");
 			animRect->SetScale(Vector2(165, 825) * totalSize);
 			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
 		}
-		else if (val <= 6.0f)
+		else if (val <= 1300.0f)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop02");
 			animRect->SetScale(Vector2(165, 825) * totalSize);

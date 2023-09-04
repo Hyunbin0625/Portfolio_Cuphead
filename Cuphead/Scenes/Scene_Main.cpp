@@ -10,10 +10,12 @@ void SceneMain::Init()
 	optionButton = make_unique<TextureRect>(Vector2(CENTER_X - 1, CENTER_Y), Vector2(78, 43) * 0.7, 0.0f, L"_Textures/Scene_Main/option_00.png");
 	endButton = make_unique<TextureRect>(Vector2(CENTER_X, CENTER_Y - 47 * 0.7), Vector2(80, 45) * 0.7, 0.0f, L"_Textures/Scene_Main/end_00.png");
 
+	CAMERA->SetPosition(Vector2());
+
+	IRISA->Start();
+
 	SOUND->AddSound("Back", L"_Sounds/MUS_Intro_DontDealWithDevil_Vocal.wav", true);
 	SOUND->Play("Back");
-
-	SCREENFX->Start();
 }
 
 void SceneMain::Destroy()
@@ -76,7 +78,7 @@ void SceneMain::Update()
 	{
 		bStart = false;
 		SOUND->DeleteSound("Back");
-		++currentSceneIndex;
+		currentSceneIndex += 1;
 	}
 
 	background->Update();

@@ -3,12 +3,12 @@
 class RibbyAttackManager
 {
 public:
-	RibbyAttackManager();
+	DECLARE_SINGLETON(RibbyAttackManager);
 
 public:
 	void Init(UINT totalBullet, float bulletSpeed, Vector2 position, float rotation, int currentPhase);
 	void InitBall();
-	void InitCoin(float rotation);
+	void InitCoin(float rotation, Vector2 position);
 
 	void Update();
 	void Render();

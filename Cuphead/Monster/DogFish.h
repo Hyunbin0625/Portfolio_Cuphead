@@ -52,6 +52,11 @@ private:
 	int animCount = 0;
 	float groundPosY = 0.0f;
 	bool bActivation = false;
+
+	// Sounds
+	bool bJumpS = false;
+	bool bSlideS = false;
+	bool bDeathS = false;
 };
 
 class DogFishManager

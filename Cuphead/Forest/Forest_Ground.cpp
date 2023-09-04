@@ -27,7 +27,8 @@ void Forest_Ground::Update()
 
 void Forest_Ground::Render()
 {
-	textureRect->Render();
+	if (bMod)
+		textureRect->Render();
 }
 
 void Forest_Ground::GUI(int ordinal)

@@ -18,6 +18,7 @@ public:
 public:
 	virtual void Collision(shared_ptr<Player> player) override;
 	virtual void Init() override;
+	virtual void Destroy() override;
 
 	virtual void Update() override;
 	virtual void Render() override;
@@ -60,4 +61,8 @@ private:
 
 	bool bMod = 0;
 	bool bDelete = 0;
+
+	bool bFloatS = false;
+	bool bLandS = false;
+	bool bDeathS = false;
 };

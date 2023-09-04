@@ -26,5 +26,8 @@ private:
 	vector<shared_ptr<IForestObjects>> objectList;
 	unique_ptr<ForestObjectSet> forestObjectSet;
 
-	bool mod = true;
+	float deltaTime = 0.0f;
+
+	bool bIntro = false;
+	bool mod = false;
 };

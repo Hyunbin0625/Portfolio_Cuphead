@@ -18,6 +18,9 @@ public:
 	static string GetDirectoryName(string path);
 	static wstring GetDirectoryName(wstring path);
 
+	static string GetDirectoryName(string path, int count);
+	static wstring GetDirectoryName(wstring path, int count);
+
 	static string GetExtension(string path);
 	static wstring GetExtension(wstring path);
 

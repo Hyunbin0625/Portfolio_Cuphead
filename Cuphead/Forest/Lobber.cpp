@@ -30,7 +30,9 @@ Lobber::Lobber(const Vector2& position, float totailSize, float seedSpeed, int m
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 
 	// Bullet
-	bullet = make_shared<LSeedManager>(1, seedSpeed);
+	bullet = make_shared<LSeedManager>(3, seedSpeed);
+
+	SOUND->AddSound("LBShoot", L"_Sounds/sfx_platforming_forest_lobber_shoot_01.wav", false, true);
 }
 
 void Lobber::Collision(shared_ptr<Player> player)
@@ -55,6 +57,11 @@ void Lobber::Init()
 	animRect->SetPosition(state.position);
 	hp = state.maxHp;
 	direction = state.direction;
+}
+
+void Lobber::Destroy()
+{
+	SOUND->Stop("LBShoot");
 }
 
 void Lobber::Update()
@@ -123,6 +130,11 @@ void Lobber::Update()
 		}
 		break;
 	case LobberState::Attack:
+		if (!bShootS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bShootS = true;
+			SOUND->Play("LBShoot");
+		}
 		time += DELTA;
 		animRect->SetScale(Vector2(131, 247) * state.totalSize);
 		animRect->SetPosition(Vector2(state.position.x + 11 * state.totalSize, state.position.y));
@@ -137,6 +149,7 @@ void Lobber::Update()
 		}
 		if (animRect->GET_COMP(Animator)->GetEnd())
 		{
+			bShootS = false;
 			checkAttack = false;
 			time = 0;
 		}

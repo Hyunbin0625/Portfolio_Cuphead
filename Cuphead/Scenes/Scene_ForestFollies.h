@@ -15,19 +15,24 @@ public:
 	void SaveForestFolliesMap(const wstring& path = L"");
 	void LoadForestFolliesMap(const wstring& path = L"");
 
-	// 임시 함수
-	void CheckGround();
+	void Collision();
 
 private:
-
 	shared_ptr<Player> player;
+
 	vector<shared_ptr<IForestEnemy>> enemyList;
 	unique_ptr<ForestEnemySet> forestEnemySet;
 
 	vector<shared_ptr<IForestObjects>> objectList;
 	unique_ptr<ForestObjectSet> forestObjectSet;
 
+	vector<shared_ptr<TextureRect>> trRectList;
+
 	unique_ptr<TextureRect> skyLayer;
 
-	bool mod = true;
+	float deltaTime = 0.0f;
+
+	bool nextScene = false;
+	bool bIntro = false;
+	bool mod = false;
 };

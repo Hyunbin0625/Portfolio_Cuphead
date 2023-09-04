@@ -18,6 +18,7 @@ public:
 public:
 	virtual void Collision(shared_ptr<Player> player) override;
 	virtual void Init() override;
+	virtual void Destroy() override;
 
 	virtual void Update() override;
 	virtual void Render() override;
@@ -66,4 +67,9 @@ private:
 	int checkState = 0;
 	float distance = 0.0f;
 	bool shoot = false;
+
+
+
+	bool bPopS = false;
+	bool bDeathS = false;
 };

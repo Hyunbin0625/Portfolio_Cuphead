@@ -43,4 +43,7 @@ private:
 
 	bool bStart = false;
 	bool bEnd = false;
+
+	// Sounds
+	bool bSpinES = false;
 };

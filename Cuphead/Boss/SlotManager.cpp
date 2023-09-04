@@ -10,6 +10,8 @@ SlotManager::SlotManager()
 
 	random_device random;
 	mt = mt19937(random());
+
+	SOUND->AddSound("MspinLP3", L"_Sounds/sfx_level_frogs_morphed_dial_spin_loop_01.wav", true);
 }
 
 SlotManager::~SlotManager() {}
@@ -42,6 +44,7 @@ void SlotManager::Update()
 {
 	if (bStart)
 	{
+		SOUND->Play("MspinLP3");
 		time += DELTA;
 
 		// animation
@@ -54,6 +57,7 @@ void SlotManager::Update()
 				bResult = true;
 				slotList[i]->SetStart(false);
 				slotList[i]->SetEnd(true);
+				SOUND->Stop("MspinLP3");
 			}
 		}
 		if (slotList.back()->GetFlashCount() >= 3)

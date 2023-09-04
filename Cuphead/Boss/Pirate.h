@@ -33,6 +33,7 @@ public:
 
 public:
 	void Collision(shared_ptr<Player> player);
+	void Destroy();
 
 	void Update();
 	void Render();
@@ -98,4 +99,7 @@ private:
 	bool bWhistle = false;
 	bool bIntro = false;
 	bool bMod = false;
+
+	// Sounds
+	bool bShootS = false;
 };

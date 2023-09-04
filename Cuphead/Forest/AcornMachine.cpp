@@ -51,6 +51,9 @@ AcornMachine::AcornMachine(const Vector2& position, float totailSize, float spee
 
 	// acorn
 	acorn = make_shared<Acorn>(position, totailSize, speed, 3, true, regenTime, Direction::L);
+
+	SOUND->AddSound("AMGrunt", L"_Sounds/sfx_platforming_acorn_maker_grunt_01-02.wav", true);
+	SOUND->AddSound("AMDeath", L"_Sounds/sfx_platforming_acorn_maker_death_01.wav", false, true);
 }
 
 void AcornMachine::Collision(shared_ptr<Player> player)
@@ -64,17 +67,42 @@ void AcornMachine::Collision(shared_ptr<Player> player)
 	if (player->GetAnimRect()->GetPosition().x >= state.position.x - WIN_DEFAULT_WIDTH)
 	{
 		if (acorn->GetHp() <= 0 && acorn->GetTime() >= state.regenTime)
-		{
-			cout << "true\n";
 			animState = AcornMachineState::Create;
-		}
 	}
 	else
 		animState = AcornMachineState::Idle;
+
+	if (animState != AcornMachineState::Create)
+	{
+		for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
+		{
+			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(acorn->GetAnimRect()->GET_COMP(Collider)) && acorn->GetHp() > 0)
+			{
+				if (!player->GetBullet()->GetBullets()[i]->GetHit())
+				{
+					player->GetBullet()->GetBullets()[i]->Hit();
+					player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+					--hp;
+				}
+			}
+		}
+
+		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
+		{
+			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(acorn->GetAnimRect()->GET_COMP(Collider)) && acorn->GetHp() > 0)
+			{
+				acorn->SetHit(true);
+			}
+		}
+
+		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(acorn->GetAnimRect()->GET_COMP(Collider)) && acorn->GetHp() > 0)
+			acorn->SetHit(true);
+	}
 }
 
 void AcornMachine::Init()
 {
+	bDeathS = false;
 	animRect->SetPosition(state.position);
 	animRect1->SetPosition(state.position);
 	animRect2->SetPosition(Vector2(state.position.x + 245 * state.totalSize, state.position.y - 150 * state.totalSize));
@@ -83,6 +111,12 @@ void AcornMachine::Init()
 	acorn->SetAcornState(AcornState::DropLoop);
 	direction = state.direction;
 	hp = state.maxHp;
+}
+
+void AcornMachine::Destroy()
+{
+	SOUND->Stop("AMGrunt");
+	SOUND->Stop("AMDeath");
 }
 
 void AcornMachine::Update()
@@ -101,10 +135,15 @@ void AcornMachine::Update()
 		animRect2->SetPosition(Vector2(1000, -1000));
 		acorn->SetHp(0);
 	}
-	cout << hp << '\n';
 	switch (animState)
 	{
 	case AcornMachineState::Death:
+		SOUND->Stop("AMGrunt");
+		if (!bDeathS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bDeathS = true;
+			SOUND->Play("AMDeath");
+		}
 		animRect->SetScale(Vector2(894, 675) * state.totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())
@@ -125,6 +164,10 @@ void AcornMachine::Update()
 			check = false;
 		}
 	case AcornMachineState::Idle:
+		if (animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+			SOUND->Play("AMGrunt");
+		else
+			SOUND->Stop("AMGrunt");
 		animRect->SetScale(Vector2(530, 534) * state.totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Idle");
 		animRect1->SetScale(Vector2(530, 534) * state.totalSize);

@@ -34,6 +34,9 @@ ForestBlob::ForestBlob(const Vector2& position, float totailSize, float speed, i
 
 	// Components
 	animRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
+
+	SOUND->AddSound("BlobDeath", L"_Sounds/sfx_level_platforming_ball_runner_death_01.wav", false, true);
+	SOUND->AddSound("BlobReform", L"_Sounds/sfx_platforming_blobrunner_reform_01.wav", false, true);
 }
 
 void ForestBlob::Collision(shared_ptr<Player> player)
@@ -45,6 +48,15 @@ void ForestBlob::Collision(shared_ptr<Player> player)
 void ForestBlob::Init()
 {
 	hp = state.maxHp;
+
+	bDeathS = false;
+	bUnMeltS = false;
+}
+
+void ForestBlob::Destroy()
+{
+	SOUND->Stop("BlobDeath");
+	SOUND->Stop("BlobReform");
 }
 
 void ForestBlob::Update()
@@ -60,7 +72,7 @@ void ForestBlob::Update()
 			state.position = INPUT->GetMousePosition();
 		animRect->SetPosition(state.position);
 		direction = state.direction;
-		hp = state.maxHp;
+		Init();
 	}
 
 	if (bWall)
@@ -73,7 +85,9 @@ void ForestBlob::Update()
 	}
 
 	if (hp <= 0)
+	{
 		animState = BlobState::Melt;
+	}
 	
 	if (hp <= 0 && state.bRegen&& time >= state.regenTime)
 	{
@@ -119,6 +133,11 @@ void ForestBlob::Update()
 		}
 		break;
 	case BlobState::Melt:
+		if (!bDeathS)
+		{
+			bDeathS = true;
+			SOUND->Play("BlobDeath");
+		}
 		animRect->SetScale(Vector2(178, 124) * state.totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"MeltR");
@@ -128,6 +147,11 @@ void ForestBlob::Update()
 			time += DELTA;
 		break;
 	case BlobState::UnMelt:
+		if (!bUnMeltS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			bUnMeltS = true;
+			SOUND->Play("BlobReform");
+		}
 		animRect->SetScale(Vector2(136, 116) * state.totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"UnMeltR");
