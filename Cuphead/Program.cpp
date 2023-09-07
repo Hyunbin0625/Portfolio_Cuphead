@@ -24,7 +24,7 @@ void Program::Init()
 
 	SOUND->AddSound("Noise", L"_Sounds/sfx_noise_1920s_01.wav", true);
 	SOUND->Play("Noise");
-	SOUND->SetMasterVolume(0.5f);
+	SOUND->SetMasterVolume(0.0f);
 
 	SCREENFX->Start();
 }

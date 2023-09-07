@@ -29,7 +29,7 @@ void ScenePirate::Init()
 	waterList[3] = make_unique<BG_Water>((WaterType)1, Vector2(CENTER_X, 0), 1.3f);
 
 	forestObjectSet = make_unique<ForestObjectSet>();
-	objectList.push_back(make_shared<Forest_Ground>(Vector2(193.0f, 73.999f), 6.0f, 0.0f, true));
+	objectList.push_back(make_shared<Forest_Ground>(Vector2(193.0f, 73.999f), 6.0f, 0.0f, true, false));
 
 	CAMERA->SetPosition(Vector2());
 
@@ -72,7 +72,7 @@ void ScenePirate::Update()
 
 	// Create Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
-		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true, false));
 	else if (forestObjectSet->GetSelectedIndex() == 1)
 		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 	else if (forestObjectSet->GetSelectedIndex() == 2)
@@ -417,7 +417,7 @@ void ScenePirate::LoadRibbyCroaks(const wstring& path)
 				in.read((char*)&tempObjectState, sizeof(tempObjectState));
 
 				if (tempObjectState.type == ForestObjectType::Ground)
-					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction);
 				else if (tempObjectState.type == ForestObjectType::Wall)
 					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
 				else if (tempObjectState.type >= ForestObjectType::FPlatform_a && tempObjectState.type <= ForestObjectType::FPlatform_c)

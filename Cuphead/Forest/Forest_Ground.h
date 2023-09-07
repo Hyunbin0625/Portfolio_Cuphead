@@ -3,8 +3,8 @@
 class Forest_Ground : public IForestObjects
 {
 public:
-	Forest_Ground() : Forest_Ground(Vector2(), 1.0f, 0.0f, 0) {}
-	Forest_Ground(const Vector2& position, const float& totalSize, float rotation, bool bCollision);
+	Forest_Ground() : Forest_Ground(Vector2(), 1.0f, 0.0f, false, false) {}
+	Forest_Ground(const Vector2& position, const float& totalSize, float rotation, bool bCollision, bool platform);
 
 public:
 	virtual void Update() override;

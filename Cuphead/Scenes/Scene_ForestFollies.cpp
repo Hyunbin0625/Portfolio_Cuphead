@@ -6,11 +6,11 @@ void SceneForestFollies::Init()
 	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
 	player->SetTotalSize(0.9f);
 
-	skyLayer = make_unique<TextureRect>(CENTER, Vector2(1898, 823) * 1.35f, 0.0f, L"_Textures/Scene_ForestFollies/lv1-1_bg_sky_01.png");
+	skyLayer = make_unique<TextureRect>(CENTER, Vector2(1898, 823) * 1.35f, 0.0f, L"_Textures/Scene_ForestFollies/lv1-1_bg_sky_00.png");
 
 	forestEnemySet = make_unique<ForestEnemySet>();
 	forestObjectSet = make_unique<ForestObjectSet>();
-	objectList.push_back(make_shared<Forest_Ground>(Vector2(640, -1.348), 6.0f, 0.0f, true));
+	objectList.push_back(make_shared<Forest_Ground>(Vector2(640, -1.348), 6.0f, 0.0f, true, false));
 
 	CAMERA->SetPosition(Vector2());
 	CAMERA->SetEdges(false);
@@ -82,7 +82,7 @@ void SceneForestFollies::Update()
 
 	// Add Object
 	if (forestObjectSet->GetSelectedIndex() == 0)
-		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
+		objectList.push_back(make_shared<Forest_Ground>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true, false));
 	else if (forestObjectSet->GetSelectedIndex() == 1)
 		objectList.push_back(make_shared<Forest_Wall>(CAMERA->GetPosition() + CENTER, 1.0f, 0.0f, true));
 	else if (forestObjectSet->GetSelectedIndex() == 2)
@@ -126,23 +126,25 @@ void SceneForestFollies::Update()
 	{
 		Vector2 temp = Vector2();
 		if (!player->GetPlatform())
-			temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (player->GetGroundPos().y - 140) - CAMERA->GetPosition().y);
+			temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, (player->GetGroundPos().y - 117) - CAMERA->GetPosition().y);
 		else
 			temp = Vector2((player->GetAnimRect()->GetPosition().x - CENTER.x) - CAMERA->GetPosition().x, 0);
-		if (player->GetAnimRect()->GetPosition().y <= CAMERA->GetPosition().y + 140)
+		if (player->GetAnimRect()->GetPosition().y <= CAMERA->GetPosition().y + 117)
 			temp.y = (player->GetAnimRect()->GetPosition().y - CENTER.y) - CAMERA->GetPosition().y;
 		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));
 	}
 
 	if (!bIntro)
+	{
 		player->SetCheckCollider(true);
+	}
 
 	player->Update();
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
 
 	CAMERA->Update();
-	skyLayer->SetPosition(CAMERA->GetPosition() + CENTER + Vector2(0, 50));
+	skyLayer->SetPosition(CAMERA->GetPosition() + CENTER + Vector2(0, 27));
 	skyLayer->Update();
 
 	FIGHTTEXT->Update();
@@ -192,7 +194,10 @@ void SceneForestFollies::PostRender()
 		if (ImGui::Button("Load", ImVec2(50, 30)))
 			LoadForestFolliesMap();
 
-		ImGui::Checkbox("CreateMod", &mod);
+		if (ImGui::Checkbox("CreateMod", &mod))
+		{
+			CAMERA->SetPosition(player->GetPosition() - CENTER);
+		}
 		for (const auto& enemy : enemyList)
 			enemy->SetMod(mod);
 		for (const auto& object : objectList)
@@ -315,7 +320,7 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 				in.read((char*)&tempObjectState, sizeof(tempObjectState));
 
 				if (tempObjectState.type == ForestObjectType::Ground)
-					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction);
 				else if (tempObjectState.type == ForestObjectType::Wall)
 					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
 				else if (tempObjectState.type == ForestObjectType::Hole)
@@ -325,9 +330,8 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 				else if (tempObjectState.type == ForestObjectType::Exit)
 					objectList[i] = make_shared<Forest_Exit>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
 			}
-
+			
 			// EnemyList
-			listSize;
 			in.read((char*)&listSize, sizeof(listSize));
 
 			enemyList.clear();

@@ -357,7 +357,9 @@
     <ClCompile Include="Forest\Forest_Exit.cpp">
       <Filter>Forest</Filter>
     </ClCompile>
-    <ClCompile Include="Forest\Forest_Hole.cpp" />
+    <ClCompile Include="Forest\Forest_Hole.cpp">
+      <Filter>Forest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Program.h" />
@@ -685,7 +687,9 @@
     <ClInclude Include="Forest\Forest_Exit.h">
       <Filter>Forest</Filter>
     </ClInclude>
-    <ClInclude Include="Forest\Forest_Hole.h" />
+    <ClInclude Include="Forest\Forest_Hole.h">
+      <Filter>Forest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="_Shaders\Vertex.hlsl">

@@ -121,7 +121,7 @@ void TextureRect::ChangeImageFunc(const wstring& path)
 	else
 	{
 		wstring tempPath = path.substr(path.find(L"_Textures/"));
-		SetSRV(path);
+		SetSRV(tempPath);
 	}
 }
 
@@ -135,6 +135,6 @@ void TextureRect::ChangeShaderFunc(const wstring& path)
 	else
 	{
 		wstring tempPath = path.substr(path.find(L"_Shaders/"));
-		SetShader(path);
+		SetShader(tempPath);
 	}
 }

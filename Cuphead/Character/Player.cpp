@@ -243,7 +243,6 @@ void Player::Update()
 	{
 		vel += (float)(G * 700 * DELTA);
 		jumpSpeed -= vel * DELTA;
-
 		animRect->Move(Vector2(0, jumpSpeed) * totalSize);
 
 		// Jump state
@@ -1064,6 +1063,7 @@ void Player::Update()
 		break;
 	case Intro:
 		deltaTime += DELTA;
+		jumpSpeed = 0;
 		if (deltaTime > 2.0f)
 		{
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");

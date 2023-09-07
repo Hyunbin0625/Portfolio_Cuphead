@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "Forest_Ground.h"
 
-Forest_Ground::Forest_Ground(const Vector2& position, const float& totalSize, float rotation, bool bCollision)
+Forest_Ground::Forest_Ground(const Vector2& position, const float& totalSize, float rotation, bool bCollision, bool platform)
 {
-	state = { ForestObjectType::Ground, position, totalSize, rotation, bCollision };
+	state = { ForestObjectType::Ground, position, totalSize, rotation, bCollision, platform };
 
 	textureRect = make_unique<TextureRect>(position, scale * totalSize, rotation, L"_Textures/ground.png");
 
@@ -27,7 +27,7 @@ void Forest_Ground::Update()
 
 void Forest_Ground::Render()
 {
-	if (bMod)
+//	if (bMod)
 		textureRect->Render();
 }
 
@@ -41,11 +41,13 @@ void Forest_Ground::GUI(int ordinal)
 
 		ImGui::Text(objName.c_str());
 
-		ImGui::SliderFloat2("Position", (float*)&state.position, CAMERA->GetPosition().x, CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH);
+		ImGui::InputFloat("PositionX", (float*)&state.position.x, 1.0f, 100.0f);
+		ImGui::InputFloat("PositionY", (float*)&state.position.y, 1.0f, 100.0f);
 		ImGui::InputFloat("Size", &state.totalSize, 1.0f, 50.0f);
 		ImGui::SliderAngle("Rotation", &state.rotation);
 
 		ImGui::Checkbox("collision", &state.bCollision);
+		ImGui::Checkbox("platform", &state.direction);
 
 		if (ImGui::Button("Delete", ImVec2(50, 30)))
 			bDelete = 1;
@@ -67,6 +69,9 @@ bool Forest_Ground::Collision(shared_ptr<Player> player)
 			&& player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x - textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x + textureRect->GetScale().x / 2)
 		{
+			if (state.direction)
+				player->SetPlatform(true);
+
 			if (textureRect->GetRotationDegree() != 0.0f)
 			{
 				// 두점
@@ -89,28 +94,34 @@ bool Forest_Ground::Collision(shared_ptr<Player> player)
 			{
 				player->GetAnimRect()->Move(Vector2(0, 400));
 			}
+
 			return true;
 		}	// 충돌시 player가 object 아래인 경우
 		else if (player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y - textureRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x - textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x + textureRect->GetScale().x / 2)
 		{
-			player->GetAnimRect()->Move(Vector2(0, player->GetJumpSpeed()));
-			player->SetJumpSpeed(0.0f);
+			if (!state.direction)
+			{
+				player->GetAnimRect()->Move(Vector2(0, player->GetJumpSpeed()));
+				player->SetJumpSpeed(0.0f);
+			}
 			return false;
 		}	// 충돌시 player가 object 옆인 경우
 		else if (player->GetAnimRect()->GetPosition().x > textureRect->GetPosition().x + textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
 		{
-			player->GetAnimRect()->Move(Vector2(player->GetSpeed(), 0));
+			if (!state.direction)
+				player->GetAnimRect()->Move(Vector2(player->GetSpeed(), 0));
 			return false;
 		}
 		else if (player->GetAnimRect()->GetPosition().x < textureRect->GetPosition().x - textureRect->GetScale().x / 2
 			&& player->GetAnimRect()->GetPosition().y < textureRect->GetPosition().y + textureRect->GetScale().y / 2
 			&& player->GetAnimRect()->GetPosition().y > textureRect->GetPosition().y - textureRect->GetScale().y / 2)
 		{
-			player->GetAnimRect()->Move(Vector2(-player->GetSpeed(), 0));
+			if (!state.direction)
+				player->GetAnimRect()->Move(Vector2(-player->GetSpeed(), 0));
 			return false;
 		}
 	}
