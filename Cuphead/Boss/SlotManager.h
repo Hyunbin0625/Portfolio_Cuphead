@@ -21,6 +21,7 @@ public:
 private:
 	vector<unique_ptr<Slot>> slotList;
 	SlotType type = SlotType::None;
+	int count = 2;
 	mt19937 mt;
 
 	Vector2 position;
@@ -33,4 +34,7 @@ private:
 	bool bEnd = false;
 
 	bool bActivation = false;
+
+	// Sounds
+	bool bSpinS = false;
 };
