@@ -3,20 +3,30 @@
 
 void SceneForestFollies::Init()
 {
-	player = make_shared<Player>(CENTER, Vector2(101, 159), 500.0f, 3, 100.0f);
+	// √ ±‚»≠
+	deltaTime = 0.0f;
+
+	nextScene = false;
+	bIntro = false;
+	bEnd = false;
+
+	player = make_shared<Player>(Vector2(-2621.54, 71.55), Vector2(101, 159), 500.0f, 10, 100.0f);
 	player->SetTotalSize(0.9f);
 
 	skyLayer = make_unique<TextureRect>(CENTER, Vector2(1898, 823) * 1.35f, 0.0f, L"_Textures/Scene_ForestFollies/lv1-1_bg_sky_00.png");
 
 	forestEnemySet = make_unique<ForestEnemySet>();
 	forestObjectSet = make_unique<ForestObjectSet>();
-	objectList.push_back(make_shared<Forest_Ground>(Vector2(640, -1.348), 6.0f, 0.0f, true, false));
 
-	CAMERA->SetPosition(Vector2());
+	if (!bCreateMod)
+		LoadForestFolliesMapT(L"_Maps/ForestFolliesMapT.txt");
+
+	CAMERA->SetPosition(player->GetPosition() - CENTER);
 	CAMERA->SetEdges(false);
 
 	IRISA->Start();
 
+	SOUND->DeleteSound("Back");
 	SOUND->AddSound("Back", L"_Sounds/MUS_ForestFollies.wav", true);
 	SOUND->Play("Back");
 }
@@ -32,11 +42,9 @@ void SceneForestFollies::Update()
 		bIntro = true;
 		FIGHTTEXT->Init(FightTextType::RunNGun, true);
 	}
-	
+
 	if (mod)
-	{
 		bIntro = false;
-	}
 
 	Collision();
 
@@ -121,6 +129,30 @@ void SceneForestFollies::Update()
 	for (const auto& trRect : trRectList)
 		trRect->Update();
 
+	// player Death
+	if (player->GetHp() <= 0)
+	{
+		deltaTime += DELTA;
+		if (!bEnd && deltaTime >= 3.0f)
+		{
+			bEnd = true;
+			IRISA->End();
+		}
+		else if (deltaTime >= 3.0f && IRISA->GetIsAnimEnd())
+		{
+			bEnd = false;
+			deltaTime = 0.0f;
+			Init();
+		}
+	}
+	FIGHTTEXT->Update();
+
+	if (!bIntro)
+	{
+		player->SetCheckCollider(true);
+		player->SetPosition(Vector2(-2621.54, 71.55));
+	}
+
 	// CAMERA
 	if (!mod)
 	{
@@ -134,20 +166,14 @@ void SceneForestFollies::Update()
 		CAMERA->SetPosition(Vector2(CAMERA->GetPosition().x + temp.x * 2 * DELTA, CAMERA->GetPosition().y + temp.y * 2 * DELTA));
 	}
 
-	if (!bIntro)
-	{
-		player->SetCheckCollider(true);
-	}
-
 	player->Update();
+
 	UI->Init(CAMERA->GetPosition(), player->GetHp(), player->GetPercentSuperMeterCard());
 	UI->Update();
 
 	CAMERA->Update();
 	skyLayer->SetPosition(CAMERA->GetPosition() + CENTER + Vector2(0, 27));
 	skyLayer->Update();
-
-	FIGHTTEXT->Update();
 }
 
 void SceneForestFollies::PreRender()
@@ -193,6 +219,12 @@ void SceneForestFollies::PostRender()
 		ImGui::SameLine();
 		if (ImGui::Button("Load", ImVec2(50, 30)))
 			LoadForestFolliesMap();
+
+		if (ImGui::Button("SaveT", ImVec2(50, 30)))
+			SaveForestFolliesMapT();
+		ImGui::SameLine();
+		if (ImGui::Button("LoadT", ImVec2(50, 30)))
+			LoadForestFolliesMapT();
 
 		if (ImGui::Checkbox("CreateMod", &mod))
 		{
@@ -393,6 +425,271 @@ void SceneForestFollies::LoadForestFolliesMap(const wstring& path)
 	}
 }
 
+void SceneForestFollies::SaveForestFolliesMapT(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneForestFollies::SaveForestFolliesMapT, this, placeholders::_1);
+		Path::SaveFileDialog(L"", Path::TextFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		if (enemyList.empty() && objectList.empty()) return;
+
+		ofstream out(path.c_str());
+
+		if (out.is_open())
+		{
+			// Player
+			Vector2 tempPos = player->GetAnimRect()->GetPosition();
+			out << tempPos.x << endl;
+			out << tempPos.y << endl;
+			float tempSize = player->GetTotalSize();
+			out << tempSize << endl;
+
+			// objectList
+			int listSize = (int)objectList.size();
+			out << listSize << endl;
+
+			ForestObjectState tempObjectState;
+			for (UINT i = 0; i < objectList.size(); ++i)
+			{
+				tempObjectState = objectList[i]->GetState();
+				out << (int)tempObjectState.type << endl;
+
+				out << tempObjectState.position.x << endl;
+				out << tempObjectState.position.y << endl;
+				out << tempObjectState.totalSize << endl;
+				out << tempObjectState.rotation << endl;
+
+				out << tempObjectState.bCollision << endl;
+
+				out << tempObjectState.direction << endl;
+				out << tempObjectState.moveScale << endl;
+			}
+
+			// enemyList
+			listSize = (int)enemyList.size();
+			out << listSize << endl;
+
+			ForestEnemyState tempEnemyState;
+			for (UINT i = 0; i < enemyList.size(); ++i)
+			{
+				tempEnemyState = enemyList[i]->GetState();
+				out << (int)tempEnemyState.type << endl;
+
+				out << tempEnemyState.position.x << endl;
+				out << tempEnemyState.position.y << endl;
+				out << tempEnemyState.totalSize << endl;
+				out << tempEnemyState.speed << endl;
+
+				out << tempEnemyState.maxHp << endl;
+
+				out << tempEnemyState.bRegen << endl;
+				out << tempEnemyState.regenTime << endl;
+				out << tempEnemyState.direction << endl;
+			}
+
+			string tempPath;
+			Vector2 tempScale;
+			if (!trRectList.empty())
+			{
+				listSize = (int)trRectList.size();
+				out << listSize << endl;
+
+				for (UINT i = 0; i < trRectList.size(); ++i)
+				{
+					tempPos = trRectList[i]->GetPosition();
+					out << tempPos.x << endl;
+					out << tempPos.y << endl;
+
+					tempScale = trRectList[i]->GetScale();
+					out << tempScale.x << endl;
+					out << tempScale.y << endl;
+
+					size_t tempLength = trRectList[i]->GetPath().length();
+					out << tempLength << endl;
+
+					if (!trRectList[i]->GetPath().empty())
+					{
+						tempPath = String::ToString(trRectList[i]->GetPath());
+						out << tempPath << endl;
+					}
+				}
+			}
+			else
+			{
+				listSize = 0;
+				out << listSize << endl;
+			}
+		}
+
+		out.close();
+	}
+}
+
+void SceneForestFollies::LoadForestFolliesMapT(const wstring& path)
+{
+	if (path.empty())
+	{
+		function<void(wstring)> func = bind(&SceneForestFollies::LoadForestFolliesMapT, this, placeholders::_1);
+		Path::OpenFileDialog(L"", Path::TextFilter, L"_Maps/", func, gHandle);
+	}
+	else
+	{
+		ifstream in(path.c_str());
+
+		if (in.is_open())
+		{
+			// Player
+			Vector2 tempPos;
+			in >> tempPos.x;
+			in >> tempPos.y;
+			cout << tempPos.x << '\n';
+			cout << tempPos.y << '\n';
+			player->SetPosition(tempPos);
+
+			float tempSize;
+			in >> tempSize;
+			player->SetTotalSize(tempSize);
+			cout << tempSize << '\n';
+
+			// ObjectList
+			int listSize;
+			in >> listSize;
+			cout << '\n' << listSize << '\n';
+
+			objectList.clear();
+			objectList.resize(listSize);
+
+			ForestObjectState tempObjectState;
+			int tempType = 0;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in >> tempType;
+				tempObjectState.type = (ForestObjectType)tempType;
+				in >> tempObjectState.position.x;
+				in >> tempObjectState.position.y;
+				in >> tempObjectState.totalSize;
+				in >> tempObjectState.rotation;
+				in >> tempObjectState.bCollision;
+				in >> tempObjectState.direction;
+				in >> tempObjectState.moveScale;
+
+				cout << tempType << '\n';
+				cout << tempObjectState.position.x << '\n';
+				cout << tempObjectState.position.y << '\n';
+				cout << tempObjectState.totalSize << '\n';
+				cout << tempObjectState.rotation << '\n';
+				cout << tempObjectState.bCollision << '\n';
+				cout << tempObjectState.direction << '\n';
+				cout << tempObjectState.moveScale << '\n';
+
+				if (tempObjectState.type == ForestObjectType::Ground)
+					objectList[i] = make_shared<Forest_Ground>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction);
+				else if (tempObjectState.type == ForestObjectType::Wall)
+					objectList[i] = make_shared<Forest_Wall>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type == ForestObjectType::Hole)
+					objectList[i] = make_shared<Forest_Hole>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+				else if (tempObjectState.type >= ForestObjectType::FPlatform_a && tempObjectState.type <= ForestObjectType::FPlatform_c)
+					objectList[i] = make_shared<FloatingPlatform>(tempObjectState.type, tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision, tempObjectState.direction, tempObjectState.moveScale);
+				else if (tempObjectState.type == ForestObjectType::Exit)
+					objectList[i] = make_shared<Forest_Exit>(tempObjectState.position, tempObjectState.totalSize, tempObjectState.rotation, tempObjectState.bCollision);
+			}
+
+			// EnemyList
+			in >> listSize;
+			cout << '\n' << listSize << '\n';
+
+			enemyList.clear();
+			enemyList.resize(listSize);
+
+			ForestEnemyState tempEnemyState;
+			bool tempDirection;
+			for (UINT i = 0; i < listSize; ++i)
+			{
+				in >> tempType;
+				tempEnemyState.type = (ForestEnemyType)tempType;
+				in >> tempEnemyState.position.x;
+				in >> tempEnemyState.position.y;
+				in >> tempEnemyState.totalSize;
+				in >> tempEnemyState.speed;
+				in >> tempEnemyState.maxHp;
+				in >> tempEnemyState.bRegen;
+				in >> tempEnemyState.regenTime;
+				in >> tempDirection;
+				tempEnemyState.direction = (Direction)tempDirection;
+
+				cout << tempType << '\n';
+				cout << tempEnemyState.position.x << '\n';
+				cout << tempEnemyState.position.y << '\n';
+				cout << tempEnemyState.totalSize << '\n';
+				cout << tempEnemyState.speed << '\n';
+				cout << tempEnemyState.maxHp << '\n';
+				cout << tempEnemyState.bRegen << '\n';
+				cout << tempEnemyState.regenTime << '\n';
+				cout << tempDirection << '\n';
+
+				if (tempEnemyState.type == ForestEnemyType::FlowerGrunt)
+					enemyList[i] = make_shared<FlowerGrunt>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Blob)
+					enemyList[i] = make_shared<ForestBlob>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Mushroom)
+					enemyList[i] = make_shared<Mushroom>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Lobber)
+					enemyList[i] = make_shared<Lobber>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Chomper)
+					enemyList[i] = make_shared<Chomper>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Spiker)
+					enemyList[i] = make_shared<Spiker>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::Acorn)
+					enemyList[i] = make_shared<Acorn>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+				else if (tempEnemyState.type == ForestEnemyType::AcornMachine)
+					enemyList[i] = make_shared<AcornMachine>(tempEnemyState.position, tempEnemyState.totalSize, tempEnemyState.speed, tempEnemyState.maxHp, tempEnemyState.bRegen, tempEnemyState.regenTime, tempEnemyState.direction);
+			}
+
+			// TextureRect
+			in >> listSize;
+			cout << listSize << '\n';
+
+			trRectList.clear();
+			trRectList.resize(listSize);
+
+			if (listSize)
+			{
+				wstring tempPath;
+				Vector2 tempScale;
+				for (UINT i = 0; i < listSize; ++i)
+				{
+					in >> tempPos.x;
+					in >> tempPos.y;
+					cout << tempPos.x << '\n';
+					cout << tempPos.y << '\n';
+
+					in >> tempScale.x;
+					in >> tempScale.y;
+					cout << tempScale.x << '\n';
+					cout << tempScale.y << '\n';
+
+					size_t tempLength = 0;
+					in >> tempLength;
+					cout << tempLength << '\n';
+					if (tempLength)
+					{
+						string str = "";
+						str.resize(tempLength);
+						in >> str;
+						cout << str << '\n';
+						tempPath = String::ToWString(str);
+					}
+					trRectList[i] = make_shared<TextureRect>(tempPos, tempScale, 0.0f, tempPath);
+				}
+			}
+		}
+		in.close();
+	}
+}
+
 void SceneForestFollies::Collision()
 {
 	for (auto& enemy : enemyList)
@@ -403,16 +700,25 @@ void SceneForestFollies::Collision()
 		{
 			if (object->GetState().type == ForestObjectType::Ground)
 			{
-				if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
-					enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
-
-				if (enemy->GetState().type == ForestEnemyType::Lobber)
+				if (enemy->GetState().type == ForestEnemyType::FlowerGrunt)
 				{
-					for (int i = 0; i < enemy->GetBullet()->GetBullets().size(); ++i)
+					if (object->GetState().direction != true
+						&& object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+						enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
+				}
+				else
+				{
+					if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)))
+						enemy->SetGroundPos(Vector2(object->GetTextureRect()->GetPosition().x, object->GetTextureRect()->GetPosition().y + object->GetTextureRect()->GetScale().y / 2));
+
+					if (enemy->GetState().type == ForestEnemyType::Lobber)
 					{
-						if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)))
+						for (int i = 0; i < enemy->GetBullet()->GetBullets().size(); ++i)
 						{
-							enemy->GetBullet()->GetBullets()[i]->SetGround(true);
+							if (object->GetTextureRect()->GET_COMP(Collider)->Intersect(enemy->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)))
+							{
+								enemy->GetBullet()->GetBullets()[i]->SetGround(true);
+							}
 						}
 					}
 				}
@@ -430,15 +736,33 @@ void SceneForestFollies::Collision()
 	// playerBullts&enemies Collision
 	for (auto& enemy : enemyList)
 	{
-		for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
+		if (enemy->GetState().type == ForestEnemyType::AcornMachine)
 		{
-			if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0)
+			for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
 			{
-				if (!player->GetBullet()->GetBullets()[i]->GetHit())
+				if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0)
 				{
-					enemy->SetHit(true);
-					player->GetBullet()->GetBullets()[i]->SetIsHit(true);
-					player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+					if (!player->GetBullet()->GetBullets()[i]->GetHit())
+					{
+						enemy->SetHit(true);
+						player->GetBullet()->GetBullets()[i]->Hit();
+						player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < player->GetBullet()->GetBullets().size(); ++i)
+			{
+				if (player->GetBullet()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(enemy->GetAnimRect()->GET_COMP(Collider)) && enemy->GetHp() > 0)
+				{
+					if (!player->GetBullet()->GetBullets()[i]->GetHit())
+					{
+						enemy->SetHit(true);
+						player->GetBullet()->GetBullets()[i]->SetIsHit(true);
+						player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
+					}
 				}
 			}
 		}

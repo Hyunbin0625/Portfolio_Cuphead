@@ -45,7 +45,7 @@ Acorn::Acorn(const Vector2& position, float totalSize, float speed, int maxHp, b
 	// animRect SetAnimator
 	subAnimRect->SetAnimator(subAnimRect->GET_COMP(Animator));
 
-	SOUND->AddSound("AcornFly", L"_Sounds/sfx_platforming_forest_acorn_fly_loop.wav", true, false);
+	SOUND->AddSound("AcornFly", L"_Sounds/sfx_platforming_forest_acorn_fly_loop.wav", true, true);
 	SOUND->AddSound("AcornDrop", L"_Sounds/sfx_platforming_forest_acorn_drop_01.wav", false ,true);
 	SOUND->AddSound("AcornDeath", L"_Sounds/sfx_platforming_flowergrunt_death_04.wav", false, true);
 }
@@ -60,8 +60,6 @@ void Acorn::Collision(shared_ptr<Player> player)
 
 void Acorn::Init()
 {
-	bDropS = false;
-	bDeathS = false;
 	time = 0.0f;
 	animRect->SetPosition(state.position);
 	hp = state.maxHp;
@@ -125,8 +123,11 @@ void Acorn::Update()
 	switch (animState)
 	{
 	case AcornState::Fly:
-		if (animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		if (!bMod && !check && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		{
+			check = true;
 			SOUND->Play("AcornFly");
+		}
 		animRect->SetScale(Vector2(142, 157) * state.totalSize);
 		if (!bMachine)
 			animRect->SetPosition(Vector2(animRect->GetPosition().x, CAMERA->GetPosition().y + WIN_DEFAULT_HEIGHT - 100));
@@ -136,7 +137,10 @@ void Acorn::Update()
 			if (!bMachine)
 				animRect->Move(Vector2(state.speed, 0));
 			if (animRect->GetPosition().x >= playerX)
+			{
+				check = false;
 				animState = AcornState::Drop;
+			}
 		}
 		else
 		{
@@ -144,16 +148,19 @@ void Acorn::Update()
 			if (!bMachine)
 				animRect->Move(Vector2(-state.speed, 0));
 			if (animRect->GetPosition().x <= playerX)
+			{
+				check = false;
 				animState = AcornState::Drop;
+			}
 		}
 		break;
 	case AcornState::Drop:
 		
-		if (!bDropS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
+		if (!bMod && !check && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
 		{
-			bDropS = true;
-			SOUND->Play("AcornDrop");
+			check = true;
 			SOUND->Stop("AcornFly");
+			SOUND->Play("AcornDrop");
 		}
 		subAnimRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + animRect->GetScale().y / 2));
 		animRect->SetScale(Vector2(113, 150) * state.totalSize);
@@ -162,7 +169,10 @@ void Acorn::Update()
 		else
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DropL");
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			check = false;
 			animState = AcornState::DropLoop;
+		}
 		break;
 	case AcornState::DropLoop:
 		animRect->SetScale(Vector2(113, 150) * state.totalSize);
@@ -176,18 +186,21 @@ void Acorn::Update()
 		}
 		break;
 	case AcornState::Death:
-		if (!bDeathS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x
+		if (!bMod && !bDeathS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x
 			&& animRect->GetPosition().y <= CAMERA->GetPosition().y + WIN_DEFAULT_WIDTH && animRect->GetPosition().y >= CAMERA->GetPosition().y)
 		{
 			bDeathS = true;
-			SOUND->Play("AcornDeath");
 			SOUND->Stop("AcornFly");
 			SOUND->Stop("AcornDrop");
+			SOUND->Play("AcornDeath");
 		}
 		animRect->SetScale(Vector2(234, 261) * 0.9 * state.totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			bDeathS = false;
 			animRect->SetPosition(Vector2(1000, -1000));
+		}
 		break;
 	}
 

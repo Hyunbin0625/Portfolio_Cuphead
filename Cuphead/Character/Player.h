@@ -187,4 +187,11 @@ private:
 	bool platform = 0;
 	bool bIntro = false;
 	bool bMod = false;
+	
+	// Sounds
+	bool bAttackS = false;
+	bool bHitS = false;
+	bool bDashS = false;
+	bool bJumpS = false;
+	bool bBeamS = false;
 };

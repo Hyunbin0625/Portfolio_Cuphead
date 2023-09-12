@@ -12,6 +12,7 @@ enum class ForestObjectType
 	Exit,
 };
 
+#pragma pack(push, 1)
 struct ForestObjectState
 {
 	ForestObjectType type = ForestObjectType::None;
@@ -25,6 +26,7 @@ struct ForestObjectState
 	bool direction = 0;	// 0 : »óÇÏ, 1 : ÁÂ¿ì
 	float moveScale = 0.0f;
 };
+#pragma pack(pop)
 
 class IForestObjects
 {

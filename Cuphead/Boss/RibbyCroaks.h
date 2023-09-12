@@ -96,6 +96,13 @@ private:
 	bool bMod = false;
 
 	// sounds
+	bool bSIntroS = false;
+	bool bTIntroS = false;
 	bool bSAttack = false;
 	bool bTAttack = false;
+
+	bool bOpenS = false;
+	bool bArmS = false;
+
+	bool bDeathS = false;
 };

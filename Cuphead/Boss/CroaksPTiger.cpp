@@ -31,8 +31,6 @@ CroaksPTiger::CroaksPTiger()
 	// Components
 	collisionRect->AddComponent(make_shared<ColliderComponent>(ColliderType::RECT));
 	bulletRect->AddComponent(make_shared<ColliderComponent>(ColliderType::CIRCLE));
-
-	SOUND->AddSound("BBall", L"_Sounds/sfx_frogs_ball_platform_ball_launch_01.wav", false, true);
 }
 
 void CroaksPTiger::Collision(shared_ptr<Player> player)

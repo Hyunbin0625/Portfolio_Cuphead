@@ -114,7 +114,6 @@ WPARAM Window::Run()
             GRAPHICS->End();
         }
     }
-
     return msg.wParam;
 }
 
@@ -132,7 +131,6 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CREATE:
     {
         gHandle = handle;
-
     }
     break;
     case WM_SIZE:   // ﻿어떤 방식으로 윈도우 창의 크기가 변경될때 발생하는 메시지

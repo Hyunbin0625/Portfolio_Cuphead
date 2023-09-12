@@ -27,7 +27,7 @@ void Forest_Wall::Update()
 
 void Forest_Wall::Render()
 {
-	if (bMod)
+	if (bCreateMod)
 		textureRect->Render();
 }
 

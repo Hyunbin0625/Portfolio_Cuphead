@@ -55,7 +55,11 @@ void Squid::Update()
 		dust->SetPosition(Vector2(1000, -1000));
 		break;
 	case SquidState::Intro:
-		SOUND->Play("SquidEneter");
+		if (!check)
+		{
+			check = true;
+			SOUND->Play("SquidEneter");
+		}
 		animRect->SetPosition(position);
 		animRect->SetScale(Vector2(489, 544));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
@@ -68,7 +72,10 @@ void Squid::Update()
 			dust->SetPosition(Vector2(1000, -1000));
 
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			check = false;
 			state = SquidState::Loop;
+		}
 		break;
 	case SquidState::Loop:
 		if (animCount == 0)
@@ -81,7 +88,11 @@ void Squid::Update()
 		}
 		else
 		{
-			SOUND->Play("SquidAttack");
+			if (!bAttackS)
+			{
+				bAttackS = true;
+				SOUND->Play("SquidAttack");
+			}
 			animRect->SetPosition(position);
 			animRect->SetScale(Vector2(587, 537));
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"AttackL");
@@ -90,6 +101,7 @@ void Squid::Update()
 			time += DELTA;
 			if (time >= attackTime)
 			{
+				bAttackS = false;
 				SOUND->Stop("SquidAttack");
 				animCount = 0;
 				time = 0.0f;
@@ -99,12 +111,19 @@ void Squid::Update()
 		}
 		break;
 	case SquidState::Leave:
-		SOUND->Play("SquidExit");
+		if (!check)
+		{
+			check = true;
+			SOUND->Play("SquidExit");
+		}
 		animRect->SetPosition(position + Vector2(10, 30) * totalSize);
 		animRect->SetScale(Vector2(449, 606));
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Leave");
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			check = false;
 			state = SquidState::None;
+		}
 		break;
 	}
 

@@ -6,6 +6,7 @@ enum class FightTextType
 	RunNGun,
 	Boss_A,
 	Boss_B,
+	Died
 };
 
 class FightText
@@ -29,4 +30,7 @@ private:
 
 	bool bStart = false;
 	bool bEnd = false;
+
+	// Sounds
+	bool check = false;
 };

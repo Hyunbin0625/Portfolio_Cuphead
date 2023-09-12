@@ -58,9 +58,11 @@ private:
 
 	float time = 0;
 
-	bool bMod = 0;
-	bool bDelete = 0;
+	bool bTurn = false;
+	bool bMod = false;
+	bool bDelete = false;
 
+	// Sounds
 	bool bDeathS = false;
 	bool bUnMeltS = false;
 };

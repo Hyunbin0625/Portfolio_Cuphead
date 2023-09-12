@@ -152,7 +152,11 @@ void Barrel::Update()
 		val += G * 300.0f * DELTA;
 		if (val <= 850.0f)
 		{
-			SOUND->Play("BarrelDrop");
+			if (!bDropS)
+			{
+				bDropS = true;
+				SOUND->Play("BarrelDrop");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Drop01");
 			animRect->SetScale(Vector2(165, 825) * totalSize);
 			animRect->SetPosition(position + Vector2(0, 275) * totalSize);
@@ -179,8 +183,9 @@ void Barrel::Update()
 			animRect->SetPosition(position + Vector2(0, 279.5f) * totalSize);
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
-				++animCount;
+				bDropS = false;
 
+				++animCount;
 				dust->GET_COMP(Animator)->ResetFrame();
 				fx->GET_COMP(Animator)->ResetFrame();
 			}

@@ -53,5 +53,7 @@ private:
 	bool bMod = 0;
 	bool bDelete = 0;
 
+	// Sounds
+	bool bFGruntS = false;
 	bool bDeathS = false;
 };

@@ -316,9 +316,9 @@ void Pirate::Update()
 	case PirateState::Attack:
 		if (captainInfo.animClipCount == 0)
 		{
-			if (!bShootS)
+			if (!bCAttackS)
 			{
-				bShootS = true;
+				bCAttackS = true;
 				SOUND->Play("CShootS");
 			}
 			captainInfo.subAnimRect = true;
@@ -332,6 +332,7 @@ void Pirate::Update()
 			tCaptain->SetPosition(captain->GetPosition());
 			if (captain->GET_COMP(Animator)->GetEnd())
 			{
+				bCAttackS = false;
 				++captainInfo.animClipCount;
 				deltaTime = 0.0f;
 				uniform_int_distribution<int> randomCount(2, 4);
@@ -340,7 +341,11 @@ void Pirate::Update()
 		}
 		else if (captainInfo.animClipCount <= count && deltaTime >= 2.0f)
 		{
-			SOUND->Play("CShoot");
+			if (!bCAttackS)
+			{
+				bCAttackS = true;
+				SOUND->Play("CShoot");
+			}
 
 			captain->GET_COMP(Animator)->SetCurrentAnimClip(L"PShot");
 			captain->SetScale(Vector2(665, 415) * captainInfo.totalSize);
@@ -359,6 +364,7 @@ void Pirate::Update()
 
 			if (captain->GET_COMP(Animator)->GetEnd())
 			{
+				bCAttackS = false;
 				check = false;
 				++captainInfo.animClipCount;
 				deltaTime = 0.0f;
@@ -377,7 +383,11 @@ void Pirate::Update()
 		}
 		else
 		{
-			SOUND->Play("CShootE");
+			if (!bCAttackS)
+			{
+				bCAttackS = true;
+				SOUND->Play("CShootE");
+			}
 
 			captain->GET_COMP(Animator)->SetCurrentAnimClip(L"PShotE");
 			captain->SetScale(Vector2(490, 465) * captainInfo.totalSize);
@@ -388,7 +398,7 @@ void Pirate::Update()
 			tCaptain->SetPosition(captain->GetPosition());
 			if (captain->GET_COMP(Animator)->GetEnd())
 			{
-				bShootS = false;
+				bCAttackS = false;
 				bWhistle = true;
 				captainInfo.time = 0.0f;
 				captainInfo.animClipCount = 0;
@@ -416,12 +426,19 @@ void Pirate::Update()
 		}
 		else if (captainInfo.animClipCount == 2)
 		{
-			SOUND->Play("CWhistle");
+			if (!bCAttackS)
+			{
+				bCAttackS = true;
+				SOUND->Play("CWhistle");
+			}
 			captain->GET_COMP(Animator)->SetCurrentAnimClip(L"Whistle03");
 			captain->SetScale(Vector2(630, 485) * captainInfo.totalSize);
 			captain->SetPosition(boatInfo.position + (captainInfo.position + Vector2(89, 57)) * captainInfo.totalSize);
 			if (captain->GET_COMP(Animator)->GetEnd())
+			{
+				bCAttackS = false;
 				++captainInfo.animClipCount;
+			}
 		}
 		else if (captainInfo.animClipCount == 3)
 		{
@@ -469,12 +486,17 @@ void Pirate::Update()
 	case PirateState::Intro:
 		if (captainInfo.animClipCount == 0)
 		{
-			SOUND->Play("CIntro");
+			if (!bIntroS)
+			{
+				bIntroS = true;
+				SOUND->Play("CIntro");
+			}
 			captain->GET_COMP(Animator)->SetCurrentAnimClip(L"IntroS");
 			captain->SetScale(Vector2(360, 400) * captainInfo.totalSize);
 			captain->SetPosition(boatInfo.position + captainInfo.position * captainInfo.totalSize);
 			if (captain->GET_COMP(Animator)->GetEnd())
 			{
+				bIntroS = false;
 				++captainInfo.animClipCount;
 			}
 		}
@@ -549,12 +571,19 @@ void Pirate::Update()
 		{
 			if (boatInfo.animClipCount == 0)
 			{
-				SOUND->Play("BCannonC");
+				if (!bBAttackS)
+				{
+					bBAttackS = true;
+					SOUND->Play("BCannonC");
+				}
 				fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"Attack01");
 				fBoat->SetScale(Vector2(485, 505) * boatInfo.totalSize);
 				fBoat->SetPosition(boatInfo.position + Vector2(8, 11) * boatInfo.totalSize);
 				if (fBoat->GET_COMP(Animator)->GetEnd())
+				{
+					bBAttackS = false;
 					++boatInfo.animClipCount;
+				}
 			}
 			else if (boatInfo.animClipCount == 1)
 			{
@@ -661,14 +690,16 @@ void Pirate::Update()
 				fBoat->SetScale(Vector2(620, 703) * boatInfo.totalSize);
 				fBoat->SetPosition(boatInfo.position + Vector2(90, 67) * boatInfo.totalSize);
 
-				if (fBoat->GET_COMP(Animator)->GetCurrentFrameIndex() == 2)
+				if (fBoat->GET_COMP(Animator)->GetCurrentFrameIndex() == 2 && !bBAttackS)
 				{
+					bBAttackS = true;
 					SOUND->Play("UvulaBeam");
 					PIRATEBEAM->Init(fBoat->GetPosition(), boatInfo.totalSize);
 				}
 
 				if (fBoat->GET_COMP(Animator)->GetEnd())
 				{
+					bBAttackS = false;
 					++boatInfo.animClipCount;
 					deltaTime = 0.0f;
 				}
@@ -726,8 +757,12 @@ void Pirate::Update()
 		}
 		else if (boatInfo.animClipCount == 2)
 		{
-			SOUND->SetVolume("BTransform", 0.7);
-			SOUND->Play("BTransform");
+			if (!bIntroS)
+			{
+				bIntroS = true;
+				SOUND->SetVolume("BTransform", 0.7);
+				SOUND->Play("BTransform");
+			}
 			fBoat->GET_COMP(Animator)->SetCurrentAnimClip(L"TransS");
 			fBoat->SetScale(Vector2(646, 735)* boatInfo.totalSize);
 			fBoat->SetPosition(boatInfo.position + Vector2(47, 62) * boatInfo.totalSize);
@@ -741,6 +776,7 @@ void Pirate::Update()
 
 			if (fBoat->GET_COMP(Animator)->GetEnd())
 			{
+				bIntroS = false;
 				++boatInfo.animClipCount;
 				deltaTime = 0.0f;
 			}

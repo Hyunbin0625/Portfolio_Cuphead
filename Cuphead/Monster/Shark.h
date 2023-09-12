@@ -40,4 +40,8 @@ private:
 	float time = 0.0f;
 
 	int animCount = 0;
+
+	// Sounds
+	bool bIntroS = false;
+	bool bAttackS = false;
 };

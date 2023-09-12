@@ -3,6 +3,7 @@
 #include "Program.h"
 
 int currentSceneIndex;
+bool bCreateMod;
 
 Program::Program()
 {
@@ -24,7 +25,7 @@ void Program::Init()
 
 	SOUND->AddSound("Noise", L"_Sounds/sfx_noise_1920s_01.wav", true);
 	SOUND->Play("Noise");
-	SOUND->SetMasterVolume(0.0f);
+	SOUND->SetMasterVolume(0.8f);
 
 	SCREENFX->Start();
 }
@@ -35,6 +36,33 @@ void Program::Update()
 	{
 		currentIndex = currentSceneIndex;
 		currentScene = sceneList[currentIndex];
+		currentScene->Init();
+	}
+	
+	if (INPUT->Press(VK_ESCAPE))
+	{
+		currentSceneIndex = 0;
+		currentScene = sceneList[currentSceneIndex];
+		currentScene->Init();
+	}
+	else if (bCreateMod && INPUT->Press(VK_F1))
+	{
+		currentScene = sceneList[1];
+		currentScene->Init();
+	}
+	else if (bCreateMod && INPUT->Press(VK_F2))
+	{
+		currentScene = sceneList[2];
+		currentScene->Init();
+	}
+	else if (bCreateMod && INPUT->Press(VK_F3))
+	{
+		currentScene = sceneList[3];
+		currentScene->Init();
+	}
+	else if (bCreateMod && INPUT->Press(VK_F4))
+	{
+		currentScene = sceneList[4];
 		currentScene->Init();
 	}
 
@@ -61,7 +89,8 @@ void Program::Render()
 
 void Program::PostRender()
 {
-	currentScene->PostRender();
+	if (bCreateMod)
+		currentScene->PostRender();
 
 	IMGUI->PrintFrame();
 }

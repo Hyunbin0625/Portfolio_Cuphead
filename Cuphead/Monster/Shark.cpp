@@ -63,7 +63,11 @@ void Shark::Update()
 		dust->SetPosition(position);
 		break;
 	case SharkState::Intro:
-		SOUND->Play("SharkWarning");
+		if (!bIntroS)
+		{
+			bIntroS = true;
+			SOUND->Play("SharkWarning");
+		}
 		animRect->SetScale(Vector2(178, 156) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Intro");
 		animRect->Move(Vector2(-800.0f, 0));
@@ -73,6 +77,7 @@ void Shark::Update()
 
 		if (time >= 2.0f)
 		{
+			bIntroS = false;
 			state = SharkState::Entry;
 			time = 0.0f;
 		}
@@ -94,7 +99,11 @@ void Shark::Update()
 		}
 		break;
 	case SharkState::Bite:
-		SOUND->Play("SharkAttack");
+		if (!bAttackS)
+		{
+			bAttackS = true;
+			SOUND->Play("SharkAttack");
+		}
 		position.x += speed * DELTA;
 		animRect->SetScale(Vector2(835, 535) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Bite");
@@ -108,10 +117,17 @@ void Shark::Update()
 		collisionRect->SetPosition(position + Vector2(-65, 0) * totalSize);
 
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			bAttackS = false;
 			state = SharkState::Leave;
+		}
 		break;
 	case SharkState::Leave:
-		SOUND->Play("SharkExit");
+		if (!bAttackS)
+		{
+			bAttackS = true;
+			SOUND->Play("SharkExit");
+		}
 		position.x -= speed * 0.5f * DELTA;
 		animRect->SetScale(Vector2(795, 498) * totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Leave");
@@ -122,6 +138,7 @@ void Shark::Update()
 
 		if (position.x <= CAMERA->GetPosition().x - animRect->GetScale().x)
 		{
+			bAttackS = false;
 			SOUND->Stop("SharkExit");
 			state = SharkState::None;
 		}

@@ -17,6 +17,9 @@ FightText::FightText()
 
 	animRect->AddAnimClip(make_shared<AnimationClip>(L"KO", L"_Textures/ScreenFx/FightText_KO.png", 27, false, false, 0.1));
 
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Died01", L"_Textures/ScreenFx/you_died_text_01.png", 10, false, false, 0.1));
+	animRect->AddAnimClip(make_shared<AnimationClip>(L"Died02", L"_Textures/ScreenFx/you_died_text_02.png", 10, false, false, 0.1));
+
 	animRect->AddComponent(make_shared<AnimatorComponent>(animRect->GetAnimClips()));
 	animRect->SetAnimator(animRect->GET_COMP(Animator));
 
@@ -31,8 +34,6 @@ FightText::FightText()
 	SOUND->AddSound("KnockoutAnnouncer", L"_Sounds/sfx_level_announcer_knockout_0004.wav");
 	SOUND->AddSound("KnockoutBell", L"_Sounds/sfx_level_knockout_bell.wav");
 	SOUND->AddSound("KnockoutBoom", L"_Sounds/sfx_level_knockout_boom_01.wav");
-
-
 }
 
 FightText::~FightText() {}
@@ -51,15 +52,23 @@ void FightText::Update()
 	case FightTextType::None:
 		break;
 	case FightTextType::RunNGun:
+		animRect->SetScale(Vector2(1280, 720));
 		if (bStart)
 		{
 			if (animCount == 0)
 			{
-				SOUND->SetVolume("RunNGo", 0.8f);
-				SOUND->Play("RunNGo");
+				if (!check)
+				{
+					check = true;
+					SOUND->SetVolume("RunNGo", 0.8f);
+					SOUND->Play("RunNGo");
+				}
 				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"RunNGoS");
 				if (animRect->GET_COMP(Animator)->GetEnd())
+				{
+					check = false;
 					++animCount;
+				}
 			}
 			else if (animCount == 1)
 			{
@@ -85,11 +94,18 @@ void FightText::Update()
 		{
 			if (animCount == 0)
 			{
-				SOUND->SetVolume("Bravo", 0.8f);
-				SOUND->Play("Bravo");
+				if (!check)
+				{
+					check = true;
+					SOUND->SetVolume("Bravo", 0.8f);
+					SOUND->Play("Bravo");
+				}
 				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Bravo01");
 				if (animRect->GET_COMP(Animator)->GetEnd())
+				{
+					check = false;
 					++animCount;
+				}
 			}
 			else
 			{
@@ -103,15 +119,23 @@ void FightText::Update()
 		}
 		break;
 	case FightTextType::Boss_A:
+		animRect->SetScale(Vector2(1280, 720));
 		if (bStart)
 		{
 			if (animCount == 0)
 			{
-				SOUND->SetVolume("Ready_A", 0.8f);
-				SOUND->Play("Ready_A");
+				if (!check)
+				{
+					check = true;
+					SOUND->SetVolume("Ready_A", 0.8f);
+					SOUND->Play("Ready_A");
+				}
 				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"GetReadyS");
 				if (animRect->GET_COMP(Animator)->GetEnd())
+				{
+					check = false;
 					++animCount;
+				}
 			}
 			else
 			{
@@ -125,27 +149,42 @@ void FightText::Update()
 		}
 		else if(bEnd)
 		{
-			SOUND->SetVolume("KnockoutAnnouncer", 0.8f);
-			SOUND->SetVolume("KnockoutBell", 0.8f);
-			SOUND->SetVolume("KnockoutBoom", 0.8f);
-			SOUND->Play("KnockoutAnnouncer");
-			SOUND->Play("KnockoutBell");
-			SOUND->Play("KnockoutBoom");
+			if (!check)
+			{
+				check = true;
+				SOUND->SetVolume("KnockoutAnnouncer", 0.8f);
+				SOUND->SetVolume("KnockoutBell", 0.8f);
+				SOUND->SetVolume("KnockoutBoom", 0.8f);
+				SOUND->Play("KnockoutAnnouncer");
+				SOUND->Play("KnockoutBell");
+				SOUND->Play("KnockoutBoom");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"KO");
 			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				check = false;
 				type = FightTextType::None;
+			}
 		}
 		break;
 	case FightTextType::Boss_B:
+		animRect->SetScale(Vector2(1280, 720));
 		if (bStart)
 		{
 			if (animCount == 0)
 			{
-				SOUND->SetVolume("Ready_B", 0.8f);
-				SOUND->Play("Ready_B");
+				if (!check)
+				{
+					check = true;
+					SOUND->SetVolume("Ready_B", 0.8f);
+					SOUND->Play("Ready_B");
+				}
 				animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"GetReadyS");
 				if (animRect->GET_COMP(Animator)->GetEnd())
+				{
+					check = false;
 					++animCount;
+				}
 			}
 			else
 			{
@@ -159,15 +198,40 @@ void FightText::Update()
 		}
 		else if (bEnd)
 		{
-			SOUND->SetVolume("KnockoutAnnouncer", 0.8f);
-			SOUND->SetVolume("KnockoutBell", 0.8f);
-			SOUND->SetVolume("KnockoutBoom", 0.8f);
-			SOUND->Play("KnockoutAnnouncer");
-			SOUND->Play("KnockoutBell");
-			SOUND->Play("KnockoutBoom");
+			if (!check)
+			{
+				check = true;
+				SOUND->SetVolume("KnockoutAnnouncer", 0.8f);
+				SOUND->SetVolume("KnockoutBell", 0.8f);
+				SOUND->SetVolume("KnockoutBoom", 0.8f);
+				SOUND->Play("KnockoutAnnouncer");
+				SOUND->Play("KnockoutBell");
+				SOUND->Play("KnockoutBoom");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"KO");
 			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				check = false;
 				type = FightTextType::None;
+			}
+		}
+		break;
+	case FightTextType::Died:
+		animRect->SetScale(Vector2(1280, 276));
+		if (animCount == 0)
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Died01");
+			if (animRect->GET_COMP(Animator)->GetEnd())
+				++animCount;
+		}
+		else
+		{
+			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Died01");
+			if (animRect->GET_COMP(Animator)->GetEnd())
+			{
+				animCount = 0;
+				type = FightTextType::None;
+			}
 		}
 		break;
 	}

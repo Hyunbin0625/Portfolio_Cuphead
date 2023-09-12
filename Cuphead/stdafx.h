@@ -112,6 +112,7 @@ extern HWND gHandle;
 extern float gWinWidth;
 extern float gWinHeight;
 extern int currentSceneIndex;
+extern bool bCreateMod;
 
 //Systems
 #include "Systems/Input.h"

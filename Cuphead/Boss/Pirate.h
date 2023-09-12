@@ -101,5 +101,8 @@ private:
 	bool bMod = false;
 
 	// Sounds
-	bool bShootS = false;
+	bool bIntroS = false;
+
+	bool bCAttackS = false;
+	bool bBAttackS = false;
 };

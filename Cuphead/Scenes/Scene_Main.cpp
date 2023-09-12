@@ -3,6 +3,13 @@
 
 void SceneMain::Init()
 {
+	// √ ±‚»≠
+	CurrentButton = 0;
+	bStart = false;
+	bMod = false;
+	bOption = false;
+	bEnd = false;
+
 	background = make_unique<TextureRect>(Vector2(CENTER_X, CENTER_Y - 10), Vector2(WIN_DEFAULT_WIDTH, WIN_DEFAULT_HEIGHT) * 1.2, 0.0f, L"_Textures/Scene_Main/cuphead_secondary_title_screen.png");
 
 	startButton = make_unique<TextureRect>(Vector2(CENTER_X, CENTER_Y + 47 * 2 * 0.7), Vector2(80, 45) * 0.7, 0.0f, L"_Textures/Scene_Main/start_00.png");
@@ -14,6 +21,7 @@ void SceneMain::Init()
 
 	IRISA->Start();
 
+	SOUND->DeleteSound("Back");
 	SOUND->AddSound("Back", L"_Sounds/MUS_Intro_DontDealWithDevil_Vocal.wav", true);
 	SOUND->Play("Back");
 }
@@ -51,6 +59,7 @@ void SceneMain::Update()
 		if (INPUT->Down(VK_RETURN) || INPUT->Down('Z') && !bStart)
 		{
 			bStart = true;
+			bCreateMod = false;
 			IRISA->End();
 		}
 		break;
@@ -58,7 +67,11 @@ void SceneMain::Update()
 		path = L"_Textures/Scene_Main/mod_01.png";
 		modButton->SetSRV(path);
 		if (INPUT->Down(VK_RETURN) || INPUT->Down('Z'))
+		{
 			bMod = true;
+			bCreateMod = true;
+			IRISA->End();
+		}
 		break;
 	case Button::Option:
 		path = L"_Textures/Scene_Main/option_01.png";
@@ -70,13 +83,22 @@ void SceneMain::Update()
 		path = L"_Textures/Scene_Main/end_01.png";
 		endButton->SetSRV(path);
 		if (INPUT->Down(VK_RETURN) || INPUT->Down('Z'))
+		{
 			bEnd = true;
+			PostMessage(gHandle, WM_QUIT, 0, 0);
+		}
 		break;
 	}
 
 	if (bStart && IRISA->GetIsAnimEnd())
 	{
 		bStart = false;
+		SOUND->DeleteSound("Back");
+		currentSceneIndex += 1;
+	}
+	else if (bMod && IRISA->GetIsAnimEnd())
+	{
+		bMod = false;
 		SOUND->DeleteSound("Back");
 		currentSceneIndex += 1;
 	}

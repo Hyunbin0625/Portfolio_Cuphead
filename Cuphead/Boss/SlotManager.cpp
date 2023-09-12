@@ -34,17 +34,26 @@ void SlotManager::Init(Vector2 position, float totalSize)
 void SlotManager::Start()
 {
 	bStart = true;
-	uniform_int_distribution<int> randomSlotType(1, 3);
-	type = (SlotType)randomSlotType(mt);
+	bSpinS = false;
+//	uniform_int_distribution<int> randomSlotType(1, 3);
+	type = (SlotType)count;
 	for (auto& slot : slotList)
 		slot->SetType(type);
+
+	++count;
+	if (count > 3)
+		count = 1;
 }
 
 void SlotManager::Update()
 {
 	if (bStart)
 	{
-		SOUND->Play("MspinLP3");
+		if (!bSpinS)
+		{
+			bSpinS = true;
+			SOUND->Play("MspinLP3");
+		}
 		time += DELTA;
 
 		// animation

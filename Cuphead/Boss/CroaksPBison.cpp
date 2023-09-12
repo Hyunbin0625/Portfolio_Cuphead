@@ -37,8 +37,6 @@ CroaksPBison::CroaksPBison()
 	// radom
 	random_device random;
 	mt = mt19937(random());
-
-	SOUND->AddSound("BBurst", L"_Sounds/sfx_frogs_flame_platform_fire_burst_01.wav", false, true);
 }
 
 void CroaksPBison::Collision(shared_ptr<Player> player)

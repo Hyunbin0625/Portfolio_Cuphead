@@ -57,4 +57,7 @@ private:
 
 	bool bIntro = false;
 	bool bMod = false;
+
+	// Sounds
+	bool bDropS = false;
 };

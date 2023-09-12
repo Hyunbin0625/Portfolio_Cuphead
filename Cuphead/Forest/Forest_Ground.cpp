@@ -27,7 +27,7 @@ void Forest_Ground::Update()
 
 void Forest_Ground::Render()
 {
-//	if (bMod)
+	if (bCreateMod)
 		textureRect->Render();
 }
 

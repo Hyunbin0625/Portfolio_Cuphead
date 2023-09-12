@@ -6,7 +6,7 @@ void ScenePirate::Init()
 	// √ ±‚»≠
 	bIntro = false;
 
-	player = make_shared<Player>(Vector2(250, 180), Vector2(101, 159), 500.0f, 3, 100.0f);
+	player = make_shared<Player>(Vector2(250, 180), Vector2(101, 159), 500.0f, 10, 100.0f);
 	player->SetTotalSize(1.0f);
 
 	pirate = make_shared<Pirate>(PirateInfo{ Vector2(-18, 272), 1.04, 10.0f }, PirateInfo{ Vector2(1110, 225), 1.3f, 3.0f }, 500.0f, 0.7f);
@@ -37,6 +37,7 @@ void ScenePirate::Init()
 
 	IRISA->Start();
 
+	SOUND->DeleteSound("Back");
 	SOUND->AddSound("Back", L"_Sounds/MUS_Pirate.wav", true);
 	SOUND->Play("Back");
 }
@@ -94,6 +95,23 @@ void ScenePirate::Update()
 			pirate->Destroy();
 			SOUND->DeleteSound("Back");
 			currentSceneIndex = 0;
+		}
+	}
+
+	// player Death
+	if (player->GetHp() <= 0)
+	{
+		deltaTime += DELTA;
+		if (!bEnd && deltaTime >= 3.0f)
+		{
+			bEnd = true;
+			IRISA->End();
+		}
+		else if (deltaTime >= 3.0f && IRISA->GetIsAnimEnd())
+		{
+			bEnd = false;
+			deltaTime = 0.0f;
+			Init();
 		}
 	}
 

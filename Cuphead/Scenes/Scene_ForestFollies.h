@@ -15,6 +15,9 @@ public:
 	void SaveForestFolliesMap(const wstring& path = L"");
 	void LoadForestFolliesMap(const wstring& path = L"");
 
+	void SaveForestFolliesMapT(const wstring& path = L"");
+	void LoadForestFolliesMapT(const wstring& path = L"");
+
 	void Collision();
 
 private:
@@ -34,5 +37,6 @@ private:
 
 	bool nextScene = false;
 	bool bIntro = false;
+	bool bEnd = false;
 	bool mod = false;
 };

@@ -18,6 +18,9 @@ CroaksAttackManager::CroaksAttackManager()
 	mt = mt19937(random());
 
 	SOUND->AddSound("FirFlyDeath", L"_Sounds/sfx_frogs_tall_firefly_death_01.wav", false, true);
+
+	SOUND->AddSound("BBurst", L"_Sounds/sfx_frogs_flame_platform_fire_burst_01.wav", false, true);
+	SOUND->AddSound("BBall", L"_Sounds/sfx_frogs_ball_platform_ball_launch_01.wav", false, true);
 }
 
 CroaksAttackManager::~CroaksAttackManager() {}
@@ -103,6 +106,7 @@ void CroaksAttackManager::InitPlatform(Vector2 position, float speed, SlotType t
 	}
 
 	count = 0;
+	currentIndex = 0;
 	time = 0.0f;
 	bPlatform = true;
 	bEnd = false;

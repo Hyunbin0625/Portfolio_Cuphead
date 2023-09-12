@@ -93,6 +93,8 @@ void TextureRect::GUI(int ordinal)
 
 	if (ImGui::BeginMenu(objName.c_str()))
 	{
+		SetOutline(true);
+
 		ImGui::Text(objName.c_str());
 		ImGui::Text(imgName.c_str());
 		ImGui::Text(shaderName.c_str());
@@ -108,6 +110,10 @@ void TextureRect::GUI(int ordinal)
 			bDelete = true;
 
 		ImGui::EndMenu();
+	}
+	else
+	{
+		SetOutline(false);
 	}
 }
 

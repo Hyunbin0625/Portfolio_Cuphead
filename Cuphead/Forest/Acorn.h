@@ -62,6 +62,7 @@ private:
 	bool bMod = 0;
 	bool bDelete = 0;
 
-	bool bDropS = false;
+	// Sounds
+	bool check = false;
 	bool bDeathS = false;
 };

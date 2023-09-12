@@ -68,6 +68,9 @@ bool Sound::DeleteSound(const string& key)
 
 void Sound::Play(const string& key)
 {
+	++count;
+	cout << count << '\n';
+
 	auto iter = soundList.find(key);
 
 	if (iter != soundList.end())

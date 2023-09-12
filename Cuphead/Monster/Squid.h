@@ -37,4 +37,8 @@ private:
 	float attackTime = 8.0f;
 
 	int animCount = 0;
+
+	// Sounds
+	bool check = false;
+	bool bAttackS = false;
 };

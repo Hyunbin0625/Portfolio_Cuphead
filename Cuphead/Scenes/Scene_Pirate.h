@@ -36,5 +36,6 @@ private:
 	float parryTime = 0.0f;
 
 	bool bIntro = false;
+	bool bEnd = false;
 	bool mod = false;
 };

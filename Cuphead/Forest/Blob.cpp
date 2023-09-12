@@ -75,6 +75,11 @@ void ForestBlob::Update()
 		Init();
 	}
 
+	if (!bGround)
+		animRect->Move(Vector2(0, -20));
+
+	if (!bTurn)
+		bWall = false;
 	if (bWall)
 		animState = BlobState::Turn;
 	else if (bGround)
@@ -97,6 +102,9 @@ void ForestBlob::Update()
 	switch (animState)
 	{
 	case BlobState::Run:
+		time += DELTA;
+		if (time >= 0.5f)
+			bTurn = true;
 		animRect->SetScale(Vector2(135, 102) * state.totalSize);
 		if (bGround)
 			animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
@@ -112,6 +120,8 @@ void ForestBlob::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnR");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
+				bTurn = false;
+				time = 0.0f;
 				direction = Direction::L;
 				bWall = false;
 				animRect->SetPosition(Vector2(animRect->GetPosition().x - 5 * state.totalSize, animRect->GetPosition().y));
@@ -124,6 +134,8 @@ void ForestBlob::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnL");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
+				bTurn = false;
+				time = 0.0f;
 				direction = Direction::R;
 				bWall = false;
 				animRect->SetPosition(Vector2(animRect->GetPosition().x + 10 * state.totalSize, animRect->GetPosition().y));
@@ -135,6 +147,7 @@ void ForestBlob::Update()
 	case BlobState::Melt:
 		if (!bDeathS)
 		{
+			time = 0.0f;
 			bDeathS = true;
 			SOUND->Play("BlobDeath");
 		}

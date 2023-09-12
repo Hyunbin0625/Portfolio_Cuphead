@@ -13,11 +13,15 @@ void SceneTutorial::Init()
 
 	tutoSet = make_unique<TutoSet>();
 
+	if (!bCreateMod)
+		LoadTutorialMap(L"_Maps/TutorialMap.tuto");
+
 	CAMERA->SetPosition(Vector2());
 	CAMERA->SetEdges(false);
 
 	IRISA->Start();
 
+	SOUND->DeleteSound("Back");
 	SOUND->AddSound("Back", L"_Sounds/MUS_Tutorial.wav", true);
 	SOUND->Play("Back");
 }

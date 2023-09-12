@@ -337,6 +337,7 @@ void Player::Update()
 	}
 	else if(checkCollider && !bSpecialAttack && !bSuperBeam && !bMod && !bIntro)
 	{
+		bJumpS = false;
 		jumpDash = true;
 		jumpSpeed = 0;
 		jumpCount = 0;
@@ -701,6 +702,7 @@ void Player::Update()
 
 	if (deltaTime >= maxTime && bSuperBeam == 1)
 	{
+		bBeamS = false;
 		SOUND->Stop("PlayerBeamL");
 		superMeterCard = 0;
 		bSuperBeam = 2;
@@ -724,6 +726,7 @@ void Player::Update()
 	else if (animRect->GET_COMP(Animator)->GetEnd())
 	{
 		lastHp = hp;
+		bHitS = false;
 	}
 	else if (hp > lastHp)
 		lastHp = hp;
@@ -757,13 +760,25 @@ void Player::Update()
 		break;
 	case Jump_R:
 		if (jumpSpeed >= jumpMaxSpeed * 0.5f)
-			SOUND->Play("PlayerJump");
+		{
+			if (!bJumpS)
+			{
+				bJumpS = true;
+				SOUND->Play("PlayerJump");
+			}
+		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpR");
 		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
 	case Jump_L:
 		if (jumpSpeed >= jumpMaxSpeed * 0.5f)
-			SOUND->Play("PlayerJump");
+		{
+			if (!bJumpS)
+			{
+				bJumpS = true;
+				SOUND->Play("PlayerJump");
+			}
+		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"JumpL");
 		animRect->SetScale(Vector2(88, 109)* totalSize);
 		break;
@@ -924,14 +939,21 @@ void Player::Update()
 		SFXbullet->SetPosition(Vector2(animRect->GetPosition().x - 30 * totalSize, animRect->GetPosition().y - 85 * totalSize));
 		break;
 	case Dash:
-		SOUND->Play("PlayerDash");
+		if (!bDashS)
+		{
+			bDashS = true;
+			SOUND->Play("PlayerDash");
+		}
 		animRect->SetScale(Vector2(158, 132) * totalSize);
 		if (direction == Direction::R)
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashR");
 		else
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"DashL");
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			bDashS = false;
 			dash = 2;
+		}
 		break;
 	case DashLoop:
 		animRect->SetScale(Vector2(347, 165) * totalSize);
@@ -1002,18 +1024,27 @@ void Player::Update()
 		superBeam->Init(animRect->GetPosition(), totalSize, deltaTime, maxTime, 0);
 		if (deltaTime < 0.9f)
 		{
-			SOUND->Play("PlayerBeamS");
+			if (!bBeamS)
+			{
+				bBeamS = true;
+				SOUND->Play("PlayerBeamS");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroR1");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
 		else if (deltaTime < 1.3f)	// 0.9~1.3
 		{
+			bBeamS = false;
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroR2");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
 		else
 		{
-			SOUND->Play("PlayerBeamL");
+			if (!bBeamS)
+			{
+				bBeamS = true;
+				SOUND->Play("PlayerBeamL");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamLoopR");
 			animRect->SetScale(Vector2(202, 140) * totalSize);
 		}
@@ -1022,31 +1053,48 @@ void Player::Update()
 		superBeam->Init(animRect->GetPosition(), totalSize, deltaTime, maxTime, 1);
 		if (deltaTime < 0.9f)
 		{
-			SOUND->Play("PlayerBeamS");
+			if (!bBeamS)
+			{
+				bBeamS = true;
+				SOUND->Play("PlayerBeamS");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroL1");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
 		else if (deltaTime < 1.3f)
 		{
+			bBeamS = false;
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamIntroL2");
 			animRect->SetScale(Vector2(238, 177) * totalSize);
 		}
 		else
 		{
-			SOUND->Play("PlayerBeamL");
+			if (!bBeamS)
+			{
+				bBeamS = true;
+				SOUND->Play("PlayerBeamL");
+			}
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"SuperBeamLoopL");
 			animRect->SetScale(Vector2(202, 140) * totalSize);
 		}
 		break;
 	case Hit_R:
-		SOUND->Play("PlayerCrack");
-		SOUND->Play("PlayerHit");
+		if (!bHitS)
+		{
+			bHitS = true;
+			SOUND->Play("PlayerCrack");
+			SOUND->Play("PlayerHit");
+		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitR");
 		animRect->SetScale(Vector2(125, 188) * totalSize);
 		break;
 	case Hit_L:
-		SOUND->Play("PlayerCrack");
-		SOUND->Play("PlayerHit");
+		if (!bHitS)
+		{
+			bHitS = true;
+			SOUND->Play("PlayerCrack");
+			SOUND->Play("PlayerHit");
+		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"HitL");
 		animRect->SetScale(Vector2(125, 188) * totalSize);
 		break;
@@ -1057,6 +1105,7 @@ void Player::Update()
 			SOUND->Play("PlayerCrack");
 			SOUND->Play("PlayerHit");
 			SOUND->Play("PlayerDeath");
+			FIGHTTEXT->Init(FightTextType::Died, true);
 		}
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		animRect->SetScale(Vector2(172, 106) * totalSize);
@@ -1109,10 +1158,20 @@ void Player::Update()
 		|| state >= PlayerState::Aim_Shoot_Diagonal_Up_R && state <= PlayerState::Aim_Shoot_Down_L
 		|| state >= PlayerState::Jump_R && state <= PlayerState::Jump_L && INPUT->Press('X'))
 	{
-		SOUND->Play("PlayerShoot");
+		if (!bAttackS)
+		{
+			bAttackS = true;
+			SOUND->Play("PlayerShoot");
+		}
 	}
 	else
-		SOUND->Stop("PlayerShoot");
+	{
+		if (bAttackS)
+		{
+			bAttackS = false;
+			SOUND->Stop("PlayerShoot");
+		}
+	}
 
 
 	SFXbullet->Update();

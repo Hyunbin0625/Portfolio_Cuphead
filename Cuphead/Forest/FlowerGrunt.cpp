@@ -93,6 +93,8 @@ void FlowerGrunt::Update()
 		hp = state.maxHp;
 	}
 
+	if (!bTurn)
+		bWall = false;
 	if (bWall)
 		animState = FwGruntState::Turn;
 	else if (bGround)
@@ -120,6 +122,9 @@ void FlowerGrunt::Update()
 	switch (animState)
 	{
 	case FwGruntState::Run:
+		time += DELTA;
+		if (time >= 0.5f)
+			bTurn = true;
 		animRect->SetScale(Vector2(179, 193) * state.totalSize);
 		animRect->SetPosition(Vector2(animRect->GetPosition().x, animRect->GetPosition().y + (groundPos.y - (animRect->GetPosition().y - animRect->GetScale().y / 2))));
 		if (direction == Direction::R)
@@ -148,6 +153,8 @@ void FlowerGrunt::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnR");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
+				bTurn = false;
+				time = 0.0f;
 				direction = Direction::L;
 				bWall = false;
 				animRect->SetPosition(Vector2(animRect->GetPosition().x - 5 * state.totalSize, animRect->GetPosition().y));
@@ -160,6 +167,8 @@ void FlowerGrunt::Update()
 			animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"TurnL");
 			if (animRect->GET_COMP(Animator)->GetEnd())
 			{
+				bTurn = false;
+				time = 0.0f;
 				direction = Direction::R;
 				bWall = false;
 				animRect->SetPosition(Vector2(animRect->GetPosition().x + 10 * state.totalSize, animRect->GetPosition().y));

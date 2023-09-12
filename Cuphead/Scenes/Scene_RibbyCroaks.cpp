@@ -6,7 +6,7 @@ void SceneRibbyCroaks::Init()
 	// √ ±‚»≠
 	bIntro = false;
 
-	player = make_shared<Player>(Vector2(284, 116.602f), Vector2(101, 159), 500.0f, 3, 100.0f);
+	player = make_shared<Player>(Vector2(284, 116.602f), Vector2(101, 159), 500.0f, 20, 100.0f);
 	player->SetTotalSize(1.1f);
 
 	ribbyCroaks = make_shared<RibbyCroaks>(RibbyCroaksInfo{ Vector2(1028, 191), 1.2 }, RibbyCroaksInfo{ Vector2(1080, 322), 1.0 }, 1000, 5.0f);
@@ -21,6 +21,7 @@ void SceneRibbyCroaks::Init()
 
 	IRISA->Start();
 
+	SOUND->DeleteSound("Back");
 	SOUND->AddSound("Back", L"_Sounds/MUS_Frogs.wav", true);
 	SOUND->Play("Back");
 }
@@ -102,6 +103,24 @@ void SceneRibbyCroaks::Update()
 			ribbyCroaks->Destroy();
 			SOUND->DeleteSound("Back");
 			currentSceneIndex += 1;
+		}
+	}
+
+	// player Death
+	if (player->GetHp() <= 0)
+	{
+		deltaTime += DELTA;
+		if (!bEnd && deltaTime >= 3.0f)
+		{
+			bEnd = true;
+			IRISA->End();
+		}
+		else if (deltaTime >= 3.0f && IRISA->GetIsAnimEnd())
+		{
+			ribbyCroaks->Destroy();
+			bEnd = false;
+			deltaTime = 0.0f;
+			Init();
 		}
 	}
 

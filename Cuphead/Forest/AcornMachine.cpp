@@ -80,9 +80,9 @@ void AcornMachine::Collision(shared_ptr<Player> player)
 			{
 				if (!player->GetBullet()->GetBullets()[i]->GetHit())
 				{
-					player->GetBullet()->GetBullets()[i]->Hit();
+					player->GetBullet()->GetBullets()[i]->SetIsHit(true);
 					player->SetSuperMeterCard(player->GetSuperMeterCard() + 1);
-					--hp;
+					acorn->SetHit(true);
 				}
 			}
 		}
@@ -90,9 +90,7 @@ void AcornMachine::Collision(shared_ptr<Player> player)
 		for (int i = 0; i < player->GetSpecialAttack()->GetBullets().size(); ++i)
 		{
 			if (player->GetSpecialAttack()->GetBullets()[i]->GetAnimRect()->GET_COMP(Collider)->Intersect(acorn->GetAnimRect()->GET_COMP(Collider)) && acorn->GetHp() > 0)
-			{
 				acorn->SetHit(true);
-			}
 		}
 
 		if (player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(acorn->GetAnimRect()->GET_COMP(Collider)) && acorn->GetHp() > 0)
@@ -138,16 +136,20 @@ void AcornMachine::Update()
 	switch (animState)
 	{
 	case AcornMachineState::Death:
-		SOUND->Stop("AMGrunt");
 		if (!bDeathS && animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
 		{
 			bDeathS = true;
+			bFGruntS = false;
+			SOUND->Stop("AMGrunt");
 			SOUND->Play("AMDeath");
 		}
 		animRect->SetScale(Vector2(894, 675) * state.totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
 		if (animRect->GET_COMP(Animator)->GetEnd())
+		{
+			bFGruntS = false;
 			animRect->SetPosition(Vector2(1000, -1000));
+		}
 		break;
 	case AcornMachineState::Create:
 		if (!check)
@@ -165,9 +167,21 @@ void AcornMachine::Update()
 		}
 	case AcornMachineState::Idle:
 		if (animRect->GetPosition().x <= CAMERA->GetPosition().x + WIN_DEFAULT_WIDTH && animRect->GetPosition().x >= CAMERA->GetPosition().x)
-			SOUND->Play("AMGrunt");
+		{
+			if (!bFGruntS)
+			{
+				bFGruntS = true;
+				SOUND->Play("AMGrunt");
+			}
+		}
 		else
-			SOUND->Stop("AMGrunt");
+		{
+			if (bFGruntS)
+			{
+				bFGruntS = false;
+				SOUND->Stop("AMGrunt");
+			}
+		}
 		animRect->SetScale(Vector2(530, 534) * state.totalSize);
 		animRect->GET_COMP(Animator)->SetCurrentAnimClip(L"Idle");
 		animRect1->SetScale(Vector2(530, 534) * state.totalSize);

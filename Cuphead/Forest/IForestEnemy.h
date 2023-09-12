@@ -13,6 +13,7 @@ enum class ForestEnemyType
 	AcornMachine,
 };
 
+#pragma pack(push, 1)
 struct ForestEnemyState
 {
 	ForestEnemyType type = ForestEnemyType::None;
@@ -28,6 +29,7 @@ struct ForestEnemyState
 
 	Direction direction = Direction::R;
 };
+#pragma pack(pop)
 
 class IForestEnemy
 {

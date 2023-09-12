@@ -39,4 +39,6 @@ private:
 	map<string, shared_ptr<SoundNode>> soundList;
 	FMOD::System* system = nullptr;
 	float volume = 0.2f;
+
+	int count = 0;
 };

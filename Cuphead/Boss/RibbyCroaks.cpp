@@ -507,12 +507,17 @@ void RibbyCroaks::Update()
 			}
 			else if (ribbyInfo.animCount == 1)
 			{
-				SOUND->Play("SAttackP1");
+				if (!bSAttack)
+				{
+					bSAttack = true;
+					SOUND->Play("SAttackP1");
+				}
 				ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RageL");
 				ribby->SetScale(Vector2(515, 395) * ribbyInfo.totalSize);
 				ribby->SetPosition(Vector2(ribbyInfo.position.x - 87 * ribbyInfo.totalSize, ribbyInfo.position.y + 26 * ribbyInfo.totalSize));
 				if (RATTACKMANAGER->GetEnd())
 				{
+					bSAttack = false;
 					SOUND->Stop("SAttackP1");
 					++ribbyInfo.animCount;
 				}
@@ -675,13 +680,18 @@ void RibbyCroaks::Update()
 	case RibbyCroaksState::Start2P:
 		if (ribbyInfo.animCount == 0)
 		{
-			SOUND->Play("SRollSP1");
-			SOUND->Play("SRollLP1");
+			if (!bSIntroS)
+			{
+				bSIntroS = true;
+				SOUND->Play("SRollSP1");
+				SOUND->Play("SRollLP1");
+			}
 			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollSL");
 			ribby->SetScale(Vector2(420, 335) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x - 20 * ribbyInfo.totalSize, ribbyInfo.position.y - 47 * ribbyInfo.totalSize));
 			if (ribby->GET_COMP(Animator)->GetEnd())
 			{
+				bSIntroS = false;
 				ribby->GET_COMP(Animator)->ResetFrame();
 				++ribbyInfo.animCount;
 				ribbyInfo.time = 0.0f;
@@ -708,12 +718,17 @@ void RibbyCroaks::Update()
 		}
 		else
 		{
-			SOUND->Play("SRollEP1");
+			if (!bSIntroS)
+			{
+				bSIntroS = true;
+				SOUND->Play("SRollEP1");
+			}
 			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollEL");
 			ribby->SetScale(Vector2(480, 300) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x - 68 * ribbyInfo.totalSize, ribbyInfo.position.y - 31 * ribbyInfo.totalSize));
 			if (ribby->GET_COMP(Animator)->GetEnd())
 			{
+				bSIntroS = false;
 				ribbyInfo.time = 0.0f;
 				ribbyInfo.animCount = 0;
 				phaseIntro = false;
@@ -738,8 +753,12 @@ void RibbyCroaks::Update()
 		}
 		else if (ribbyInfo.animCount == 1)
 		{
-			SOUND->Play("SRollSP1");
-			SOUND->Play("SRollLP1");
+			if (!bSIntroS)
+			{
+				bSIntroS = true;
+				SOUND->Play("SRollSP1");
+				SOUND->Play("SRollLP1");
+			}
 			ribby->GET_COMP(Animator)->SetCurrentAnimClip(L"RollLR");
 			ribby->SetScale(Vector2(610, 260) * ribbyInfo.totalSize);
 			ribby->SetPosition(Vector2(ribbyInfo.position.x - 95 * ribbyInfo.totalSize, ribbyInfo.position.y - 55 * ribbyInfo.totalSize));
@@ -752,6 +771,7 @@ void RibbyCroaks::Update()
 		}
 		else
 		{
+			bSIntroS = false;
 			SOUND->Stop("SRollSP1");
 			SOUND->Stop("SRollLP1");
 			ribbyInfo.time = 0.0f;
@@ -863,7 +883,11 @@ void RibbyCroaks::Update()
 		{
 			if (croaksInfo.animCount == 0)
 			{
-				SOUND->Play("TFanSP2");
+				if (!bTAttack)
+				{
+					bTAttack = true;
+					SOUND->Play("TFanSP2");
+				}
 				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"FanS");
 				croaks->SetScale(Vector2(610, 710)* croaksInfo.totalSize);
 				croaks->SetPosition(Vector2(croaksInfo.position.x + 50 * croaksInfo.totalSize, croaksInfo.position.y + 30 * croaksInfo.totalSize));
@@ -874,6 +898,7 @@ void RibbyCroaks::Update()
 				}
 				if (croaks->GET_COMP(Animator)->GetEnd())
 				{
+					bTAttack = false;
 					++croaksInfo.animCount;
 					deltaTime = 0.0f;
 					croaksInfo.bFrame = false;
@@ -882,7 +907,11 @@ void RibbyCroaks::Update()
 			}
 			else if (croaksInfo.animCount == 1)
 			{
-				SOUND->Play("TFanLP2");
+				if (!bTAttack)
+				{
+					bTAttack = true;
+					SOUND->Play("TFanLP2");
+				}
 				deltaTime += DELTA;
 				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"FanL");
 				croaks->SetScale(Vector2(370, 670) * croaksInfo.totalSize);
@@ -897,6 +926,7 @@ void RibbyCroaks::Update()
 
 				if (deltaTime >= 8.0f)
 				{
+					bTAttack = false;
 					SOUND->Stop("TFanLP2");
 					++croaksInfo.animCount;
 					deltaTime = 0.0f;
@@ -905,12 +935,17 @@ void RibbyCroaks::Update()
 			}
 			else
 			{
-				SOUND->Play("TFanEP2");
+				if (!bTAttack)
+				{
+					bTAttack = true;
+					SOUND->Play("TFanEP2");
+				}
 				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"FanE");
 				croaks->SetScale(Vector2(460, 610) * croaksInfo.totalSize);
 				croaks->SetPosition(Vector2(croaksInfo.position.x - 13 * croaksInfo.totalSize, croaksInfo.position.y + 15 * croaksInfo.totalSize));
 				if (croaks->GET_COMP(Animator)->GetEnd())
 				{
+					bTAttack = false;
 					croaksInfo.animCount = 0;
 					croaksInfo.time = 0.0f;
 				}
@@ -920,13 +955,18 @@ void RibbyCroaks::Update()
 		{
 			if (croaksInfo.animCount == 0)
 			{
-				SOUND->Play("MAttackSP3");
+				if (!bTAttack)
+				{
+					bTAttack = true;
+					SOUND->Play("MAttackSP3");
+				}
 				SOUND->SetVolume("MAttackSP3", 0.9);
 				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MAttackS");
 				croaks->SetScale(Vector2(595, 655) * 1.09 * croaksInfo.totalSize);
 				croaks->SetPosition(Vector2(croaksInfo.position.x, croaksInfo.position.y + 14 * croaksInfo.totalSize));
 				if (croaks->GET_COMP(Animator)->GetEnd())
 				{
+					bTAttack = false;
 					// attack object
 					CATTACKMANAGER->InitPlatform(Vector2(croaks->GetPosition().x, croaks->GetPosition().y - 150.0f), 600.0f, SLOTMANAGER->GetType());
 					++croaksInfo.animCount;
@@ -937,7 +977,11 @@ void RibbyCroaks::Update()
 			}
 			else if (croaksInfo.animCount == 1)
 			{
-				SOUND->Play("MAttackLP3");
+				if (!bTAttack)
+				{
+					bTAttack = true;
+					SOUND->Play("MAttackLP3");
+				}
 				croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MAttackL");
 				croaks->SetScale(Vector2(535, 665) * 1.09 * croaksInfo.totalSize);
 				croaks->SetPosition(Vector2(croaksInfo.position.x - 43 * croaksInfo.totalSize, croaksInfo.position.y + 12 * croaksInfo.totalSize));
@@ -948,6 +992,7 @@ void RibbyCroaks::Update()
 
 				if (CATTACKMANAGER->GetEnd())
 				{
+					bTAttack = false;
 					++croaksInfo.animCount;
 					ribbyInfo.animCount = 0;
 
@@ -991,7 +1036,11 @@ void RibbyCroaks::Update()
 	case RibbyCroaksState::Init:
 		if (croaksInfo.animCount == 0)
 		{
-			SOUND->Play("MOpenP3");
+			if (!bOpenS)
+			{
+				bOpenS = true;
+				SOUND->Play("MOpenP3");
+			}
 			SLOTMANAGER->Init(croaksInfo.position, 1.0f);
 			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MOpen");
 			croaks->SetScale(Vector2(542, 631) * 1.09 * croaksInfo.totalSize);
@@ -999,6 +1048,7 @@ void RibbyCroaks::Update()
 			croaks->SetPosition(croaksInfo.position);
 			if (croaks->GET_COMP(Animator)->GetEnd())
 			{
+				bOpenS = false;
 				++croaksInfo.animCount;
 				croaksInfo.time = 0.0f;
 			}
@@ -1020,12 +1070,19 @@ void RibbyCroaks::Update()
 	case RibbyCroaksState::Arm:
 		if (croaksInfo.animCount == 0)
 		{
-			SOUND->Play("MArmDownP3");
+			if (!bArmS)
+			{
+				bArmS = true;
+				SOUND->Play("MArmDownP3");
+			}
 			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MArmS");
 			croaks->SetScale(Vector2(734, 631) * 1.09 * croaksInfo.totalSize);
 			croaks->SetPosition(Vector2(croaksInfo.position.x - 99 * croaksInfo.totalSize, croaksInfo.position.y - 4 * croaksInfo.totalSize));
 			if (croaks->GET_COMP(Animator)->GetEnd())
+			{
+				bArmS = false;
 				++croaksInfo.animCount;
+			}
 		}
 		else if (croaksInfo.animCount == 1)
 		{
@@ -1045,12 +1102,17 @@ void RibbyCroaks::Update()
 		}
 		else
 		{
-			SOUND->Play("MArmUpP3");
+			if (!bArmS)
+			{
+				bArmS = true;
+				SOUND->Play("MArmUpP3");
+			}
 			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MArmE");
 			croaks->SetScale(Vector2(734, 631) * 1.09 * croaksInfo.totalSize);
 			croaks->SetPosition(Vector2(croaksInfo.position.x - 99 * croaksInfo.totalSize, croaksInfo.position.y - 4 * croaksInfo.totalSize));
 			if (croaks->GET_COMP(Animator)->GetEnd())
 			{
+				bArmS = false;
 				bParrySlap = false;
 				bArm = false;
 				croaksInfo.animCount = 0;
@@ -1085,12 +1147,17 @@ void RibbyCroaks::Update()
 		}
 		else
 		{
-			SOUND->Play("TMorphEP3");
+			if (!bTIntroS)
+			{
+				bTIntroS = true;
+				SOUND->Play("TMorphEP3");
+			}
 			croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"MorphE");
 			croaks->SetScale(Vector2(800, 735) * 1.2 * croaksInfo.totalSize);
 			croaks->SetPosition(Vector2(croaksInfo.position.x - 90 * croaksInfo.totalSize, croaksInfo.position.y + 75 * croaksInfo.totalSize));
 			if (croaks->GET_COMP(Animator)->GetEnd())
 			{
+				bTIntroS = false;
 				croaksInfo.animCount = 0;
 				phaseIntro = false;
 				bInit = true;
@@ -1098,7 +1165,11 @@ void RibbyCroaks::Update()
 		}
 		break;
 	case RibbyCroaksState::Death:
-		SOUND->Play("MDeath");
+		if (!bDeathS)
+		{
+			bDeathS = true;
+			SOUND->Play("MDeath");
+		}
 		croaks->SetScale(Vector2(560, 640) * 1.09 * croaksInfo.totalSize);
 		croaks->SetPosition(Vector2(croaksInfo.position.x + 0 * croaksInfo.totalSize, croaksInfo.position.y + 0 * croaksInfo.totalSize));
 		croaks->GET_COMP(Animator)->SetCurrentAnimClip(L"Death");
