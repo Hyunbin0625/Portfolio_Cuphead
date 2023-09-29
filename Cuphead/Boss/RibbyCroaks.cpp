@@ -302,16 +302,15 @@ void RibbyCroaks::Collision(shared_ptr<Player> player)
 		|| player->GetSuperBeam()->GetAnimRect()->GET_COMP(Collider)->Intersect(croaks->GET_COMP(Collider)))
 		--hp;
 
-	// playerPos, Bullet Rotation
+	// Bullet Rotation
 	if (currentPhase == 3 && rState == RibbyCroaksState::Attack)
 	{
-		float distance = (float)sqrt(pow(player->GetAnimRect()->GetPosition().x - ribby->GetPosition().x, 2) + pow(player->GetAnimRect()->GetPosition().y - ribby->GetPosition().y, 2));
+		Vector2 startPos = ribby->GetPosition();
+		Vector2 target = player->GetAnimRect()->GetPosition();
 
-		Vector2 reference = ribby->GetPosition();
-		Vector2 point = Vector2(player->GetAnimRect()->GetPosition().x, player->GetAnimRect()->GetPosition().y);
+		float distance = (float)sqrt(pow((target.x - startPos.x), 2) + pow((target.y - startPos.y), 2));
 
-		float R = (float)sqrt(pow((point.x - reference.x), 2) + pow((point.y - reference.y), 2));
-		bulletRotate = acos((point.x - reference.x) / R);
+		bulletRotate = acos((target.x - startPos.x) / distance);
 		bulletRotate = (bulletRotate * 180) / (float)acos(-1);
 	}
 

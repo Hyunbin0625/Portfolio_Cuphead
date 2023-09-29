@@ -379,8 +379,8 @@ xcopy /y /d /s "_Shaders\*.*" "$(Outdir)_Shaders\"
 xcopy /y /d /s "_Textures\*.*" "$(Outdir)_Textures\"
 xcopy /y /d /s "_Sounds\*.*" "$(Outdir)_Sounds\"
 xcopy /y /d /s "_Maps\*.*" "$(Outdir)_Maps\"
-xcopy /y /d "Imgui.ini" "$(Outdir)"
-xcopy /y /d "_Libraries\FMOD\x86\fmodL.dll" "$(Outdir)"</Command>
+xcopy /y /d "imgui.ini" "$(Outdir)"
+xcopy /y /d "_Libraries\FMOD\x64\fmodL.dll" "$(Outdir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -407,8 +407,8 @@ xcopy /y /d /s "_Shaders\*.*" "$(Outdir)_Shaders\"
 xcopy /y /d /s "_Textures\*.*" "$(Outdir)_Textures\"
 xcopy /y /d /s "_Sounds\*.*" "$(Outdir)_Sounds\"
 xcopy /y /d /s "_Maps\*.*" "$(Outdir)_Maps\"
-xcopy /y /d "Imgui.ini" "$(Outdir)"
-xcopy /y /d "_Libraries\FMOD\x86\fmodL.dll" "$(Outdir)"</Command>
+xcopy /y /d "imgui.ini" "$(Outdir)"
+xcopy /y /d "_Libraries\FMOD\x64\fmodL.dll" "$(Outdir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

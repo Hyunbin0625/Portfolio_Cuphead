@@ -152,10 +152,11 @@ wstring Path::GetFileNameWithoutExtension(const wstring& path)
 const WCHAR* Path::ImageFilter = L"Image File (*.png;*.bmp;*.jpg)\0*.png;*.bmp;*.jpg";
 const WCHAR* Path::ShaderFilter = L"HLSL File (*.hlsl)\0*.hlsl";
 const WCHAR* Path::TextFilter = L"Text File (*.txt)\0*.txt";
-const WCHAR* Path::SoundFilter = L"Text File (*.mp3;*.wav;*.flac)\0*.mp3;*.wav;*.flac";
+const WCHAR* Path::SoundFilter = L"Sound File (*.mp3;*.wav;*.flac)\0*.mp3;*.wav;*.flac";
 const WCHAR* Path::TutorialFilter = L"Tutorial File (*.tuto)\0*.tuto";
 const WCHAR* Path::ForestFilter = L"ForestFollies File (*.frst)\0*.frst";
 const WCHAR* Path::RibbyCroaksFilter = L"RibbyCroaks File (*.frog)\0*.frog";
+const WCHAR* Path::PirateFilter = L"Pirate File (*.prt)\0*.prt";
 
 void Path::OpenFileDialog(const wstring& file, const WCHAR* filter, const wstring& folder, function<void(wstring)>& func, const HWND& hwnd)
 {
@@ -173,7 +174,7 @@ void Path::OpenFileDialog(const wstring& file, const WCHAR* filter, const wstrin
 	ofn.lpstrTitle = L"불러오기";
 	ofn.nMaxFile = 255;
 	ofn.lpstrInitialDir = tempFolder.c_str();	// 창을 켰을때, 초기 경로
-	ofn.Flags = OFN_NOCHANGEDIR;	// 경로가 변경되고 다음뻔에 켰을 경우, 초기 경로 변경 옵션
+	ofn.Flags = OFN_NOCHANGEDIR;	// 경로가 변경되고 다음번에 켰을 경우, 초기 경로 변경 옵션
 
 	if(GetOpenFileName(&ofn))
 	{

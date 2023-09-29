@@ -9,7 +9,8 @@ PlayerBulletManager::PlayerBulletManager(UINT totalBullet, float bulletSpeed, fl
 	count = 0;
 	totalSize = 1;
 
-	bullets.resize(totalBullet);
+	// 매개변수로 받아온 값 만큼 객체 생성
+	bullets.resize(totalBullet);	
 
 	for (auto& bullet : bullets)
 		bullet = make_shared<PlayerBullet>(bulletSpeed);
