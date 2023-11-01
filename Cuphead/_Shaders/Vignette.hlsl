@@ -46,7 +46,7 @@ cbuffer SelectionBuffer : register(b0)
 
 float4 PS(PixelInput input) : SV_Target0    // target0번에 출력
 {
-    // smpling
+    // sampling
     float4 color = sourceTex.Sample(samp, input.uv);
 
     float2 uv = input.uv - 0.5f;
